@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public enum CurrentState
 {
+    NEWLY_INFECTED,
     NOT_INFECTED,
     INFECTED,
     NUM_STATES
@@ -31,6 +32,9 @@ public class AIScript : MonoBehaviour
     {
         switch (mAttributes.mCurrentState)
         {
+            case CurrentState.NEWLY_INFECTED:
+                //Do nothing
+                break;
             case CurrentState.NOT_INFECTED:
                 NonInfectedBehaviour();
                 break;

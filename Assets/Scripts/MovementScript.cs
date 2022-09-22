@@ -23,7 +23,7 @@ public class MovementScript : MonoBehaviour
 
         if (enemy)
         {
-            FleeFromEnemy(enemy.transform.position);
+            FleeFromEnemy(enemy);
         }
         else
         {
@@ -34,7 +34,7 @@ public class MovementScript : MonoBehaviour
     public void InfectedMovement()
     {
         GameObject target = FindTarget();
-        ChaseAgent(target.transform.position);
+        ChaseAgent(target);
     }
 
     GameObject CheckForCloseInfectedAgent()
@@ -67,7 +67,7 @@ public class MovementScript : MonoBehaviour
         return target;
     }
 
-    public void FleeFromEnemy(Vector3 pos)
+    public void FleeFromEnemy(GameObject pos)
     {
 
     }   
@@ -77,7 +77,7 @@ public class MovementScript : MonoBehaviour
 
     }
 
-    public void ChaseAgent(Vector3 pos)
+    public void ChaseAgent(GameObject pos)
     {
 
     }

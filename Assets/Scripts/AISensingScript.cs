@@ -17,7 +17,6 @@ public class AISensingScript : MonoBehaviour
         if (mAgentLayerMask == (mAgentLayerMask | (1 << other.gameObject.layer)))
         {
             mSensingArray.Add(other);
-            Debug.Log("Agent added to mSensingArray");
         }
     }
 
