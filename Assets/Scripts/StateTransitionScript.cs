@@ -7,6 +7,8 @@ public class StateTransitionScript : MonoBehaviour
     GameManagerScript mGameManager;
     AttributesScript mAttributes;
 
+    bool start = false;
+    float lerp = 0;
     [SerializeField]
     float mTimeForInfectionTransition = 3.0f;
 
@@ -26,6 +28,7 @@ public class StateTransitionScript : MonoBehaviour
     {
         mGameManager.NewAgentInfected(gameObject);
         mAttributes.mInfected = true;
+        start = true;
         //GetComponent<MeshRenderer>().material = mAttributes.mInfectedMaterial;
         mAttributes.mCurrentState = CurrentState.NEWLY_INFECTED;
 
@@ -33,15 +36,18 @@ public class StateTransitionScript : MonoBehaviour
 
         mAttributes.mCurrentState = CurrentState.INFECTED;
         Debug.Log("Infection Ended");
+        start = false;
     }
+
+
 
     IEnumerator ChangeInfectedAppearance()
     {
         Renderer rend = GetComponent<Renderer>();
-        while (mAttributes.mNonInfectedMaterial != mAttributes.mInfectedMaterial)
+        while (lerp < 1.0f)
         {
-            rend.material.Lerp(mAttributes.mNonInfectedMaterial, mAttributes.mInfectedMaterial, 0.5f);
-            Debug.Log("Doing something");
+            lerp += Time.deltaTime / mTimeForInfectionTransition;
+            rend.material.Lerp(mAttributes.mNonInfectedMaterial, mAttributes.mInfectedMaterial, lerp);
             yield return null;
         }
         yield return 0;
