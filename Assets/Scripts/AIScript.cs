@@ -3,59 +3,50 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum MovementStates
+public enum CurrentState
 {
-    Wander,
-    Chase,
-    NUM_OF_STATES
+    NOT_INFECTED,
+    INFECTED,
+    NUM_STATES
 }
 
 public class AIScript : MonoBehaviour
 {
-    NavMeshAgent agent;
-    bool isInfected = false;
-    GameObject target = null;
-    MovementStates movementStates = MovementStates.Wander;
+    AttributesScript mAttributes;
+    MovementScript mMovement;
     // Start is called before the first frame update
+
+    public void Awake()
+    {
+        mAttributes = GetComponent<AttributesScript>();
+        mMovement = GetComponent<MovementScript>();
+    }
+
     void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
+        InvokeRepeating(nameof(RunStateMachine), 0.0f, mAttributes.mBehaviourUpdateFrequency);
     }
 
-    // Update is called once per frame
-    void Update()
+    void RunStateMachine()
     {
-
-        RunStateMachine(movementStates);
-    }
-
-    void RunStateMachine(MovementStates states)
-    {
-        switch(states)
+        switch (mAttributes.mCurrentState)
         {
-            case MovementStates.Wander:
-                Wander();
+            case CurrentState.NOT_INFECTED:
+                NonInfectedBehaviour();
                 break;
-            case MovementStates.Chase:
-                Chase();
+            case CurrentState.INFECTED:
+                InfectedBehaviour();
                 break;
         }
     }
 
-    public void RecentlyInfected()
+    void InfectedBehaviour()
     {
-        isInfected = true;
-
-
+        mMovement.InfectedMovement();
     }
 
-    void Wander()
+    void NonInfectedBehaviour()
     {
-
-    }
-
-    void Chase()
-    {
-
+        mMovement.NonInfectedMovement();
     }
 }
