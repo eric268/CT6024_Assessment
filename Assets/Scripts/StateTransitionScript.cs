@@ -7,7 +7,6 @@ public class StateTransitionScript : MonoBehaviour
     GameManagerScript mGameManager;
     AttributesScript mAttributes;
 
-    bool start = false;
     float lerp = 0;
     [SerializeField]
     float mTimeForInfectionTransition = 3.0f;
@@ -28,15 +27,12 @@ public class StateTransitionScript : MonoBehaviour
     {
         mGameManager.NewAgentInfected(gameObject);
         mAttributes.mInfected = true;
-        start = true;
-        //GetComponent<MeshRenderer>().material = mAttributes.mInfectedMaterial;
         mAttributes.mCurrentState = CurrentState.NEWLY_INFECTED;
 
         yield return new WaitForSeconds(mTimeForInfectionTransition);
 
         mAttributes.mCurrentState = CurrentState.INFECTED;
         Debug.Log("Infection Ended");
-        start = false;
     }
 
 

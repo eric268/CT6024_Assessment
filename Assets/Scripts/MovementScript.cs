@@ -56,12 +56,15 @@ public class MovementScript : MonoBehaviour
     GameObject FindTarget()
     {
         GameObject target = null;
-        float distance = float.MaxValue;
-        foreach(GameObject obj in mGameManager.mNonInfectedAgents)
+        float max = float.MaxValue;
+
+        foreach (GameObject obj in mGameManager.mNonInfectedAgents)
         {
-            if(Vector3.Distance(obj.transform.position, gameObject.transform.position) < distance)
+            float distance = Vector3.Distance(obj.transform.position, gameObject.transform.position);
+            if (distance < max)
             {
                 target = obj;
+                max = distance;
             }
         }
         return target;
@@ -69,7 +72,7 @@ public class MovementScript : MonoBehaviour
 
     public void FleeFromEnemy(GameObject pos)
     {
-
+        
     }   
     
     public void Wander()
@@ -77,8 +80,12 @@ public class MovementScript : MonoBehaviour
 
     }
 
-    public void ChaseAgent(GameObject pos)
+    public void ChaseAgent(GameObject target)
     {
+        if (target)
+        {
+            mAgent.SetDestination(target.transform.position);
+        }
 
     }
 }
