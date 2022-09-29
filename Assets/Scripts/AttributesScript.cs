@@ -12,8 +12,8 @@ public class AttributesScript : MonoBehaviour
     public CurrentState mCurrentState = CurrentState.NOT_INFECTED;
 
     [Header("Movement Attributes")]
-    [SerializeField]
-    public float mMovementSpeed = 4.5f;
+    static public float mInfectedMovementSpeed = 3.75f;
+    static public float mMovementSpeed = 4.5f;
 
     [Header("Visual Attributes")]
     [SerializeField]

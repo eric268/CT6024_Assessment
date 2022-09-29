@@ -13,8 +13,8 @@ public class InfectiousScript : MonoBehaviour
 
         if (mAgentLayerMask == (mAgentLayerMask | (1 << other.gameObject.layer)) && !other.gameObject.GetComponent<AttributesScript>().mInfected)
         {
-            other.gameObject.GetComponent<StateTransitionScript>().BeginInfection();
+            other.gameObject.GetComponent<StateTransitionScript>().InfectedTransition();
         }
     }
-
+    
 }

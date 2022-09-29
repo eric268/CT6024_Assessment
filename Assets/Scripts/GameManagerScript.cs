@@ -11,7 +11,6 @@ public class GameManagerScript : MonoBehaviour
     void Awake()
     {
         mNonInfectedAgents = new HashSet<GameObject>(GameObject.FindGameObjectsWithTag("Agent"));
-        Debug.Log(mNonInfectedAgents.Count);
     }
 
     private void Start()
@@ -22,7 +21,7 @@ public class GameManagerScript : MonoBehaviour
     private void BeginInfection()
     {
         int rand = Random.Range(0, mNonInfectedAgents.Count);
-        mNonInfectedAgents.ElementAt(rand).GetComponent<StateTransitionScript>().BeginInfection();
+        mNonInfectedAgents.ElementAt(rand).GetComponent<StateTransitionScript>().InfectedTransition();
     }
 
     // Update is called once per frame

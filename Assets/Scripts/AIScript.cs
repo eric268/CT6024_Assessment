@@ -15,12 +15,14 @@ public class AIScript : MonoBehaviour
 {
     AttributesScript mAttributes;
     MovementScript mMovement;
+    NavMeshAgent mAgent;
     // Start is called before the first frame update
 
     public void Awake()
     {
         mAttributes = GetComponent<AttributesScript>();
         mMovement = GetComponent<MovementScript>();
+        mAgent = GetComponent<NavMeshAgent>();  
     }
 
     void Start()
@@ -46,6 +48,7 @@ public class AIScript : MonoBehaviour
 
     void InfectedBehaviour()
     {
+        mAgent.isStopped = false;
         mMovement.InfectedMovement();
     }
 

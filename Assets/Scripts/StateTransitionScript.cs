@@ -1,24 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class StateTransitionScript : MonoBehaviour
 {
     GameManagerScript mGameManager;
     AttributesScript mAttributes;
+    NavMeshAgent mAgent;
 
     float lerp = 0;
     [SerializeField]
     float mTimeForInfectionTransition = 3.0f;
 
-    private void Start()
+    private void Awake()
     {
         mGameManager = FindObjectOfType<GameManagerScript>();
         mAttributes = GetComponent<AttributesScript>();
+        mAgent = GetComponent<NavMeshAgent>();
     }
 
-    public void BeginInfection()
+    public void InfectedTransition()
     {
+        if (mAgent)
+        {
+            mAgent.isStopped = true;
+        }
         StartCoroutine(InfectedTransiton());
         StartCoroutine(ChangeInfectedAppearance());
     }
@@ -28,11 +35,11 @@ public class StateTransitionScript : MonoBehaviour
         mGameManager.NewAgentInfected(gameObject);
         mAttributes.mInfected = true;
         mAttributes.mCurrentState = CurrentState.NEWLY_INFECTED;
+        mAgent.speed = AttributesScript.mInfectedMovementSpeed;
 
         yield return new WaitForSeconds(mTimeForInfectionTransition);
 
         mAttributes.mCurrentState = CurrentState.INFECTED;
-        Debug.Log("Infection Ended");
     }
 
 
