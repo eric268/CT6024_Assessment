@@ -48,12 +48,12 @@ public class AIScript : MonoBehaviour
 
     void InfectedBehaviour()
     {
-        mAgent.isStopped = false;
-        mMovement.InfectedMovement();
+       // mAgent.isStopped = false;
+        //mMovement.InfectedMovement();
     }
 
     void NonInfectedBehaviour()
     {
-        mMovement.NonInfectedMovement();
+        //mMovement.NonInfectedMovement();
     }
 }

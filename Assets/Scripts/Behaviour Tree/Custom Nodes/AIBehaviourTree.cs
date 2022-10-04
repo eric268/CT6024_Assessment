@@ -10,7 +10,7 @@ public class AIBehaviourTree : MonoBehaviour
     Selector mTopNode;
 
     [SerializeField]
-    float mBehaviourTreeUpdateFreq = 0.15f;
+    float mBehaviourTreeUpdateFreq = 0.05f;
     // Start is called before the first frame update
 
     private void Awake()
@@ -30,19 +30,19 @@ public class AIBehaviourTree : MonoBehaviour
         //Newely-infected Behaviour
         BeginInfectionNode beginInfectionNode = new BeginInfectionNode(mAttributesScript, mStateTransitionScript);
 
-
-
         //Non-infected Behaviour
         WanderNode wanderNode = new WanderNode(mMovementScript);
         FleeNode fleeNode = new FleeNode(mMovementScript);
         CheckEnemyCloseNode checkEnemyCloseNode = new CheckEnemyCloseNode(mMovementScript);
-        IsInfectedNode isInfectedNode = new IsInfectedNode(mAttributesScript);
+        StateCheckNode isNotInfectedNode = new StateCheckNode(mAttributesScript, CurrentState.NOT_INFECTED);
         Sequencer nonInfectedFleeSequencer = new Sequencer(new List<Node> { checkEnemyCloseNode, fleeNode });
-        Selector nonInfectedBehaviourSelector = new Selector(new List<Node> {isInfectedNode, nonInfectedFleeSequencer, wanderNode});
+        Selector nonInfectedMovementSequencer = new Selector(new List<Node> { nonInfectedFleeSequencer, wanderNode });
+        Sequencer nonInfectedBehaviourSelector = new Sequencer(new List<Node> {isNotInfectedNode, nonInfectedMovementSequencer});
 
         //InfectedBehaviour
         FindTargetNode findTargetNode = new FindTargetNode(mMovementScript);
         ChaseTarget chaseTargetNode = new ChaseTarget(mMovementScript);
+        StateCheckNode isInfectedNode = new StateCheckNode(mAttributesScript, CurrentState.INFECTED);
         Sequencer infectedBehaviourSequencer = new Sequencer(new List<Node> { isInfectedNode, findTargetNode, chaseTargetNode });
 
         mTopNode = new Selector(new List<Node> { infectedBehaviourSequencer, nonInfectedBehaviourSelector, beginInfectionNode });

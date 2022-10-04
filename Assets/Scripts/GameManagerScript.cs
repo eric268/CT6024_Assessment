@@ -21,7 +21,7 @@ public class GameManagerScript : MonoBehaviour
     private void BeginInfection()
     {
         int rand = Random.Range(0, mNonInfectedAgents.Count);
-        mNonInfectedAgents.ElementAt(rand).GetComponent<StateTransitionScript>().InfectedTransition();
+        mNonInfectedAgents.ElementAt(rand).GetComponent<AttributesScript>().mCurrentState = CurrentState.NEWLY_INFECTED;
     }
 
     // Update is called once per frame

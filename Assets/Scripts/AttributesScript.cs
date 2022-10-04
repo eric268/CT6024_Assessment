@@ -12,7 +12,7 @@ public class AttributesScript : MonoBehaviour
     public CurrentState mCurrentState = CurrentState.NOT_INFECTED;
 
     [Header("Movement Attributes")]
-    static public float mInfectedMovementSpeed = 3.75f;
+    static public float mInfectedMovementSpeed = 5.0f;
     static public float mMovementSpeed = 4.5f;
 
     [Header("Visual Attributes")]

@@ -15,8 +15,8 @@ public class MovementScript : MonoBehaviour
     [SerializeField]
     float pathfindingMaxRange;
 
-    public GameObject enemy;
-    public GameObject target;
+    public GameObject mCloseEnemy;
+    public GameObject mCurrentTarget;
 
     private bool isWandering = true;
 
@@ -30,9 +30,9 @@ public class MovementScript : MonoBehaviour
     }
     public void NonInfectedMovement()
     {
-        enemy = CheckForCloseInfectedAgent();
+        mCloseEnemy = CheckForCloseInfectedAgent();
 
-        if (enemy)
+        if (mCloseEnemy)
         {
             FleeFromEnemy();
             isWandering = false;
@@ -43,27 +43,27 @@ public class MovementScript : MonoBehaviour
             isWandering = true;
         }
     }
-    
+
     public void InfectedMovement()
     {
-        target = FindTarget();
+        mCurrentTarget = FindTarget();
         ChaseAgent();
     }
 
     public GameObject CheckForCloseInfectedAgent()
     {
-        GameObject closestEnemy = null;
+        mCloseEnemy = null;
         float distance = float.MaxValue;
-        foreach (Collider enemy in mSensing.mSensingArray)
+        foreach (Collider e in mSensing.mSensingArray)
         {
-            float d = Vector3.Distance(gameObject.transform.position, enemy.gameObject.transform.position);
-            if (enemy.gameObject.GetComponent<AttributesScript>().mInfected && (d < distance))
+            float d = Vector3.Distance(gameObject.transform.position, e.gameObject.transform.position);
+            if (e.gameObject.GetComponent<AttributesScript>().mInfected && (d < distance))
             {
-                closestEnemy = enemy.gameObject;
+                mCloseEnemy = e.gameObject;
                 distance = d;
             }
         }
-        return closestEnemy;
+        return mCloseEnemy;
     }
 
     public GameObject FindTarget()
@@ -75,28 +75,29 @@ public class MovementScript : MonoBehaviour
             float distance = Vector3.Distance(obj.transform.position, gameObject.transform.position);
             if (distance < max)
             {
-                target = obj;
+                mCurrentTarget = obj;
                 max = distance;
             }
         }
-        return target;
+        return mCurrentTarget;
     }
 
     public void FleeFromEnemy()
     {
-        if (!enemy)
+        if (!mCloseEnemy)
             return;
 
         if (mAgent.remainingDistance < 1.0f || isWandering)
         {
             float dist = float.MinValue;
+            isWandering = false;
             for (int i = 0; i < 10; i++)
             {
                 NavMeshHit hit;
                 float range = Random.Range(pathfindingMinRange, pathfindingMaxRange);
                 if (GetRandomPos(transform.position, out hit, pathfindingMinRange, pathfindingMaxRange,pathfindingMaxRange))
                 {
-                    float f = Vector3.Distance(hit.position, enemy.transform.position);
+                    float f = Vector3.Distance(hit.position, mCloseEnemy.transform.position);
                     if (f > dist)
                     {
                         dist = f; ;
@@ -129,6 +130,7 @@ public class MovementScript : MonoBehaviour
         {
             float angleCloseTo45 = 180;
             NavMeshHit hit;
+            isWandering = true;
 
             for (int i = 0; i < 10; i++)
             {
@@ -148,9 +150,9 @@ public class MovementScript : MonoBehaviour
 
     public void ChaseAgent()
     {
-        if (target)
+        if (mCurrentTarget)
         {
-            mAgent.SetDestination(target.transform.position);
+            mAgent.SetDestination(mCurrentTarget.transform.position);
         }
         else
         {

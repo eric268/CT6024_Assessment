@@ -40,6 +40,7 @@ public class StateTransitionScript : MonoBehaviour
         yield return new WaitForSeconds(mTimeForInfectionTransition);
 
         mAttributes.mCurrentState = CurrentState.INFECTED;
+        mAgent.isStopped = false;
     }
 
 
