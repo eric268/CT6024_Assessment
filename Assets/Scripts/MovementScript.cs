@@ -15,6 +15,9 @@ public class MovementScript : MonoBehaviour
     [SerializeField]
     float pathfindingMaxRange;
 
+    public GameObject enemy;
+    public GameObject target;
+
     private bool isWandering = true;
 
     private void Awake()
@@ -27,11 +30,11 @@ public class MovementScript : MonoBehaviour
     }
     public void NonInfectedMovement()
     {
-        GameObject enemy = CheckForCloseInfectedAgent();
+        enemy = CheckForCloseInfectedAgent();
 
         if (enemy)
         {
-            FleeFromEnemy(enemy);
+            FleeFromEnemy();
             isWandering = false;
         }
         else
@@ -43,11 +46,11 @@ public class MovementScript : MonoBehaviour
     
     public void InfectedMovement()
     {
-        GameObject target = FindTarget();
-        ChaseAgent(target);
+        target = FindTarget();
+        ChaseAgent();
     }
 
-    GameObject CheckForCloseInfectedAgent()
+    public GameObject CheckForCloseInfectedAgent()
     {
         GameObject closestEnemy = null;
         float distance = float.MaxValue;
@@ -58,16 +61,13 @@ public class MovementScript : MonoBehaviour
             {
                 closestEnemy = enemy.gameObject;
                 distance = d;
-
             }
         }
-
         return closestEnemy;
     }
 
-    GameObject FindTarget()
+    public GameObject FindTarget()
     {
-        GameObject target = null;
         float max = float.MaxValue;
 
         foreach (GameObject obj in mGameManager.mNonInfectedAgents)
@@ -82,8 +82,11 @@ public class MovementScript : MonoBehaviour
         return target;
     }
 
-    public void FleeFromEnemy(GameObject enemy)
+    public void FleeFromEnemy()
     {
+        if (!enemy)
+            return;
+
         if (mAgent.remainingDistance < 1.0f || isWandering)
         {
             float dist = float.MinValue;
@@ -143,7 +146,7 @@ public class MovementScript : MonoBehaviour
         }
     }
 
-    public void ChaseAgent(GameObject target)
+    public void ChaseAgent()
     {
         if (target)
         {
