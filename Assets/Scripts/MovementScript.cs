@@ -8,7 +8,7 @@ public class MovementScript : MonoBehaviour
     GameManagerScript mGameManager;
     AttributesScript mAttributes;
     NavMeshAgent mAgent;
-    AISensingScript mSensing;
+    SensingVisionCone mSensing;
 
     [SerializeField]
     float pathfindingMinRange;
@@ -25,7 +25,7 @@ public class MovementScript : MonoBehaviour
         mGameManager = FindObjectOfType<GameManagerScript>();
         mAttributes = GetComponent<AttributesScript>();
         mAgent = GetComponent<NavMeshAgent>();
-        mSensing = GetComponentInChildren<AISensingScript>();
+        mSensing = GetComponentInChildren<SensingVisionCone>();
         mAgent.speed = AttributesScript.mMovementSpeed;
     }
     public void NonInfectedMovement()
@@ -54,7 +54,7 @@ public class MovementScript : MonoBehaviour
     {
         mCloseEnemy = null;
         float distance = float.MaxValue;
-        foreach (Collider e in mSensing.mSensingArray)
+        foreach (Collider e in mSensing.mSensingContainer)
         {
             float d = Vector3.Distance(gameObject.transform.position, e.gameObject.transform.position);
             if (e.gameObject.GetComponent<AttributesScript>().mInfected && (d < distance))
