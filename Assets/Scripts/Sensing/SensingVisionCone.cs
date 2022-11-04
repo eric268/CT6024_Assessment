@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -9,7 +10,7 @@ public class SensingVisionCone : MonoBehaviour
 {
     public HashSet<Collider> mSensingContainer;
     [SerializeField]
-    public Dictionary<Collider, float> mSpottedCounter;
+    public Dictionary<Collider, float> mSpottedContainer;
 
     SphereCollider mCollider;
 
@@ -20,24 +21,39 @@ public class SensingVisionCone : MonoBehaviour
     public int mVisionConeSpacing;
 
     [SerializeField]
-    float mSpottedRate = 2.0f;
+    public int mVisionDirectionOffset = 0;
+
+    [SerializeField]
+    public Color mVisionColor = Color.white;
+
+    [SerializeField]
+    public float mVisionDistance = 10.0f;
+
+
+    [SerializeField]
+    float mSpottedTimer = 2.0f;
 
     GameObject mCurrentTarget;
 
+    private void Awake()
+    {
+        mCollider = GetComponent<SphereCollider>();
+    }
+
     void Start()
     {
-        mSpottedCounter = new Dictionary<Collider, float>();
+        mSpottedContainer = new Dictionary<Collider, float>();
         mSensingContainer = new HashSet<Collider>();
-        mCollider = GetComponent<SphereCollider>();
         if (!mCollider.isTrigger)
             mCollider.isTrigger = true;
+        mCollider.radius = mVisionDistance;
         mVisionConeSize    = Mathf.Clamp(mVisionConeSize, 0, 360);
         mVisionConeSpacing = Mathf.Clamp(mVisionConeSpacing, 0, 360 - mVisionConeSize + 1);
     }
     private void Update()
     {
         Debug.DrawLine(transform.position, transform.position + transform.forward * 5.0f, Color.red, Time.deltaTime);
-        DrawDebugVisionCone();
+        //DrawDebugVisionCone();
 
         mCurrentTarget = CheckIfWithinVision();
         if (mCurrentTarget)
@@ -50,12 +66,12 @@ public class SensingVisionCone : MonoBehaviour
     {
         for (int i = 0; i < mVisionConeSize / 2.0f; i++)
         {
-            float ang =  (i + transform.eulerAngles.y + mVisionConeSpacing/2.0f) * Mathf.Deg2Rad;
-            float ang2 = (i - transform.eulerAngles.y + mVisionConeSpacing/2.0f) * Mathf.Deg2Rad;
+            float ang =  (i + transform.eulerAngles.y + mVisionConeSpacing/2.0f + mVisionDirectionOffset) * Mathf.Deg2Rad;
+            float ang2 = (i - transform.eulerAngles.y + mVisionConeSpacing/2.0f - mVisionDirectionOffset) * Mathf.Deg2Rad;
             Vector3 pos1 = transform.position + new Vector3(Mathf.Sin(-ang2), 0.0f, Mathf.Cos(-ang2)).normalized * mCollider.radius;
             Vector3 pos2 = transform.position + new Vector3(Mathf.Sin(ang), 0.0f, Mathf.Cos(ang)).normalized * mCollider.radius;
-            Debug.DrawLine(transform.position, pos1, Color.white, Time.deltaTime);
-            Debug.DrawLine(transform.position, pos2, Color.white, Time.deltaTime);
+            Debug.DrawLine(transform.position, pos1, mVisionColor, Time.deltaTime);
+            Debug.DrawLine(transform.position, pos2, mVisionColor, Time.deltaTime);
         }
     }
 
@@ -68,18 +84,18 @@ public class SensingVisionCone : MonoBehaviour
         {
             float angle =Vector3.Angle(transform.forward, (c.gameObject.transform.position - transform.position));
             float offset = 2.0f;
-            if (mVisionConeSpacing/2.0f <= angle + offset && angle <= mVisionConeSize/2.0f + mVisionConeSpacing/2.0f - offset)
+            if (mVisionConeSpacing/2.0f + mVisionDirectionOffset <= angle + offset && angle <= mVisionConeSize/2.0f + mVisionConeSpacing/2.0f - offset + mVisionDirectionOffset)
             {
                 var LOSCheck = c.gameObject.GetComponentInChildren<LOSCheckScript>().LOSCheckPositions;
                 foreach(GameObject t in LOSCheck)
                 {
                     if (!Physics.Linecast(transform.position,t.transform.position))
                     {
-                        Debug.Log(mSpottedCounter[c]);
-                        mSpottedCounter[c] += mSpottedRate * Time.deltaTime;
-                        if (mSpottedCounter[c] >= mSpottedRate)
+                        Debug.Log(mSpottedContainer[c]);
+                        mSpottedContainer[c] += mSpottedTimer * Time.deltaTime;
+                        if (mSpottedContainer[c] >= mSpottedTimer)
                         {
-                            mSpottedCounter[c] = mSpottedRate;
+                            mSpottedContainer[c] = mSpottedTimer;
                             return c.gameObject;
                         }
                         else
@@ -87,16 +103,16 @@ public class SensingVisionCone : MonoBehaviour
                     }
                     else
                     {
-                        mSpottedCounter[c] -= mSpottedRate * Time.deltaTime;
-                        mSpottedCounter[c] = Mathf.Clamp(mSpottedCounter[c], 0.0f, mSpottedRate);
+                        mSpottedContainer[c] -= mSpottedTimer * Time.deltaTime;
+                        mSpottedContainer[c] = Mathf.Clamp(mSpottedContainer[c], 0.0f, mSpottedTimer);
                         break;  
                     }
                 }
             }
             else
             {
-                mSpottedCounter[c] -= mSpottedRate * Time.deltaTime;
-                mSpottedCounter[c] = Mathf.Clamp(mSpottedCounter[c], 0.0f, mSpottedRate);
+                mSpottedContainer[c] -= mSpottedTimer * Time.deltaTime;
+                mSpottedContainer[c] = Mathf.Clamp(mSpottedContainer[c], 0.0f, mSpottedTimer);
             }
         }
         return null;
@@ -107,20 +123,23 @@ public class SensingVisionCone : MonoBehaviour
         if (other.gameObject.CompareTag("Agent"))
         {
             mSensingContainer.Add(other);
-            if (!mSpottedCounter.ContainsKey(other))
-                 mSpottedCounter.Add(other, 0.0f);
+            if (!mSpottedContainer.ContainsKey(other))
+                 mSpottedContainer.Add(other, 0.0f);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
         mSensingContainer.Remove(other);
-        mSpottedCounter.Remove(other);
+        mSpottedContainer.Remove(other);
     }
 
     private void OnValidate()
     {
+        mVisionDirectionOffset = Mathf.Clamp(mVisionDirectionOffset, 0, 360);
         mVisionConeSize = Mathf.Clamp(mVisionConeSize, 0, 360);
         mVisionConeSpacing = Mathf.Clamp(mVisionConeSpacing, 0, 360 - mVisionConeSize + 1);
+        if (mCollider)
+            mCollider.radius = mVisionDistance;
     }
 }

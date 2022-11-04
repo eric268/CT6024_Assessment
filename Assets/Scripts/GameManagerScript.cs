@@ -10,18 +10,21 @@ public class GameManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        mNonInfectedAgents = new HashSet<GameObject>(GameObject.FindGameObjectsWithTag("Agent"));
+        //mNonInfectedAgents = new HashSet<GameObject>(GameObject.FindGameObjectsWithTag("Agent"));
     }
 
     private void Start()
     {
-        BeginInfection();
+        //BeginInfection();
     }
 
     private void BeginInfection()
     {
-        int rand = Random.Range(0, mNonInfectedAgents.Count);
-        mNonInfectedAgents.ElementAt(rand).GetComponent<AttributesScript>().mCurrentState = CurrentState.NEWLY_INFECTED;
+        if(mNonInfectedAgents.Count > 0)
+        {
+            int rand = Random.Range(0, mNonInfectedAgents.Count);
+            mNonInfectedAgents.ElementAt(rand).GetComponent<AttributesScript>().mCurrentState = CurrentState.NEWLY_INFECTED;
+        }
     }
 
     // Update is called once per frame
