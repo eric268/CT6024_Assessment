@@ -47,7 +47,7 @@ public class PreyController : MonoBehaviour
             if (fs)
             {
                 mAttributes.mEnergyLevel += fs.mEnergyAmount;
-                Destroy(collision.gameObject);
+                collision.gameObject.SetActive(false);
             }
             else
             {
