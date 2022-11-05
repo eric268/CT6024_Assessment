@@ -18,6 +18,7 @@ public class PreyController : MonoBehaviour
 
     void Start()
     {
+        mNetworkLayerSizes = new int[4] { 12, 8, 8, 5 };
         mNeuralNetwork = new NeuralNetwork(mNetworkLayerSizes);
     }
 

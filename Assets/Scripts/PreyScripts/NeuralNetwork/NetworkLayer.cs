@@ -7,8 +7,15 @@ public class NetworkLayer
     public NetworkLayer(int numOfNeurons)
     {
         mNumberOfNeurons = numOfNeurons;
-        mNeurons = new Neuron[mNumberOfNeurons];   
+        mNeurons = new Neuron[mNumberOfNeurons];
+        for (int i =0; i < mNeurons.Length; i++)
+        {
+            mNeurons[i] = new Neuron();
+        }
     }
     public int mNumberOfNeurons;
-    Neuron[] mNeurons;
+    public Neuron[] mNeurons;
+    public NetworkLayer mNextLayer;
+    public NetworkLayer mPreviousLayer;
+    public double[,] mWeights;
 }

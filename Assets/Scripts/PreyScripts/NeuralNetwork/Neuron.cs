@@ -2,17 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Neuron : MonoBehaviour
+public class Neuron
 {
-    // Start is called before the first frame update
-    void Start()
+    public double mActivation;
+    public double mBias;
+    public Neuron()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        System.Random rand = new System.Random();
+        mBias = 0.00001 * rand.Next(-10000, 10000);
+        mActivation = 0.0;
     }
 }
