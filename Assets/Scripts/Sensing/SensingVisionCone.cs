@@ -8,14 +8,14 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(SphereCollider))]
 public class SensingVisionCone : MonoBehaviour
 {
-    public HashSet<Collider> mSensingContainer;
-    [SerializeField]
-    public Dictionary<Collider, float> mSpottedContainer;
+    private List<string> mSensingTags;
+
+    public Dictionary<string, HashSet<Collider>> mSensingContainer;
 
     SphereCollider mCollider;
 
     [SerializeField]
-    public int mVisionConeSize = 90;
+    public int mVisionConeAngle = 90;
 
     [SerializeField]
     public int mVisionConeSpacing;
@@ -29,11 +29,7 @@ public class SensingVisionCone : MonoBehaviour
     [SerializeField]
     public float mVisionDistance = 10.0f;
 
-
-    [SerializeField]
-    float mSpottedTimer = 2.0f;
-
-    GameObject mCurrentTarget;
+    public float mRadius;
 
     private void Awake()
     {
@@ -42,29 +38,23 @@ public class SensingVisionCone : MonoBehaviour
 
     void Start()
     {
-        mSpottedContainer = new Dictionary<Collider, float>();
-        mSensingContainer = new HashSet<Collider>();
+        mSensingTags = GetComponentInParent<SensingManager>().sensingTag;
+        mSensingContainer = new Dictionary<string, HashSet<Collider>>();
         if (!mCollider.isTrigger)
             mCollider.isTrigger = true;
         mCollider.radius = mVisionDistance;
-        mVisionConeSize    = Mathf.Clamp(mVisionConeSize, 0, 360);
-        mVisionConeSpacing = Mathf.Clamp(mVisionConeSpacing, 0, 360 - mVisionConeSize + 1);
+        mVisionConeAngle    = Mathf.Clamp(mVisionConeAngle, 0, 360);
+        mVisionConeSpacing = Mathf.Clamp(mVisionConeSpacing, 0, 360 - mVisionConeAngle + 1);
+        mRadius = mCollider.radius;
     }
     private void Update()
     {
         Debug.DrawLine(transform.position, transform.position + transform.forward * 5.0f, Color.red, Time.deltaTime);
-        //DrawDebugVisionCone();
-
-        mCurrentTarget = CheckIfWithinVision();
-        if (mCurrentTarget)
-        {
-            Debug.Log("Target Spotted");
-        }
     }
 
     private void DrawDebugVisionCone()
     {
-        for (int i = 0; i < mVisionConeSize / 2.0f; i++)
+        for (int i = 0; i < mVisionConeAngle / 2.0f; i++)
         {
             float ang =  (i + transform.eulerAngles.y + mVisionConeSpacing/2.0f + mVisionDirectionOffset) * Mathf.Deg2Rad;
             float ang2 = (i - transform.eulerAngles.y + mVisionConeSpacing/2.0f - mVisionDirectionOffset) * Mathf.Deg2Rad;
@@ -75,70 +65,73 @@ public class SensingVisionCone : MonoBehaviour
         }
     }
 
-    GameObject CheckIfWithinVision()
+    public Dictionary<string, List<GameObject>> GetObjectsWithinVision()
     {
-        if (mSensingContainer.Count == 0)
-            return null;
-
-        foreach (Collider c in mSensingContainer)
+        Dictionary<string, List<GameObject>> objectsInVisionList = new Dictionary<string, List<GameObject>>();
+        foreach (string tag in mSensingTags)
         {
-            float angle =Vector3.Angle(transform.forward, (c.gameObject.transform.position - transform.position));
-            float offset = 2.0f;
-            if (mVisionConeSpacing/2.0f + mVisionDirectionOffset <= angle + offset && angle <= mVisionConeSize/2.0f + mVisionConeSpacing/2.0f - offset + mVisionDirectionOffset)
+            objectsInVisionList[tag] = new List<GameObject>();
+            foreach (Collider c in mSensingContainer[tag])
             {
-                var LOSCheck = c.gameObject.GetComponentInChildren<LOSCheckScript>().LOSCheckPositions;
-                foreach(GameObject t in LOSCheck)
+                float angle = Vector3.Angle(transform.forward, (c.gameObject.transform.position - transform.position));
+                float offset = 2.0f;
+                if (mVisionConeSpacing / 2.0f + mVisionDirectionOffset <= angle + offset && angle <= mVisionConeAngle / 2.0f + mVisionConeSpacing / 2.0f - offset + mVisionDirectionOffset)
                 {
-                    if (!Physics.Linecast(transform.position,t.transform.position))
+                    LOSCheckScript LOS = c.gameObject.GetComponentInChildren<LOSCheckScript>();
+                    if (LOS)
                     {
-                        Debug.Log(mSpottedContainer[c]);
-                        mSpottedContainer[c] += mSpottedTimer * Time.deltaTime;
-                        if (mSpottedContainer[c] >= mSpottedTimer)
+                        foreach (GameObject t in LOS.LOSCheckPositions)
                         {
-                            mSpottedContainer[c] = mSpottedTimer;
-                            return c.gameObject;
+                            if (!Physics.Linecast(transform.position, t.transform.position))
+                            {
+                                objectsInVisionList[tag].Add(t);
+                                break;
+                            }
                         }
-                        else
-                            break;
                     }
                     else
                     {
-                        mSpottedContainer[c] -= mSpottedTimer * Time.deltaTime;
-                        mSpottedContainer[c] = Mathf.Clamp(mSpottedContainer[c], 0.0f, mSpottedTimer);
-                        break;  
+                        if (!Physics.Linecast(transform.position, c.transform.position))
+                        {
+                            objectsInVisionList[tag].Add(c.gameObject);
+                        }
                     }
                 }
             }
-            else
-            {
-                mSpottedContainer[c] -= mSpottedTimer * Time.deltaTime;
-                mSpottedContainer[c] = Mathf.Clamp(mSpottedContainer[c], 0.0f, mSpottedTimer);
-            }
         }
-        return null;
+        return objectsInVisionList;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Agent"))
+        foreach(string tag in mSensingTags)
         {
-            mSensingContainer.Add(other);
-            if (!mSpottedContainer.ContainsKey(other))
-                 mSpottedContainer.Add(other, 0.0f);
+            if (other.gameObject.CompareTag(tag))
+            {
+                if (!mSensingContainer.ContainsKey(tag))
+                    mSensingContainer.Add(tag, new HashSet<Collider>());
+                mSensingContainer[tag].Add(other);
+                break;
+            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        mSensingContainer.Remove(other);
-        mSpottedContainer.Remove(other);
+        foreach (string tag in mSensingTags)
+        {
+            if (other.gameObject.CompareTag(tag))
+            {
+                mSensingContainer[tag].Remove(other);
+            }
+        }
     }
 
     private void OnValidate()
     {
         mVisionDirectionOffset = Mathf.Clamp(mVisionDirectionOffset, 0, 360);
-        mVisionConeSize = Mathf.Clamp(mVisionConeSize, 0, 360);
-        mVisionConeSpacing = Mathf.Clamp(mVisionConeSpacing, 0, 360 - mVisionConeSize + 1);
+        mVisionConeAngle = Mathf.Clamp(mVisionConeAngle, 0, 360);
+        mVisionConeSpacing = Mathf.Clamp(mVisionConeSpacing, 0, 360 - mVisionConeAngle + 1);
         if (mCollider)
             mCollider.radius = mVisionDistance;
     }

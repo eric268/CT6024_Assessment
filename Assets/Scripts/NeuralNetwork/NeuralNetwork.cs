@@ -23,7 +23,7 @@ public class NeuralNetwork
         }
     }
 
-    int RunNetwork(List<double> input)
+    public int RunNetwork(List<double> input)
     {
         Debug.Assert(mNetworkLayers.Length > 0 && mNetworkLayers[0].mNeurons.Length == input.Count);
         for (int i =0; i < input.Count; i++)

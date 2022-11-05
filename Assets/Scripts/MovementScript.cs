@@ -53,16 +53,16 @@ public class MovementScript : MonoBehaviour
     public GameObject CheckForCloseInfectedAgent()
     {
         mCloseEnemy = null;
-        float distance = float.MaxValue;
-        foreach (Collider e in mSensing.mSensingContainer)
-        {
-            float d = Vector3.Distance(gameObject.transform.position, e.gameObject.transform.position);
-            if (e.gameObject.GetComponent<AttributesScript>().mInfected && (d < distance))
-            {
-                mCloseEnemy = e.gameObject;
-                distance = d;
-            }
-        }
+        //float distance = float.MaxValue;
+        //foreach (Collider e in mSensing.mSensingContainer)
+        //{
+        //    float d = Vector3.Distance(gameObject.transform.position, e.gameObject.transform.position);
+        //    if (e.gameObject.GetComponent<AttributesScript>().mInfected && (d < distance))
+        //    {
+        //        mCloseEnemy = e.gameObject;
+        //        distance = d;
+        //    }
+        //}
         return mCloseEnemy;
     }
 
