@@ -36,8 +36,7 @@ public class SensingManager : MonoBehaviour
             var objectsWithVision = sensingVisionCones[i].GetObjectsWithinVision();
             foreach (string tag in sensingTag)
             {
-                //***mVisionConeAngle may need to be /2.0********
-                InputData temp = GetInputForClosestObject(objectsWithVision[tag], sensingVisionCones[i].mRadius, sensingVisionCones[i].mVisionConeAngle);
+                InputData temp = GetInputForClosestObject(objectsWithVision[tag],sensingVisionCones[i].mVisionDirectionOffset, sensingVisionCones[i].mRadius, sensingVisionCones[i].mVisionConeAngle/2.0f);
                 inputData.Add(temp.distance);
                 inputData.Add(temp.xPos);
                 inputData.Add(temp.zPos);
@@ -46,7 +45,7 @@ public class SensingManager : MonoBehaviour
         return inputData;
     }
 
-    InputData GetInputForClosestObject(List<GameObject> objects, float radius, float angle)
+    InputData GetInputForClosestObject(List<GameObject> objects, int offset, float radius, float angle)
     {
         if (objects.Count == 0)
             return new InputData(0.0f, 0.0f, 0.0f);
@@ -64,12 +63,17 @@ public class SensingManager : MonoBehaviour
                 g = obj;
             }
         }
-        float maxX = (Mathf.Sin(angle * Mathf.Deg2Rad) * radius);
-        float maxZ = (Mathf.Cos(angle * Mathf.Deg2Rad) * radius);
-
+        
+        //This is for passing in x z values based on how close the object is relative to max distance
+        float maxX = Mathf.Abs(Mathf.Sin((offset + Mathf.Cos(offset * Mathf.Deg2Rad) * angle * 0.5f) * Mathf.Deg2Rad) * radius);
+        float maxZ = Mathf.Abs(Mathf.Cos((offset + Mathf.Sin(offset * Mathf.Deg2Rad) * 0.5f * angle) * Mathf.Deg2Rad) * radius);
         float x = 1.0f - Mathf.Abs(g.transform.position.x - transform.position.x)/maxX;
         float z = 1.0f - Mathf.Abs(g.transform.position.z - transform.position.z)/maxZ;
-        dist = 1.0f - (dist / radius);
+
+        //Vector3 dir = (g.transform.position - transform.position).normalized;
+        //float x = Mathf.Abs(dir.x);
+        //float z = Mathf.Abs(dir.z);
+        //dist = 1.0f - (dist / radius);
 
         return new InputData(x, z, dist);
     }

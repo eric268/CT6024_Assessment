@@ -58,11 +58,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef6721081f5f60a44a61bf6c51fab927, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mVisionConeSize: 70
+  mVisionConeAngle: 90
   mVisionConeSpacing: 0
   mVisionDirectionOffset: 0
   mVisionColor: {r: 0, g: 0.054581642, b: 1, a: 1}
   mVisionDistance: 10
+  mRadius: 0
+  mTestObject: {fileID: 0}
+  DebugPrint: 0
 --- !u!1 &3734262665857694418
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,7 +237,7 @@ GameObject:
   - component: {fileID: 3734262666129129710}
   - component: {fileID: 3734262666129129709}
   m_Layer: 2
-  m_Name: RightSensing
+  m_Name: LeftSensing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -280,11 +283,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef6721081f5f60a44a61bf6c51fab927, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mVisionConeSize: 110
+  mVisionConeAngle: 90
   mVisionConeSpacing: 0
   mVisionDirectionOffset: 270
   mVisionColor: {r: 0.6627451, g: 0, b: 1, a: 1}
   mVisionDistance: 15
+  mRadius: 0
+  mTestObject: {fileID: 0}
+  DebugPrint: 0
 --- !u!1 &3734262666164438622
 GameObject:
   m_ObjectHideFlags: 0
@@ -362,9 +368,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3734262665809166648}
-  - {fileID: 3734262666129129708}
-  - {fileID: 3734262666739405938}
   - {fileID: 3734262667606705540}
+  - {fileID: 3734262666739405938}
+  - {fileID: 3734262666129129708}
   m_Father: {fileID: 3734262667457119060}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -426,11 +432,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef6721081f5f60a44a61bf6c51fab927, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mVisionConeSize: 70
+  mVisionConeAngle: 90
   mVisionConeSpacing: 0
   mVisionDirectionOffset: 180
   mVisionColor: {r: 0, g: 0.05490196, b: 1, a: 1}
   mVisionDistance: 5
+  mRadius: 0
+  mTestObject: {fileID: 0}
+  DebugPrint: 0
 --- !u!1 &3734262666912512225
 GameObject:
   m_ObjectHideFlags: 0
@@ -654,7 +663,7 @@ GameObject:
   - component: {fileID: 3734262667606705542}
   - component: {fileID: 3734262667606705541}
   m_Layer: 2
-  m_Name: LeftSensing
+  m_Name: RightSensing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -700,8 +709,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef6721081f5f60a44a61bf6c51fab927, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mVisionConeSize: 110
+  mVisionConeAngle: 90
   mVisionConeSpacing: 0
   mVisionDirectionOffset: 90
   mVisionColor: {r: 0.66421795, g: 0, b: 1, a: 1}
   mVisionDistance: 15
+  mRadius: 0
+  mTestObject: {fileID: 0}
+  DebugPrint: 0

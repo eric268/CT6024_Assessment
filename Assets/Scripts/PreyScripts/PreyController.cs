@@ -29,9 +29,9 @@ public class PreyController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        UpdateEnergyLevels();
-        int result = mNeuralNetwork.RunNetwork(mSensingManager.GetNeuralNetworkInputs());
-        Move(result);
+        //UpdateEnergyLevels();
+        //int result = mNeuralNetwork.RunNetwork(mSensingManager.GetNeuralNetworkInputs());
+        //Move(result);
     }
 
     private void Move(int result)
