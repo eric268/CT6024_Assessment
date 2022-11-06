@@ -10,7 +10,12 @@ public class InputData
     public float distance;
     public float xPos;
     public float zPos;
-
+    public InputData()
+    {
+        distance = 0.0f;
+        xPos = 0.0f;
+        zPos = 0.0f;
+    }
     public InputData(float d, float x, float z)
     {
         float distance = d;
@@ -21,7 +26,7 @@ public class InputData
 
 public class SensingManager : MonoBehaviour
 {
-    SensingVisionCone[] sensingVisionCones;
+    public SensingVisionCone[] sensingVisionCones;
     public List<string> sensingTag;
     void Start()
     {
@@ -48,7 +53,7 @@ public class SensingManager : MonoBehaviour
     InputData GetInputForClosestObject(List<GameObject> objects, int offset, float radius, float angle)
     {
         if (objects.Count == 0)
-            return new InputData(0.0f, 0.0f, 0.0f);
+            return new InputData();
 
         float closestDistance = Mathf.Infinity;
         GameObject g = null;

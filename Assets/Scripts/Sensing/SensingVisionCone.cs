@@ -32,13 +32,6 @@ public class SensingVisionCone : MonoBehaviour
 
     public float mRadius;
 
-    [SerializeField]
-    public GameObject mTestObject;
-
-    float b;
-
-    public bool DebugPrint = false;
-
     private void Awake()
     {
         mCollider = GetComponent<SphereCollider>();
@@ -56,33 +49,11 @@ public class SensingVisionCone : MonoBehaviour
         mVisionConeAngle    = Mathf.Clamp(mVisionConeAngle, 0, 360);
         mVisionConeSpacing = Mathf.Clamp(mVisionConeSpacing, 0, 360 - mVisionConeAngle + 1);
         mRadius = mCollider.radius;
-        b = 0.0f;
     }
     private void Update()
     {
-        b += Time.deltaTime * 5.0f;
-        float a = b * Mathf.Deg2Rad;
-
         Debug.DrawLine(transform.position, transform.position + transform.forward * 5.0f, Color.green, Time.deltaTime);
         DrawDebugVisionCone();
-
-        float maxX = Mathf.Abs(Mathf.Sin(((mVisionDirectionOffset + Mathf.Cos(mVisionDirectionOffset * Mathf.Deg2Rad) * mVisionConeAngle * 0.5f) * Mathf.Deg2Rad)) * mRadius);
-        float maxZ = Mathf.Abs(Mathf.Cos((mVisionDirectionOffset + Mathf.Sin(mVisionDirectionOffset * Mathf.Deg2Rad) * 0.5f * mVisionConeAngle) * Mathf.Deg2Rad) * mRadius);
-
-
-        float dist = Vector3.Distance(mTestObject.transform.position, transform.position);
-        float x = 1.0f - Mathf.Abs(mTestObject.transform.position.x - transform.position.x) / maxX;
-        float z = 1.0f - Mathf.Abs(mTestObject.transform.position.z - transform.position.z) / maxZ;
-        dist = 1.0f - (dist / mRadius);
-
-        if (DebugPrint)
-        {
-            Debug.Log("Max X: " + maxX);
-            Debug.Log("Max Z: " + maxZ);
-            Debug.Log("xPos: " + Mathf.Abs(mTestObject.transform.position.x - transform.position.x));
-            Debug.Log("zPos: " + Mathf.Abs(mTestObject.transform.position.z - transform.position.z));
-            Debug.Log("Distance: " + dist);
-        }
     }
 
     private void DrawDebugVisionCone()
@@ -106,8 +77,13 @@ public class SensingVisionCone : MonoBehaviour
             objectsInVisionList[tag] = new List<GameObject>();
             foreach (Collider c in mSensingContainer[tag])
             {
-                float angle = Vector3.Angle(transform.forward, (c.gameObject.transform.position - transform.position));
+                Vector3 temp = c.gameObject.transform.position - transform.position;
+                float angle = Vector2.Angle(new Vector2(transform.forward.x, transform.forward.z), new Vector2(temp.x,temp.z));
                 float offset = 2.0f;
+                Debug.Log(angle);
+                //Debug.Log("Between: " + (mVisionConeSpacing / 2.0f + mVisionDirectionOffset));
+                //Debug.Log("Between2 : " + (mVisionConeAngle / 2.0f + mVisionConeSpacing / 2.0f - offset + mVisionDirectionOffset));
+                
                 if (mVisionConeSpacing / 2.0f + mVisionDirectionOffset <= angle + offset && angle <= mVisionConeAngle / 2.0f + mVisionConeSpacing / 2.0f - offset + mVisionDirectionOffset)
                 {
                     LOSCheckScript LOS = c.gameObject.GetComponentInChildren<LOSCheckScript>();
@@ -124,6 +100,7 @@ public class SensingVisionCone : MonoBehaviour
                     }
                     else
                     {
+                        Debug.DrawLine(transform.position, c.transform.position, Color.green, Time.deltaTime);
                         if (!Physics.Linecast(transform.position, c.transform.position))
                         {
                             objectsInVisionList[tag].Add(c.gameObject);

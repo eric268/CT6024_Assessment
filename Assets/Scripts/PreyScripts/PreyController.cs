@@ -30,8 +30,8 @@ public class PreyController : MonoBehaviour
     void FixedUpdate()
     {
         //UpdateEnergyLevels();
-        //int result = mNeuralNetwork.RunNetwork(mSensingManager.GetNeuralNetworkInputs());
-        //Move(result);
+        int result = mNeuralNetwork.RunNetwork(mSensingManager.GetNeuralNetworkInputs());
+        Move(result);
     }
 
     private void Move(int result)
@@ -87,6 +87,11 @@ public class PreyController : MonoBehaviour
             if (fs)
             {
                 mAttributes.mEnergyLevel += fs.mEnergyAmount;
+                foreach (SensingVisionCone cone in mSensingManager.sensingVisionCones)
+                {
+                    if (cone.mSensingContainer.ContainsKey(collision.gameObject.tag))
+                        cone.mSensingContainer[collision.gameObject.tag].Remove(collision.collider);
+                }
                 collision.gameObject.SetActive(false);
             }
             else
