@@ -26,8 +26,14 @@ public class WallScript : MonoBehaviour
     {
         if (agentLayerMask == (agentLayerMask | 1 << collision.gameObject.layer))
         {
-            collision.gameObject.transform.position = collision.gameObject.transform.position + newPos;
-            Debug.Log("Has collided");
+            if (xAxis)
+            {
+                collision.gameObject.transform.position = new Vector3(newPos.x, collision.gameObject.transform.position.y, collision.gameObject.transform.position.z);
+            }
+            else
+            {
+                collision.gameObject.transform.position = new Vector3(collision.gameObject.transform.position.x, collision.gameObject.transform.position.y, newPos.z);
+            }
         }
     }
 }

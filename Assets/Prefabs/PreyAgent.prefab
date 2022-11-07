@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3734262665809166648}
   - component: {fileID: 3734262665809166650}
   - component: {fileID: 3734262665809166649}
-  m_Layer: 2
+  m_Layer: 3
   m_Name: ForwardSensing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 15
+  m_Radius: 20
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3734262665809166649
 MonoBehaviour:
@@ -62,7 +62,7 @@ MonoBehaviour:
   mVisionConeSpacing: 0
   mVisionDirectionOffset: 0
   mVisionColor: {r: 0, g: 0.054581642, b: 1, a: 1}
-  mRadius: 15
+  mRadius: 20
 --- !u!1 &3734262665857694418
 GameObject:
   m_ObjectHideFlags: 0
@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 3734262665857694422}
   - component: {fileID: 3734262665857694421}
   - component: {fileID: 3734262665857694420}
-  m_Layer: 2
+  m_Layer: 3
   m_Name: HeadDir
   m_TagString: Temp
   m_Icon: {fileID: 0}
@@ -169,7 +169,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3734262666039735230}
-  m_Layer: 2
+  m_Layer: 3
   m_Name: Pos3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -200,7 +200,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3734262666074084784}
-  m_Layer: 2
+  m_Layer: 3
   m_Name: Pos1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -233,7 +233,7 @@ GameObject:
   - component: {fileID: 3734262666129129708}
   - component: {fileID: 3734262666129129710}
   - component: {fileID: 3734262666129129709}
-  m_Layer: 2
+  m_Layer: 3
   m_Name: RightSensing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -266,7 +266,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 20
+  m_Radius: 30
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3734262666129129709
 MonoBehaviour:
@@ -284,7 +284,7 @@ MonoBehaviour:
   mVisionConeSpacing: 0
   mVisionDirectionOffset: -90
   mVisionColor: {r: 0.6627451, g: 0, b: 1, a: 1}
-  mRadius: 20
+  mRadius: 30
 --- !u!1 &3734262666164438622
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,7 +295,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3734262666164438623}
   - component: {fileID: 3734262666164438608}
-  m_Layer: 2
+  m_Layer: 3
   m_Name: LOSCheckPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -343,7 +343,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3734262666208508468}
   - component: {fileID: 3416045646896263054}
-  m_Layer: 2
+  m_Layer: 3
   m_Name: Sensing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -396,7 +396,7 @@ GameObject:
   - component: {fileID: 3734262666739405938}
   - component: {fileID: 3734262666739405940}
   - component: {fileID: 3734262666739405939}
-  m_Layer: 2
+  m_Layer: 3
   m_Name: BackSensing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -457,7 +457,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3734262666912512226}
-  m_Layer: 2
+  m_Layer: 3
   m_Name: Pos2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -508,7 +508,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3734262667457119066}
-  m_LocalRotation: {x: 0, y: 0.98692673, z: 0, w: 0.16116981}
+  m_LocalRotation: {x: 0, y: -0.997285, z: 0, w: 0.07363836}
   m_LocalPosition: {x: -21.528727, y: 1, z: 39.590588}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -616,14 +616,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   mAttributes:
-    mMaxEnergy: 10
-    energyLevel: 10
+    mMaxEnergy: 15
+    energyLevel: 15
     mLearningRate: 0.1
-    mSpeed: 7.5
-    mFoodRequiredToReplicate: 2
+    mSpeed: 10
+    mFoodRequiredToReplicate: 3
     mCurrentFoodEaten: 0
   spawn: 1
-  mTurnRate: 5
+  mTurnRate: 90
 --- !u!114 &3734262667457119063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -649,7 +649,7 @@ GameObject:
   - component: {fileID: 3734262667606705540}
   - component: {fileID: 3734262667606705542}
   - component: {fileID: 3734262667606705541}
-  m_Layer: 2
+  m_Layer: 3
   m_Name: LeftSensing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -682,7 +682,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 20
+  m_Radius: 30
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3734262667606705541
 MonoBehaviour:
@@ -700,4 +700,4 @@ MonoBehaviour:
   mVisionConeSpacing: 0
   mVisionDirectionOffset: 90
   mVisionColor: {r: 0.66421795, g: 0, b: 1, a: 1}
-  mRadius: 20
+  mRadius: 30

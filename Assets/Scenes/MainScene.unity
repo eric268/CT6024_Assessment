@@ -208,17 +208,17 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 106003887}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -98.4324, y: 23.568949, z: -218.6665}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.9686481, y: 23.568949, z: -4.37333}
+  m_LocalScale: {x: 0.02, y: 1, z: 0.02}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1106141716}
   - {fileID: 343496801}
   - {fileID: 1701363595}
   - {fileID: 673583675}
-  m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_Father: {fileID: 1016317245}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &343496797
 GameObject:
@@ -331,7 +331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f289b9b9f91ea9c46a1da8092dd767e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newPos: {x: -245, y: 0, z: 0}
+  newPos: {x: -120, y: 0, z: 0}
   xAxis: 1
   agentLayerMask:
     serializedVersion: 2
@@ -511,7 +511,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f289b9b9f91ea9c46a1da8092dd767e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newPos: {x: 0, y: 0, z: 245}
+  newPos: {x: 0, y: 0, z: 120}
   xAxis: 0
   agentLayerMask:
     serializedVersion: 2
@@ -648,7 +648,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7685706745089078584, guid: 94247775a3259a041b481ab8f974271d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 16.79
+      value: 118.8
       objectReference: {fileID: 0}
     - target: {fileID: 7685706745089078584, guid: 94247775a3259a041b481ab8f974271d, type: 3}
       propertyPath: m_LocalRotation.w
@@ -730,7 +730,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundPosition: {fileID: 1016317245}
-  numPreyToSpawn: 1
+  numPreyToSpawn: 100
   preyPrefab: {fileID: 3734262667457119066, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
 --- !u!1 &963194225
 GameObject:
@@ -908,9 +908,10 @@ Transform:
   m_GameObject: {fileID: 1016317241}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 50, y: 1, z: 50}
+  m_LocalScale: {x: 25, y: 1, z: 25}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 106003888}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1092,7 +1093,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f289b9b9f91ea9c46a1da8092dd767e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newPos: {x: 245, y: 0, z: 0}
+  newPos: {x: 120, y: 0, z: 0}
   xAxis: 1
   agentLayerMask:
     serializedVersion: 2
@@ -1463,9 +1464,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foodPoolSize: 1500
-  startingFoodAmount: 750
+  startingFoodAmount: 500
   foodPrefab: {fileID: 7685706745089078590, guid: 94247775a3259a041b481ab8f974271d, type: 3}
-  spawnRate: 0.1
+  spawnRate: 0.2
   groundPosition: {fileID: 1016317245}
 --- !u!1 &1701363591
 GameObject:
@@ -1578,7 +1579,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f289b9b9f91ea9c46a1da8092dd767e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newPos: {x: 0, y: 0, z: -245}
+  newPos: {x: 0, y: 0, z: -120}
   xAxis: 0
   agentLayerMask:
     serializedVersion: 2

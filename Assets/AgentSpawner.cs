@@ -13,10 +13,11 @@ public class AgentSpawner : MonoBehaviour
     [SerializeField]
     GameObject preyPrefab;
     // Start is called before the first frame update
-    void Start()
+
+    private void Awake()
     {
         System.Random rand = new System.Random();
-        for(int i =0; i < numPreyToSpawn; i++)
+        for (int i = 0; i < numPreyToSpawn; i++)
         {
             SpawnAgent(preyPrefab);
             int rot = rand.Next(360);

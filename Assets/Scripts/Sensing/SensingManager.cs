@@ -117,7 +117,7 @@ public class SensingManager : MonoBehaviour
 
         float x = /*1.0f - */ Mathf.Abs(g.transform.position.x - transform.position.x)/maxX;
         float z = /*1.0f - */ Mathf.Abs(g.transform.position.z - transform.position.z)/maxZ;
-        dist    = /*1.0f - */  (dist / radius);
+        dist    = 1.0f -   (dist / radius);
 
         //Vector3 dir = (g.transform.position - transform.position).normalized;
         //float x = Mathf.Abs(dir.x);

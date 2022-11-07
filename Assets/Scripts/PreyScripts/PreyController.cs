@@ -28,7 +28,7 @@ public class PreyController : MonoBehaviour
 
     private void Awake()
     {
-        mNetworkLayerSizes = new int[3] { 13, 8, 3 };
+        mNetworkLayerSizes = new int[3] { 13, 8, 5 };
         mNeuralNetwork = new NeuralNetwork(mNetworkLayerSizes);
     }
 
@@ -42,11 +42,12 @@ public class PreyController : MonoBehaviour
     private void Update()
     {
         UpdateEnergyLevels();
+        UpdateNetwork();
     }
 
     private void OnEnable()
     {
-        InvokeRepeating(nameof(UpdateNetwork), Random.value, 0.1f);
+        //InvokeRepeating(nameof(UpdateNetwork), Random.value, 0.05f);
     }
 
     void SplitPrey()
@@ -99,15 +100,18 @@ public class PreyController : MonoBehaviour
         {
             case 0:
                 //Move Forward
+                mRigidBody.velocity = Vector3.forward * mAttributes.mSpeed;
                 break;
             case 1:
                 //Move Right
-                float amount = (float)mNeuralNetwork.mNetworkLayers[mNeuralNetwork.mNetworkLayers.Length - 1].mNeurons[1].mActivation;
-                transform.Rotate(0.0f, mTurnRate * amount, 0.0f);
+                mRigidBody.velocity = transform.right * mAttributes.mSpeed;
+                //float amount = (float)mNeuralNetwork.mNetworkLayers[mNeuralNetwork.mNetworkLayers.Length - 1].mNeurons[1].mActivation;
+                //transform.Rotate(0.0f, mTurnRate /** amount*/, 0.0f);
                 break;
             case 2:
-                float amount2 = (float)mNeuralNetwork.mNetworkLayers[mNeuralNetwork.mNetworkLayers.Length - 1].mNeurons[2].mActivation;
-                transform.Rotate(0.0f, -mTurnRate * amount2, 0.0f);
+                mRigidBody.velocity = -transform.right * mAttributes.mSpeed;
+                //float amount2 = (float)mNeuralNetwork.mNetworkLayers[mNeuralNetwork.mNetworkLayers.Length - 1].mNeurons[2].mActivation;
+                //transform.Rotate(0.0f, -mTurnRate /** amount2*/, 0.0f);
                 break;
                 //case 3:
                 //    //Move Left
@@ -117,8 +121,14 @@ public class PreyController : MonoBehaviour
                 //default:
                 //    Debug.LogError("Unexpected result PreyController move function");
                 //    break;
+            case 3:
+                mRigidBody.velocity = (transform.right * 0.5f + transform.forward * 0.5f).normalized * mAttributes.mSpeed;
+                break;
+            case 4:
+                mRigidBody.velocity = -(transform.right * 0.5f + transform.forward * 0.5f).normalized * mAttributes.mSpeed;
+                break; ;
         }
-        mRigidBody.velocity = transform.forward * mAttributes.mSpeed;
+        //mRigidBody.velocity = transform.forward * mAttributes.mSpeed;
 
     }
 
@@ -142,6 +152,7 @@ public class PreyController : MonoBehaviour
             FoodScript fs = collision.gameObject.GetComponent<FoodScript>();
             if (fs)
             {
+                FoodSpawnerScript.mCurrentAmountofFoodOnMap--;
                 mAttributes.mCurrentFoodEaten++;
                 if (mAttributes.mCurrentFoodEaten >= mAttributes.mFoodRequiredToReplicate)
                 {

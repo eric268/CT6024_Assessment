@@ -9,7 +9,7 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField]
     public float mTimeSpeed;
     [SerializeField]
-    public static int maxNumberOfPrey = 200;
+    public static int maxNumberOfPrey = 250;
     public static int currentNumberOfPrey;
 
 
@@ -20,7 +20,6 @@ public class GameManagerScript : MonoBehaviour
     }
     private void Update()
     {
-        Debug.Log(currentNumberOfPrey);
         if (currentNumberOfPrey == 0)
             Debug.Log(Time.time);
     }

@@ -12,8 +12,13 @@ public class FoodSpawnerScript : MonoBehaviour
     [SerializeField]
     GameObject foodPrefab;
     [SerializeField]
-    float spawnRate = 1.0f;
+    float spawnRate;
+    [SerializeField]
+    float spawnRateDecreaseFrequency = 60.0f;
     int nextItemToSpawn;
+
+    public static int mMaxFoodOnMap = 500;
+    public static int mCurrentAmountofFoodOnMap = 0;
 
 
     [SerializeField]
@@ -30,10 +35,16 @@ public class FoodSpawnerScript : MonoBehaviour
         {
             SpawnFood();
         }
+        InvokeRepeating(nameof(DecreaseSpawnRate), spawnRateDecreaseFrequency, spawnRateDecreaseFrequency);
     }
 
     void SpawnFood()
     {
+        if (mCurrentAmountofFoodOnMap >= mMaxFoodOnMap)
+            return;
+
+        mCurrentAmountofFoodOnMap++;
+
         if (foodPool.Count <= 0)
         {
             foodPool.Enqueue(Instantiate(foodPrefab, gameObject.transform));
@@ -43,6 +54,16 @@ public class FoodSpawnerScript : MonoBehaviour
         float randX = Random.Range(-groundPosition.localScale.x * 5f, groundPosition.localScale.x * 5f);
         float randZ = Random.Range(-groundPosition.localScale.z * 5f, groundPosition.localScale.z * 5f);
         food.transform.position = new Vector3(randX, 0.5f, randZ);
+    }
+
+    void DecreaseSpawnRate()
+    {
+        if (spawnRate > 1)
+            return;
+        spawnRate += 0.05f;
+        Debug.Log("Spawn Rate Decreased to: " + spawnRate);
+        CancelInvoke();
+        InvokeRepeating(nameof(SpawnFood), 0.0f, spawnRate);
     }
 
     public static void ReturnFood(GameObject obj)

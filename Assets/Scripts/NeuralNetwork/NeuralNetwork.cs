@@ -51,7 +51,7 @@ public class NeuralNetwork
         {
             for (int j =0; j < currentLayer.mWeights.GetLength(1);j++)
             {
-                currentLayer.mWeights[i, j] = 0.00001 * rand.Next(-30000, 30000);
+                currentLayer.mWeights[i, j] = 0.00001 * rand.Next(-10000, 10000);
             }
         }
     }
