@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,11 +12,12 @@ public class PreyUIManager : MonoBehaviour
     PreyController preyController;
     public GameObject healthBarPrefab;
     GameObject healthBar;
-    public Canvas canvas;
+    Canvas canvas;
     float startingXDeltaSize;
 
     private void OnEnable()
     {
+        canvas = FindObjectOfType<UIManager>().GetComponent<Canvas>();
         cam = Camera.main;
         preyController = GetComponentInParent<PreyController>();
         healthBar = Instantiate(healthBarPrefab, canvas.transform);

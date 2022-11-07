@@ -41,19 +41,21 @@ public class SensingManager : MonoBehaviour
             var objectsWithVision = sensingVisionCones[i].GetObjectsWithinVision();
             foreach (string tag in sensingTag)
             {
-                InputData temp = GetInputForClosestObject(objectsWithVision[tag],sensingVisionCones[i].mVisionDirectionOffset, sensingVisionCones[i].mRadius, sensingVisionCones[i].mVisionConeAngle/2.0f);
-                inputData.Add(temp.distance);
-                inputData.Add(temp.xPos);
-                inputData.Add(temp.zPos);
+                GetInputForClosestObject(inputData, objectsWithVision[tag],sensingVisionCones[i].mVisionDirectionOffset, sensingVisionCones[i].mRadius, sensingVisionCones[i].mVisionConeAngle);
             }
         }
         return inputData;
     }
 
-    InputData GetInputForClosestObject(List<GameObject> objects, int offset, float radius, float angle)
+    void GetInputForClosestObject(List<double> inputData, List<GameObject> objects, int offset, float radius, float angle)
     {
         if (objects.Count == 0)
-            return new InputData();
+        {
+            inputData.Add(0);
+            inputData.Add(0);
+            inputData.Add(0);
+            return;
+        }
 
         float closestDistance = Mathf.Infinity;
         GameObject g = null;
@@ -68,18 +70,27 @@ public class SensingManager : MonoBehaviour
                 g = obj;
             }
         }
-        
+
         //This is for passing in x z values based on how close the object is relative to max distance
         float maxX = Mathf.Abs(Mathf.Sin((offset + Mathf.Cos(offset * Mathf.Deg2Rad) * angle * 0.5f) * Mathf.Deg2Rad) * radius);
         float maxZ = Mathf.Abs(Mathf.Cos((offset + Mathf.Sin(offset * Mathf.Deg2Rad) * 0.5f * angle) * Mathf.Deg2Rad) * radius);
+        //float maxX = Mathf.Max(Mathf.Sin((offset + angle * 0.5f) * Mathf.Deg2Rad), Mathf.Sin((offset - angle * 0.5f) * Mathf.Deg2Rad)) * radius;
+        //float maxZ = Mathf.Max(Mathf.Cos((offset + angle * 0.5f) * Mathf.Deg2Rad), Mathf.Cos((offset - angle * 0.5f) * Mathf.Deg2Rad)) * radius;
+
+        //Debug.Log("MaxX" + maxX);
+        //Debug.Log("MaxZ" + maxZ);
+        //Debug.Log("xPos" + (g.transform.position.x - transform.position.x));
+        //Debug.Log("zPos" + (g.transform.position.z - transform.position.z));
+
         float x = 1.0f - Mathf.Abs(g.transform.position.x - transform.position.x)/maxX;
         float z = 1.0f - Mathf.Abs(g.transform.position.z - transform.position.z)/maxZ;
+        dist = 1.0f - (dist / radius);
 
         //Vector3 dir = (g.transform.position - transform.position).normalized;
         //float x = Mathf.Abs(dir.x);
         //float z = Mathf.Abs(dir.z);
-        //dist = 1.0f - (dist / radius);
-
-        return new InputData(x, z, dist);
+        inputData.Add(dist);
+        inputData.Add(x);
+        inputData.Add(z);
     }
 }

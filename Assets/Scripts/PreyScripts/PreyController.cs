@@ -13,7 +13,7 @@ public class PreyController : MonoBehaviour
 
     [SerializeField]
     LayerMask mFoodLayerMask;
-
+    Rigidbody mRigidBody;
     [SerializeField]
     public PreyAttributes mAttributes;
 
@@ -24,6 +24,7 @@ public class PreyController : MonoBehaviour
         mSensingManager = GetComponentInChildren<SensingManager>();
         mNetworkLayerSizes = new int[4] { 12, 8, 8, 5 };
         mNeuralNetwork = new NeuralNetwork(mNetworkLayerSizes);
+        mRigidBody = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -43,15 +44,19 @@ public class PreyController : MonoBehaviour
                 break;
             case 1:
                 //Move Forward
+                mRigidBody.velocity = Vector3.forward;
                 break;
             case 2:
                 //Move Right
+                mRigidBody.velocity = Vector3.right;
                 break;
             case 3:
                 //Move Backward
+                mRigidBody.velocity = -Vector3.forward;
                 break;
             case 4:
                 //Move Left
+                mRigidBody.velocity = -Vector3.right;
                 break;
             default:
                 Debug.LogError("Unexpected result PreyController move function");
@@ -81,7 +86,7 @@ public class PreyController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (mFoodLayerMask == (mFoodLayerMask | 1 << collision.gameObject.layer))
+        if (collision.gameObject.CompareTag("Food"))
         {
             FoodScript fs = collision.gameObject.GetComponent<FoodScript>();
             if (fs)

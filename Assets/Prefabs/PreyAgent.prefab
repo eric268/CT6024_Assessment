@@ -64,8 +64,6 @@ MonoBehaviour:
   mVisionColor: {r: 0, g: 0.054581642, b: 1, a: 1}
   mVisionDistance: 10
   mRadius: 0
-  mTestObject: {fileID: 0}
-  DebugPrint: 0
 --- !u!1 &3734262665857694418
 GameObject:
   m_ObjectHideFlags: 0
@@ -237,7 +235,7 @@ GameObject:
   - component: {fileID: 3734262666129129710}
   - component: {fileID: 3734262666129129709}
   m_Layer: 2
-  m_Name: LeftSensing
+  m_Name: RightSensing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -285,12 +283,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mVisionConeAngle: 90
   mVisionConeSpacing: 0
-  mVisionDirectionOffset: 270
+  mVisionDirectionOffset: -90
   mVisionColor: {r: 0.6627451, g: 0, b: 1, a: 1}
   mVisionDistance: 15
   mRadius: 0
-  mTestObject: {fileID: 0}
-  DebugPrint: 0
 --- !u!1 &3734262666164438622
 GameObject:
   m_ObjectHideFlags: 0
@@ -348,6 +344,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3734262666208508468}
+  - component: {fileID: 3416045646896263054}
   m_Layer: 2
   m_Name: Sensing
   m_TagString: Untagged
@@ -368,12 +365,27 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3734262665809166648}
-  - {fileID: 3734262667606705540}
-  - {fileID: 3734262666739405938}
   - {fileID: 3734262666129129708}
+  - {fileID: 3734262666739405938}
+  - {fileID: 3734262667606705540}
   m_Father: {fileID: 3734262667457119060}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3416045646896263054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3734262666208508467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e01f80ed38c4e8a4285ad80392bec0e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensingVisionCones: []
+  sensingTag:
+  - Food
 --- !u!1 &3734262666739405937
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,8 +450,6 @@ MonoBehaviour:
   mVisionColor: {r: 0, g: 0.05490196, b: 1, a: 1}
   mVisionDistance: 5
   mRadius: 0
-  mTestObject: {fileID: 0}
-  DebugPrint: 0
 --- !u!1 &3734262666912512225
 GameObject:
   m_ObjectHideFlags: 0
@@ -510,7 +520,7 @@ Transform:
   - {fileID: 3734262665857694419}
   - {fileID: 3734262666164438623}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 208.458, z: 0}
 --- !u!33 &3734262667457119059
 MeshFilter:
@@ -650,7 +660,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   screenOffset: 2
   healthBarPrefab: {fileID: 7328123084311905740, guid: 982bdda7d46059444ae4a629b31c2a80, type: 3}
-  canvas: {fileID: 0}
 --- !u!1 &3734262667606705539
 GameObject:
   m_ObjectHideFlags: 0
@@ -663,7 +672,7 @@ GameObject:
   - component: {fileID: 3734262667606705542}
   - component: {fileID: 3734262667606705541}
   m_Layer: 2
-  m_Name: RightSensing
+  m_Name: LeftSensing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -715,5 +724,3 @@ MonoBehaviour:
   mVisionColor: {r: 0.66421795, g: 0, b: 1, a: 1}
   mVisionDistance: 15
   mRadius: 0
-  mTestObject: {fileID: 0}
-  DebugPrint: 0

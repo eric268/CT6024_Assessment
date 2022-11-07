@@ -60,8 +60,8 @@ public class SensingVisionCone : MonoBehaviour
     {
         for (int i = 0; i < mVisionConeAngle / 2.0f; i++)
         {
-            float ang =  (i + transform.eulerAngles.y + mVisionConeSpacing/2.0f + mVisionDirectionOffset) * Mathf.Deg2Rad;
-            float ang2 = (i - transform.eulerAngles.y + mVisionConeSpacing/2.0f - mVisionDirectionOffset) * Mathf.Deg2Rad;
+            float ang =  (i + transform.eulerAngles.y - mVisionConeSpacing/2.0f - mVisionDirectionOffset) * Mathf.Deg2Rad;
+            float ang2 = (i - transform.eulerAngles.y - mVisionConeSpacing/2.0f + mVisionDirectionOffset) * Mathf.Deg2Rad;
             Vector3 pos1 = transform.position + new Vector3(Mathf.Sin(-ang2), 0.0f, Mathf.Cos(-ang2)) * mCollider.radius;
             Vector3 pos2 = transform.position + new Vector3(Mathf.Sin(ang), 0.0f, Mathf.Cos(ang)) * mCollider.radius;
             Debug.DrawLine(transform.position, pos1, mVisionColor, Time.deltaTime);
@@ -78,13 +78,22 @@ public class SensingVisionCone : MonoBehaviour
             foreach (Collider c in mSensingContainer[tag])
             {
                 Vector3 temp = c.gameObject.transform.position - transform.position;
-                float angle = Vector2.Angle(new Vector2(transform.forward.x, transform.forward.z), new Vector2(temp.x,temp.z));
+                float angle = Vector2.SignedAngle(new Vector2(transform.forward.x, transform.forward.z), new Vector2(temp.x,temp.z));
                 float offset = 2.0f;
-                Debug.Log(angle);
-                //Debug.Log("Between: " + (mVisionConeSpacing / 2.0f + mVisionDirectionOffset));
-                //Debug.Log("Between2 : " + (mVisionConeAngle / 2.0f + mVisionConeSpacing / 2.0f - offset + mVisionDirectionOffset));
+
+                bool withinVision;
+                if (Mathf.Abs(mVisionDirectionOffset) + mVisionConeAngle / 2.0f > 180)
+                {
+                    float diff = Mathf.Abs(mVisionDirectionOffset) + mVisionConeAngle / 2.0f - 180;
+                    Debug.Log("Within: " + (180 - diff));
+                    withinVision = angle >= 180 - diff || angle <= - 180 + diff;
+                }
+                else
+                {
+                    withinVision = mVisionDirectionOffset - mVisionConeAngle / 2.0f <= angle && angle <= mVisionDirectionOffset + mVisionConeAngle / 2.0f;
+                }
                 
-                if (mVisionConeSpacing / 2.0f + mVisionDirectionOffset <= angle + offset && angle <= mVisionConeAngle / 2.0f + mVisionConeSpacing / 2.0f - offset + mVisionDirectionOffset)
+                if (withinVision)
                 {
                     LOSCheckScript LOS = c.gameObject.GetComponentInChildren<LOSCheckScript>();
                     if (LOS)
@@ -137,7 +146,7 @@ public class SensingVisionCone : MonoBehaviour
 
     private void OnValidate()
     {
-        mVisionDirectionOffset = Mathf.Clamp(mVisionDirectionOffset, 0, 360);
+        mVisionDirectionOffset = Mathf.Clamp(mVisionDirectionOffset, -180, 180);
         mVisionConeAngle = Mathf.Clamp(mVisionConeAngle, 0, 360);
         mVisionConeSpacing = Mathf.Clamp(mVisionConeSpacing, 0, 360 - mVisionConeAngle + 1);
         if (mCollider)
