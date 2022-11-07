@@ -386,6 +386,53 @@ PrefabInstance:
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 94247775a3259a041b481ab8f974271d, type: 3}
+--- !u!1 &919794844
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 919794845}
+  - component: {fileID: 919794846}
+  m_Layer: 0
+  m_Name: AgentSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &919794845
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919794844}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.7575064, y: 114.68621, z: -44.16429}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &919794846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919794844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f19c9fe228a3b7947b2fc8e11a050774, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundPosition: {fileID: 1016317245}
+  numPreyToSpawn: 1000
+  preyPrefab: {fileID: 3734262667457119066, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -562,7 +609,7 @@ Transform:
   m_GameObject: {fileID: 1016317241}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 1, z: 10}
+  m_LocalScale: {x: 50, y: 1, z: 50}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -985,9 +1032,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4114e407d1c3ece45bf52f966c9dcef2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  foodPoolSize: 50
-  startingFoodAmount: 25
+  foodPoolSize: 1000
+  startingFoodAmount: 750
   foodPrefab: {fileID: 7685706745089078590, guid: 94247775a3259a041b481ab8f974271d, type: 3}
+  spawnRate: 0.05
   groundPosition: {fileID: 1016317245}
 --- !u!1 &1785354783
 GameObject:
@@ -1017,7 +1065,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2072141756}
   - {fileID: 1885811496}
   m_Father: {fileID: 0}
   m_RootOrder: 5
@@ -1303,11 +1350,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 2.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!4 &2072141756 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3734262667457119060, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-  m_PrefabInstance: {fileID: 3734262665922125032}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2096147078
 GameObject:
   m_ObjectHideFlags: 0
@@ -1352,166 +1394,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &3734262665922125032
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 2
-    m_TransformParent: {fileID: 1785354784}
-    m_Modifications:
-    - target: {fileID: 3734262665809166631, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262665809166649, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: DebugPrint
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262665809166649, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: mTestObject
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262665809166649, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: mSensingTags.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262665809166649, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: mSensingTags.Array.data[0]
-      value: Food
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262665809166649, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: mSensingTags.Array.data[1]
-      value: Enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262666129129707, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: m_Name
-      value: RightSensing
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262666129129707, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262666129129709, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: mTestObject
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262666129129709, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: mSensingTags.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262666129129709, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: mSensingTags.Array.data[0]
-      value: Food
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262666129129709, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: mSensingTags.Array.data[1]
-      value: Enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262666739405937, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262666739405939, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: mTestObject
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262666739405939, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: mSensingTags.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262666739405939, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: mSensingTags.Array.data[0]
-      value: Food
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262666739405939, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: mSensingTags.Array.data[1]
-      value: Enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262667457119060, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: m_RootOrder
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262667457119060, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -14.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262667457119060, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262667457119060, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 10.61
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262667457119060, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262667457119060, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262667457119060, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262667457119060, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262667457119060, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262667457119060, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262667457119060, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262667457119062, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: mTestObj
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262667457119063, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: canvas
-      value: 
-      objectReference: {fileID: 1216275595}
-    - target: {fileID: 3734262667457119066, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: m_Name
-      value: PreyAgent
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262667457119066, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262667606705539, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: m_Name
-      value: LeftSensing
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262667606705539, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262667606705541, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: mTestObject
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262667606705541, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: mSensingTags.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262667606705541, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: mSensingTags.Array.data[0]
-      value: Food
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734262667606705541, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
-      propertyPath: mSensingTags.Array.data[1]
-      value: Enemy
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_AddedGameObjects: []
-  m_SourcePrefab: {fileID: 100100000, guid: f9a077ab961a097468c2eeab9c241693, type: 3}

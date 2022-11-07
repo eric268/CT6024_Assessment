@@ -11,6 +11,7 @@ public class FoodSpawnerScript : MonoBehaviour
     int startingFoodAmount = 25;
     [SerializeField]
     GameObject foodPrefab;
+    [SerializeField]
     float spawnRate = 1.0f;
     int nextItemToSpawn;
 
@@ -39,8 +40,8 @@ public class FoodSpawnerScript : MonoBehaviour
         }
         GameObject food = foodPool.Dequeue();
         food.SetActive(true);
-        float randX = Random.Range(-groundPosition.localScale.x * 4.0f, groundPosition.localScale.x * 4.0f);
-        float randZ = Random.Range(-groundPosition.localScale.z * 4.0f, groundPosition.localScale.z * 4.0f);
+        float randX = Random.Range(-groundPosition.localScale.x * 5f, groundPosition.localScale.x * 5f);
+        float randZ = Random.Range(-groundPosition.localScale.z * 5f, groundPosition.localScale.z * 5f);
         food.transform.position = new Vector3(randX, 0.5f, randZ);
     }
 

@@ -403,7 +403,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3734262666739405938
 Transform:
   m_ObjectHideFlags: 0
@@ -609,7 +609,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3734262667457119066}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3.5
@@ -643,7 +643,7 @@ MonoBehaviour:
   mAttributes:
     mMaxEnergy: 10
     energyLevel: 10
-    mSpeed: 3.5
+    mSpeed: 5
     mReproductionRate: 10
     mTimeUntilReproduction: 10
 --- !u!114 &3734262667457119063
@@ -653,7 +653,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3734262667457119066}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72235a4f3c42817418adaecacead24b8, type: 3}
   m_Name: 

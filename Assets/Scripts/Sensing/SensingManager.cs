@@ -33,9 +33,14 @@ public class SensingManager : MonoBehaviour
         sensingVisionCones = GetComponentsInChildren<SensingVisionCone>();
     }
 
-    public List<double> GetNeuralNetworkInputs()
+    public List<double> GetNeuralNetworkInputs(GameObject agent)
     {
         List<double> inputData = new List<double>();
+        //First pass in current direction as inputs
+        inputData.Add(agent.GetComponent<Rigidbody>().velocity.x);
+        inputData.Add(agent.GetComponent<Rigidbody>().velocity.z);
+
+        //Pass in x, z and distance values for closest object in each vision cone
         for (int i = 0; i < sensingVisionCones.Length; i++)
         {
             var objectsWithVision = sensingVisionCones[i].GetObjectsWithinVision();
@@ -82,13 +87,13 @@ public class SensingManager : MonoBehaviour
         //Debug.Log("xPos" + (g.transform.position.x - transform.position.x));
         //Debug.Log("zPos" + (g.transform.position.z - transform.position.z));
 
-        float x = 1.0f - Mathf.Abs(g.transform.position.x - transform.position.x)/maxX;
-        float z = 1.0f - Mathf.Abs(g.transform.position.z - transform.position.z)/maxZ;
+        //float x = 1.0f - Mathf.Abs(g.transform.position.x - transform.position.x)/maxX;
+        //float z = 1.0f - Mathf.Abs(g.transform.position.z - transform.position.z)/maxZ;
         dist = 1.0f - (dist / radius);
 
-        //Vector3 dir = (g.transform.position - transform.position).normalized;
-        //float x = Mathf.Abs(dir.x);
-        //float z = Mathf.Abs(dir.z);
+        Vector3 dir = (g.transform.position - transform.position).normalized;
+        float x = Mathf.Abs(dir.x);
+        float z = Mathf.Abs(dir.z);
         inputData.Add(dist);
         inputData.Add(x);
         inputData.Add(z);

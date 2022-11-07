@@ -35,14 +35,16 @@ public class SensingVisionCone : MonoBehaviour
     private void Awake()
     {
         mCollider = GetComponent<SphereCollider>();
-    }
-
-    void Start()
-    {
         mSensingTags = GetComponentInParent<SensingManager>().sensingTag;
         mSensingContainer = new Dictionary<string, HashSet<Collider>>();
         foreach (string tag in mSensingTags)
             mSensingContainer.Add(tag, new HashSet<Collider>());
+    }
+
+    void Start()
+    { 
+
+
         if (!mCollider.isTrigger)
             mCollider.isTrigger = true;
         mCollider.radius = mVisionDistance;
@@ -52,8 +54,8 @@ public class SensingVisionCone : MonoBehaviour
     }
     private void Update()
     {
-        Debug.DrawLine(transform.position, transform.position + transform.forward * 5.0f, Color.green, Time.deltaTime);
-        DrawDebugVisionCone();
+        //Debug.DrawLine(transform.position, transform.position + transform.forward * 5.0f, Color.green, Time.deltaTime);
+        //DrawDebugVisionCone();
     }
 
     private void DrawDebugVisionCone()
@@ -109,7 +111,7 @@ public class SensingVisionCone : MonoBehaviour
                     }
                     else
                     {
-                        Debug.DrawLine(transform.position, c.transform.position, Color.green, Time.deltaTime);
+                        //Debug.DrawLine(transform.position, c.transform.position, Color.green, Time.deltaTime);
                         if (!Physics.Linecast(transform.position, c.transform.position))
                         {
                             objectsInVisionList[tag].Add(c.gameObject);
