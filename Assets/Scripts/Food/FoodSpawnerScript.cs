@@ -21,7 +21,7 @@ public class FoodSpawnerScript : MonoBehaviour
 
     public static Queue<GameObject> foodPool;
     // Start is called before the first frame update
-    void Start()
+    void Start ()
     {
         foodPool = new Queue<GameObject>();
         nextItemToSpawn = foodPoolSize / 2;
@@ -49,5 +49,10 @@ public class FoodSpawnerScript : MonoBehaviour
     {
         obj.SetActive(false);
         foodPool.Enqueue(obj);
+    }
+    private void OnValidate()
+    {
+        CancelInvoke();
+        InvokeRepeating(nameof(SpawnFood), 0.0f, spawnRate);
     }
 }

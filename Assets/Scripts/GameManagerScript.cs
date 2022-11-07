@@ -6,6 +6,8 @@ using UnityEngine;
 public class GameManagerScript : MonoBehaviour
 {
     public HashSet<GameObject> mNonInfectedAgents;
+    [SerializeField]
+    public float mTimeSpeed;
 
     // Start is called before the first frame update
     void Awake()
@@ -25,6 +27,10 @@ public class GameManagerScript : MonoBehaviour
             int rand = Random.Range(0, mNonInfectedAgents.Count);
             mNonInfectedAgents.ElementAt(rand).GetComponent<AttributesScript>().mCurrentState = CurrentState.NEWLY_INFECTED;
         }
+    }
+    private void OnValidate()
+    {
+        Time.timeScale = mTimeSpeed;
     }
 
     // Update is called once per frame

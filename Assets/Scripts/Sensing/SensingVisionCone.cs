@@ -14,7 +14,7 @@ public class SensingVisionCone : MonoBehaviour
     public Dictionary<string, HashSet<Collider>> mSensingContainer;
 
     SphereCollider mCollider;
-
+    SensingManager mManager;
     [SerializeField]
     public int mVisionConeAngle = 90;
 
@@ -28,8 +28,6 @@ public class SensingVisionCone : MonoBehaviour
     public Color mVisionColor = Color.white;
 
     [SerializeField]
-    public float mVisionDistance = 10.0f;
-
     public float mRadius;
 
     private void Awake()
@@ -43,19 +41,20 @@ public class SensingVisionCone : MonoBehaviour
 
     void Start()
     { 
-
-
         if (!mCollider.isTrigger)
             mCollider.isTrigger = true;
-        mCollider.radius = mVisionDistance;
         mVisionConeAngle    = Mathf.Clamp(mVisionConeAngle, 0, 360);
         mVisionConeSpacing = Mathf.Clamp(mVisionConeSpacing, 0, 360 - mVisionConeAngle + 1);
-        mRadius = mCollider.radius;
+        mCollider.radius = mRadius;
     }
     private void Update()
     {
-        //Debug.DrawLine(transform.position, transform.position + transform.forward * 5.0f, Color.green, Time.deltaTime);
-        //DrawDebugVisionCone();
+        if (GetComponentInParent<SensingManager>().mDebugDrawVisionCones)
+        {
+            Debug.DrawLine(transform.position, transform.position + transform.forward * 5.0f, Color.green, Time.deltaTime);
+            DrawDebugVisionCone();
+        }
+
     }
 
     private void DrawDebugVisionCone()
@@ -97,26 +96,27 @@ public class SensingVisionCone : MonoBehaviour
                 
                 if (withinVision)
                 {
-                    LOSCheckScript LOS = c.gameObject.GetComponentInChildren<LOSCheckScript>();
-                    if (LOS)
-                    {
-                        foreach (GameObject t in LOS.LOSCheckPositions)
-                        {
-                            if (!Physics.Linecast(transform.position, t.transform.position))
-                            {
-                                objectsInVisionList[tag].Add(t);
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        //Debug.DrawLine(transform.position, c.transform.position, Color.green, Time.deltaTime);
-                        if (!Physics.Linecast(transform.position, c.transform.position))
-                        {
-                            objectsInVisionList[tag].Add(c.gameObject);
-                        }
-                    }
+                    objectsInVisionList[tag].Add(c.gameObject);
+                    //LOSCheckScript LOS = c.gameObject.GetComponentInChildren<LOSCheckScript>();
+                    //if (LOS)
+                    //{
+                    //    foreach (GameObject t in LOS.LOSCheckPositions)
+                    //    {
+                    //        if (!Physics.Linecast(transform.position, t.transform.position))
+                    //        {
+                    //            objectsInVisionList[tag].Add(t);
+                    //            break;
+                    //        }
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    //Debug.DrawLine(transform.position, c.transform.position, Color.green, Time.deltaTime);
+                    //    if (!Physics.Linecast(transform.position, c.transform.position))
+                    //    {
+                                //objectsInVisionList[tag].Add(c.gameObject);
+                        //}
+                    //}
                 }
             }
         }
@@ -151,7 +151,5 @@ public class SensingVisionCone : MonoBehaviour
         mVisionDirectionOffset = Mathf.Clamp(mVisionDirectionOffset, -180, 180);
         mVisionConeAngle = Mathf.Clamp(mVisionConeAngle, 0, 360);
         mVisionConeSpacing = Mathf.Clamp(mVisionConeSpacing, 0, 360 - mVisionConeAngle + 1);
-        if (mCollider)
-            mCollider.radius = mVisionDistance;
     }
 }

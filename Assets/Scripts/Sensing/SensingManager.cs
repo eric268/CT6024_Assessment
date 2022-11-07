@@ -28,6 +28,8 @@ public class SensingManager : MonoBehaviour
 {
     public SensingVisionCone[] sensingVisionCones;
     public List<string> sensingTag;
+    [SerializeField]
+    public bool mDebugDrawVisionCones;
     void Start()
     {
         sensingVisionCones = GetComponentsInChildren<SensingVisionCone>();
@@ -36,10 +38,7 @@ public class SensingManager : MonoBehaviour
     public List<double> GetNeuralNetworkInputs(GameObject agent)
     {
         List<double> inputData = new List<double>();
-        //First pass in current direction as inputs
-        inputData.Add(agent.GetComponent<Rigidbody>().velocity.x);
-        inputData.Add(agent.GetComponent<Rigidbody>().velocity.z);
-
+        SetDirectionNetworkInput(agent, inputData);
         //Pass in x, z and distance values for closest object in each vision cone
         for (int i = 0; i < sensingVisionCones.Length; i++)
         {
@@ -50,6 +49,35 @@ public class SensingManager : MonoBehaviour
             }
         }
         return inputData;
+    }
+
+    void SetDirectionNetworkInput(GameObject agent, List<double> inputData)
+    {
+        //First pass in current direction as inputs
+        //Input[0] 1 if moving forward
+        //Input[1] 1 if moving right
+        //Input[2] 1 if moving back
+        //Input[3] 1 if moving left
+        for (int i = 0; i < 4; i++)
+        {
+            inputData.Add(0);
+        }
+        if (agent.GetComponent<Rigidbody>().velocity.x > 0.0)
+        {
+            inputData[0] = 1.0;
+        }
+        else if (agent.GetComponent<Rigidbody>().velocity.x < 0.0)
+        {
+            inputData[1] = 1.0;
+        }
+        else if (agent.GetComponent<Rigidbody>().velocity.z > 0.0)
+        {
+            inputData[2] = 1.0;
+        }
+        else
+        {
+            inputData[3] = 1.0;
+        }
     }
 
     void GetInputForClosestObject(List<double> inputData, List<GameObject> objects, int offset, float radius, float angle)
@@ -87,13 +115,14 @@ public class SensingManager : MonoBehaviour
         //Debug.Log("xPos" + (g.transform.position.x - transform.position.x));
         //Debug.Log("zPos" + (g.transform.position.z - transform.position.z));
 
-        //float x = 1.0f - Mathf.Abs(g.transform.position.x - transform.position.x)/maxX;
-        //float z = 1.0f - Mathf.Abs(g.transform.position.z - transform.position.z)/maxZ;
+        float x = 1.0f - Mathf.Abs(g.transform.position.x - transform.position.x)/maxX;
+        float z = 1.0f - Mathf.Abs(g.transform.position.z - transform.position.z)/maxZ;
         dist = 1.0f - (dist / radius);
 
-        Vector3 dir = (g.transform.position - transform.position).normalized;
-        float x = Mathf.Abs(dir.x);
-        float z = Mathf.Abs(dir.z);
+        //Vector3 dir = (g.transform.position - transform.position).normalized;
+        //float x = Mathf.Abs(dir.x);
+        //float z = Mathf.Abs(dir.z);
+
         inputData.Add(dist);
         inputData.Add(x);
         inputData.Add(z);

@@ -44,7 +44,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 10
+  m_Radius: 15
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3734262665809166649
 MonoBehaviour:
@@ -62,8 +62,7 @@ MonoBehaviour:
   mVisionConeSpacing: 0
   mVisionDirectionOffset: 0
   mVisionColor: {r: 0, g: 0.054581642, b: 1, a: 1}
-  mVisionDistance: 10
-  mRadius: 0
+  mRadius: 15
 --- !u!1 &3734262665857694418
 GameObject:
   m_ObjectHideFlags: 0
@@ -267,7 +266,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 10
+  m_Radius: 20
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3734262666129129709
 MonoBehaviour:
@@ -285,8 +284,7 @@ MonoBehaviour:
   mVisionConeSpacing: 0
   mVisionDirectionOffset: -90
   mVisionColor: {r: 0.6627451, g: 0, b: 1, a: 1}
-  mVisionDistance: 15
-  mRadius: 0
+  mRadius: 20
 --- !u!1 &3734262666164438622
 GameObject:
   m_ObjectHideFlags: 0
@@ -386,6 +384,8 @@ MonoBehaviour:
   sensingVisionCones: []
   sensingTag:
   - Food
+  - Wall
+  mDebugDrawVisionCones: 0
 --- !u!1 &3734262666739405937
 GameObject:
   m_ObjectHideFlags: 0
@@ -448,7 +448,6 @@ MonoBehaviour:
   mVisionConeSpacing: 0
   mVisionDirectionOffset: 180
   mVisionColor: {r: 0, g: 0.05490196, b: 1, a: 1}
-  mVisionDistance: 5
   mRadius: 0
 --- !u!1 &3734262666912512225
 GameObject:
@@ -511,7 +510,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3734262667457119066}
-  m_LocalRotation: {x: -0, y: 0.9693208, z: -0, w: -0.24579939}
+  m_LocalRotation: {x: 0, y: 0.8505689, z: 0, w: -0.5258636}
   m_LocalPosition: {x: -21.528727, y: 1, z: 39.590588}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -643,9 +642,12 @@ MonoBehaviour:
   mAttributes:
     mMaxEnergy: 10
     energyLevel: 10
-    mSpeed: 5
+    mLearningRate: 0.1
+    mSpeed: 7.5
     mReproductionRate: 10
     mTimeUntilReproduction: 10
+  spawn: 1
+  mTurnRate: 5
 --- !u!114 &3734262667457119063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -704,7 +706,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 10
+  m_Radius: 20
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3734262667606705541
 MonoBehaviour:
@@ -722,5 +724,4 @@ MonoBehaviour:
   mVisionConeSpacing: 0
   mVisionDirectionOffset: 90
   mVisionColor: {r: 0.66421795, g: 0, b: 1, a: 1}
-  mVisionDistance: 15
-  mRadius: 0
+  mRadius: 20

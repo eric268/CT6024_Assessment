@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.XR;
 
 public class PreyController : MonoBehaviour
 {
     [Header("Neural Network")]
     [SerializeField]
     public int[] mNetworkLayerSizes;
-    private NeuralNetwork mNeuralNetwork;
+    public NeuralNetwork mNeuralNetwork;
 
     [SerializeField]
     LayerMask mFoodLayerMask;
@@ -19,21 +20,52 @@ public class PreyController : MonoBehaviour
 
     private SensingManager mSensingManager;
     int prevResult;
-    bool doOnce = true;
+    public bool spawn = true;
+
+    [SerializeField]
+    public float mTurnRate = 0.2f;
+
+    private void Awake()
+    {
+        mNetworkLayerSizes = new int[3] { 22, 8, 3 };
+        mNeuralNetwork = new NeuralNetwork(mNetworkLayerSizes);
+    }
 
     void Start()
     {
         mSensingManager = GetComponentInChildren<SensingManager>();
-        mNetworkLayerSizes = new int[4] { 11, 8, 8, 5 };
-        mNeuralNetwork = new NeuralNetwork(mNetworkLayerSizes);
         mRigidBody = GetComponent<Rigidbody>();
+        mAttributes.mLearningRate = Random.value * 0.2f;
+    }
+    private void Update()
+    {
+        UpdateEnergyLevels();
+    }
+
+    private void OnEnable()
+    {
         InvokeRepeating(nameof(UpdateNetwork), Random.value, 0.1f);
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    void SplitPrey()
     {
-        UpdateEnergyLevels();
+        System.Random rand = new System.Random();
+        int rot = rand.Next(360);
+
+        Vector3 dir = (Vector3.zero - transform.position).normalized;
+        GameObject temp = Instantiate(gameObject, transform.position - transform.forward * 1.5f,new Quaternion(0.0f,0.0f,0.0f,1.0f), gameObject.transform.parent);
+        temp.transform.Rotate(0.0f, rot, 0.0f);
+        PreyController controller = temp.GetComponent<PreyController>();
+        controller.mAttributes.mEnergyLevel = mAttributes.mMaxEnergy;
+        controller.mAttributes.mLearningRate = mAttributes.mLearningRate;
+        controller.mSensingManager = mSensingManager = GetComponentInChildren<SensingManager>();
+        controller.mNeuralNetwork = this.mNeuralNetwork;
+        Debug.Assert(controller != null && controller.mNeuralNetwork != null);
+
+        foreach (NetworkLayer layer in controller.mNeuralNetwork.mNetworkLayers)
+        {
+            controller.mNeuralNetwork.UpdateWeightsAndBias(layer, controller.mAttributes.mLearningRate);
+        }
 
     }
 
@@ -41,54 +73,47 @@ public class PreyController : MonoBehaviour
     {
         int result = mNeuralNetwork.RunNetwork(mSensingManager.GetNeuralNetworkInputs(gameObject));
         Move(result);
-        if (doOnce)
-        {
-            prevResult = result;
-            doOnce = false;
-        }
-        if (prevResult != result)
-        {
-            Debug.Log("New behaviour found");
-            mAttributes.mEnergyLevel = 15.0f;
-        }
-            prevResult = result;
+        //mNeuralNetwork.RunNetwork(mSensingManager.GetNeuralNetworkInputs(gameObject));
+        //Move(mNeuralNetwork.mNetworkLayers[mNeuralNetwork.mNetworkLayers.Length - 1]);
+
+
     }
+
+    //private void Move(NetworkLayer outputLayer)
+    //{
+    //    float val = (float)((outputLayer.mNeurons[0].mActivation > outputLayer.mNeurons[1].mActivation) ? -outputLayer.mNeurons[0].mActivation : outputLayer.mNeurons[1].mActivation);
+    //    transform.Rotate(0.0f, val, 0.0f);
+    //    mRigidBody.velocity = transform.forward * mAttributes.mSpeed;
+
+    //}
 
     private void Move(int result)
     {
         switch (result)
         {
             case 0:
-                //No Movement
+                //Move Forward
                 break;
             case 1:
-                //Move Forward
-                mRigidBody.velocity = Vector3.forward * mAttributes.mSpeed;
+                //Move Right
+                float amount = (float)mNeuralNetwork.mNetworkLayers[mNeuralNetwork.mNetworkLayers.Length - 1].mNeurons[1].mActivation;
+                transform.Rotate(0.0f, mTurnRate * amount, 0.0f);
                 break;
             case 2:
-                //Move Right
-                mRigidBody.velocity = Vector3.right * mAttributes.mSpeed;
+                float amount2 = (float)mNeuralNetwork.mNetworkLayers[mNeuralNetwork.mNetworkLayers.Length - 1].mNeurons[2].mActivation;
+                transform.Rotate(0.0f, -mTurnRate * amount2, 0.0f);
                 break;
-            case 3:
-                //Move Backward
-                mRigidBody.velocity = -Vector3.forward * mAttributes.mSpeed;
-                break;
-            case 4:
-                //Move Left
-                mRigidBody.velocity = -Vector3.right * mAttributes.mSpeed;
-                break;
-            default:
-                Debug.LogError("Unexpected result PreyController move function");
-                break;
+                //case 3:
+                //    //Move Left
+                //    mRigidBody.velocity = -Vector3.right * mAttributes.mSpeed;
+                //    transform.rotation = new Quaternion(0.0f, 270.0f, 0.0f, 1.0f);
+                //    break;
+                //default:
+                //    Debug.LogError("Unexpected result PreyController move function");
+                //    break;
         }
+        mRigidBody.velocity = transform.forward * mAttributes.mSpeed;
 
-    }
-
-    public List<double> GetVisionInput()
-    {
-        List<double> input = new List<double>();
-
-        return input;
     }
 
     private void UpdateEnergyLevels()
@@ -110,6 +135,7 @@ public class PreyController : MonoBehaviour
             FoodScript fs = collision.gameObject.GetComponent<FoodScript>();
             if (fs)
             {
+                SplitPrey();
                 mAttributes.mEnergyLevel += fs.mEnergyAmount;
                 foreach (SensingVisionCone cone in mSensingManager.sensingVisionCones)
                 {

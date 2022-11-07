@@ -9,7 +9,7 @@ public class Neuron
     public Neuron()
     {
         System.Random rand = new System.Random();
-        mBias = 0.00001 * rand.Next(-10000, 10000);
+        mBias = 0.0f;//  0.00001 * rand.Next(-30000, 30000);
         mActivation = 0.0;
     }
 }

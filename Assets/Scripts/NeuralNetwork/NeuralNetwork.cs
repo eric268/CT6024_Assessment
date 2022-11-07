@@ -4,10 +4,11 @@ using UnityEngine;
 using System;
 using TMPro.EditorUtilities;
 using System.Linq;
+using UnityEngine.UIElements;
 
 public class NeuralNetwork
 {
-    NetworkLayer[] mNetworkLayers;
+    public NetworkLayer[] mNetworkLayers;
     public NeuralNetwork(int[] layerSizes)
     {
         Debug.Assert(layerSizes.Length > 0);
@@ -50,7 +51,7 @@ public class NeuralNetwork
         {
             for (int j =0; j < currentLayer.mWeights.GetLength(1);j++)
             {
-                currentLayer.mWeights[i, j] = 0.00001 * rand.Next(-10000, 10000);
+                currentLayer.mWeights[i, j] = 0.00001 * rand.Next(-15000, 15000);
             }
         }
     }
@@ -65,6 +66,33 @@ public class NeuralNetwork
                 currentLayer.mNextLayer.mNeurons[i].mActivation += currentLayer.mWeights[i, j] * currentLayer.mNeurons[j].mActivation;
             }
             currentLayer.mNextLayer.mNeurons[i].mActivation = Sigmoid(currentLayer.mNextLayer.mNeurons[i].mActivation + currentLayer.mNextLayer.mNeurons[i].mBias);
+        }
+    }
+
+    public void UpdateWeightsAndBias(NetworkLayer currentLayer, float mLerningRate)
+    {
+        System.Random rand = new System.Random();
+        
+        if (currentLayer.mNextLayer == null)
+        {
+            foreach(Neuron n in currentLayer.mNeurons)
+            {
+                n.mBias += 0.00001 * rand.Next(-10000, 10000) * mLerningRate;
+            }
+            return;
+        }
+        
+        bool doOnce = true;
+        for (int i = 0; i < currentLayer.mWeights.GetLength(0); i++)
+        {
+            
+            for (int j = 0; j < currentLayer.mWeights.GetLength(1); j++)
+            {
+                currentLayer.mWeights[i, j] += 0.00001 * rand.Next(-10000, 10000) * mLerningRate;
+                if (doOnce)
+                    currentLayer.mNeurons[j].mBias += 0.00001 * rand.Next(-10000, 10000) * mLerningRate;
+            }
+            doOnce = false;
         }
     }
 

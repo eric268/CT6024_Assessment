@@ -18,6 +18,8 @@ public class PreyAttributes// : MonoBehaviour
         get => energyLevel;
         set => this.energyLevel = Mathf.Clamp(value, 0, mMaxEnergy);
     }
+    [SerializeField]
+    public float mLearningRate = 0.05f;
 
     [Space(15)]
     [SerializeField]
