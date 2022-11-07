@@ -50,9 +50,4 @@ public class FoodSpawnerScript : MonoBehaviour
         obj.SetActive(false);
         foodPool.Enqueue(obj);
     }
-    private void OnValidate()
-    {
-        CancelInvoke();
-        InvokeRepeating(nameof(SpawnFood), 0.0f, spawnRate);
-    }
 }

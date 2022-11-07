@@ -27,9 +27,14 @@ public class AgentSpawner : MonoBehaviour
 
     void SpawnAgent(GameObject prefab)
     {
-        GameObject obj = Instantiate(preyPrefab, gameObject.transform);
-        float randX = Random.Range(-groundPosition.localScale.x * 3f, groundPosition.localScale.x * 3f);
-        float randZ = Random.Range(-groundPosition.localScale.z * 3f, groundPosition.localScale.z * 3f);
-        obj.transform.position = new Vector3(randX, 1.0f, randZ);
+        if (GameManagerScript.maxNumberOfPrey > GameManagerScript.currentNumberOfPrey)
+        {
+            GameObject obj = Instantiate(preyPrefab, gameObject.transform);
+            float randX = Random.Range(-groundPosition.localScale.x * 3f, groundPosition.localScale.x * 3f);
+            float randZ = Random.Range(-groundPosition.localScale.z * 3f, groundPosition.localScale.z * 3f);
+            obj.transform.position = new Vector3(randX, 1.0f, randZ);
+            GameManagerScript.currentNumberOfPrey++;
+        }
+
     }
 }

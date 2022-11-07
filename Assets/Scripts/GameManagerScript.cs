@@ -8,13 +8,22 @@ public class GameManagerScript : MonoBehaviour
     public HashSet<GameObject> mNonInfectedAgents;
     [SerializeField]
     public float mTimeSpeed;
+    [SerializeField]
+    public static int maxNumberOfPrey = 200;
+    public static int currentNumberOfPrey;
+
 
     // Start is called before the first frame update
     void Awake()
     {
         //mNonInfectedAgents = new HashSet<GameObject>(GameObject.FindGameObjectsWithTag("Agent"));
     }
-
+    private void Update()
+    {
+        Debug.Log(currentNumberOfPrey);
+        if (currentNumberOfPrey == 0)
+            Debug.Log(Time.time);
+    }
     private void Start()
     {
         //BeginInfection();

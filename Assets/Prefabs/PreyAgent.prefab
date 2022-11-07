@@ -384,7 +384,6 @@ MonoBehaviour:
   sensingVisionCones: []
   sensingTag:
   - Food
-  - Wall
   mDebugDrawVisionCones: 0
 --- !u!1 &3734262666739405937
 GameObject:
@@ -493,10 +492,9 @@ GameObject:
   - component: {fileID: 3734262667457119058}
   - component: {fileID: 3734262667457119057}
   - component: {fileID: 3734262667457119056}
-  - component: {fileID: 3734262667457119071}
   - component: {fileID: 3734262667457119062}
   - component: {fileID: 3734262667457119063}
-  m_Layer: 2
+  m_Layer: 3
   m_Name: PreyAgent
   m_TagString: Agent
   m_Icon: {fileID: 0}
@@ -510,7 +508,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3734262667457119066}
-  m_LocalRotation: {x: 0, y: 0.8505689, z: 0, w: -0.5258636}
+  m_LocalRotation: {x: 0, y: 0.98692673, z: 0, w: 0.16116981}
   m_LocalPosition: {x: -21.528727, y: 1, z: 39.590588}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -601,28 +599,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!195 &3734262667457119071
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3734262667457119066}
-  m_Enabled: 0
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 1
-  m_BaseOffset: 1
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!114 &3734262667457119062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -644,8 +620,8 @@ MonoBehaviour:
     energyLevel: 10
     mLearningRate: 0.1
     mSpeed: 7.5
-    mReproductionRate: 10
-    mTimeUntilReproduction: 10
+    mFoodRequiredToReplicate: 2
+    mCurrentFoodEaten: 0
   spawn: 1
   mTurnRate: 5
 --- !u!114 &3734262667457119063

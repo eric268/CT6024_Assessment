@@ -142,6 +142,7 @@ public class SensingVisionCone : MonoBehaviour
             if (other.gameObject.CompareTag(tag))
             {
                 mSensingContainer[tag].Remove(other);
+                Debug.Log("Removed. Size:" + mSensingContainer[tag].Count);
             }
         }
     }

@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class WallScript : MonoBehaviour
 {
+    [SerializeField]
+    Vector3 newPos;
+    [SerializeField]
+    bool xAxis;
+    [SerializeField]
+    LayerMask agentLayerMask;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,5 +20,14 @@ public class WallScript : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (agentLayerMask == (agentLayerMask | 1 << collision.gameObject.layer))
+        {
+            collision.gameObject.transform.position = collision.gameObject.transform.position + newPos;
+            Debug.Log("Has collided");
+        }
     }
 }

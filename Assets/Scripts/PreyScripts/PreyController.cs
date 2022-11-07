@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -23,11 +24,11 @@ public class PreyController : MonoBehaviour
     public bool spawn = true;
 
     [SerializeField]
-    public float mTurnRate = 0.2f;
+    public float mTurnRate;
 
     private void Awake()
     {
-        mNetworkLayerSizes = new int[3] { 22, 8, 3 };
+        mNetworkLayerSizes = new int[3] { 13, 8, 3 };
         mNeuralNetwork = new NeuralNetwork(mNetworkLayerSizes);
     }
 
@@ -35,7 +36,8 @@ public class PreyController : MonoBehaviour
     {
         mSensingManager = GetComponentInChildren<SensingManager>();
         mRigidBody = GetComponent<Rigidbody>();
-        mAttributes.mLearningRate = Random.value * 0.2f;
+        //mAttributes.mLearningRate = Random.value * mLearningRate;
+        //mTurnRate *= Random.value;
     }
     private void Update()
     {
@@ -49,17 +51,21 @@ public class PreyController : MonoBehaviour
 
     void SplitPrey()
     {
-        System.Random rand = new System.Random();
-        int rot = rand.Next(360);
+        if (GameManagerScript.currentNumberOfPrey >= GameManagerScript.maxNumberOfPrey)
+            return;
 
+        GameManagerScript.currentNumberOfPrey++;
+        System.Random rand = new System.Random();
         Vector3 dir = (Vector3.zero - transform.position).normalized;
-        GameObject temp = Instantiate(gameObject, transform.position - transform.forward * 1.5f,new Quaternion(0.0f,0.0f,0.0f,1.0f), gameObject.transform.parent);
+        GameObject temp = Instantiate(gameObject, transform.position - transform.forward * 0.5f,new Quaternion(0.0f,0.0f,0.0f,1.0f), gameObject.transform.parent);
+        int rot = rand.Next(360);
         temp.transform.Rotate(0.0f, rot, 0.0f);
         PreyController controller = temp.GetComponent<PreyController>();
         controller.mAttributes.mEnergyLevel = mAttributes.mMaxEnergy;
-        controller.mAttributes.mLearningRate = mAttributes.mLearningRate;
+        //controller.mAttributes.mLearningRate = mAttributes.mLearningRate;
         controller.mSensingManager = mSensingManager = GetComponentInChildren<SensingManager>();
         controller.mNeuralNetwork = this.mNeuralNetwork;
+
         Debug.Assert(controller != null && controller.mNeuralNetwork != null);
 
         foreach (NetworkLayer layer in controller.mNeuralNetwork.mNetworkLayers)
@@ -120,6 +126,7 @@ public class PreyController : MonoBehaviour
     {
         if (mAttributes.mEnergyLevel <= 0)
         {
+            GameManagerScript.currentNumberOfPrey--;
             Destroy(gameObject);
         }
         else
@@ -135,7 +142,12 @@ public class PreyController : MonoBehaviour
             FoodScript fs = collision.gameObject.GetComponent<FoodScript>();
             if (fs)
             {
-                SplitPrey();
+                mAttributes.mCurrentFoodEaten++;
+                if (mAttributes.mCurrentFoodEaten >= mAttributes.mFoodRequiredToReplicate)
+                {
+                    SplitPrey();
+                    mAttributes.mCurrentFoodEaten = 0;
+                }
                 mAttributes.mEnergyLevel += fs.mEnergyAmount;
                 foreach (SensingVisionCone cone in mSensingManager.sensingVisionCones)
                 {

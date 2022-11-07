@@ -24,7 +24,7 @@ public class PreyAttributes// : MonoBehaviour
     [Space(15)]
     [SerializeField]
     public float mSpeed;
-    public float mReproductionRate;
-    public float mTimeUntilReproduction;
+    public int mFoodRequiredToReplicate;
+    public int mCurrentFoodEaten;
 
 }
