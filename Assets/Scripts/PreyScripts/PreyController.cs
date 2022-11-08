@@ -15,7 +15,7 @@ public class PreyController : MonoBehaviour
 
     [SerializeField]
     LayerMask mFoodLayerMask;
-    Rigidbody mRigidBody;
+    public Rigidbody mRigidBody;
     [SerializeField]
     public PreyAttributes mAttributes;
 
@@ -28,7 +28,7 @@ public class PreyController : MonoBehaviour
 
     private void Awake()
     {
-        mNetworkLayerSizes = new int[3] { 13, 8, 5 };
+        mNetworkLayerSizes = new int[3] { 11, 8, 5 };
         mNeuralNetwork = new NeuralNetwork(mNetworkLayerSizes);
     }
 
@@ -111,21 +111,21 @@ public class PreyController : MonoBehaviour
             case 2:
                 mRigidBody.velocity = -transform.right * mAttributes.mSpeed;
                 //float amount2 = (float)mNeuralNetwork.mNetworkLayers[mNeuralNetwork.mNetworkLayers.Length - 1].mNeurons[2].mActivation;
-                //transform.Rotate(0.0f, -mTurnRate /** amount2*/, 0.0f);
+                transform.Rotate(0.0f, -mTurnRate /** amount2*/, 0.0f);
                 break;
-                //case 3:
-                //    //Move Left
-                //    mRigidBody.velocity = -Vector3.right * mAttributes.mSpeed;
-                //    transform.rotation = new Quaternion(0.0f, 270.0f, 0.0f, 1.0f);
-                //    break;
-                //default:
-                //    Debug.LogError("Unexpected result PreyController move function");
-                //    break;
+            //case 3:
+            //    //Move Left
+            //    mRigidBody.velocity = -Vector3.right * mAttributes.mSpeed;
+            //    transform.rotation = new Quaternion(0.0f, 270.0f, 0.0f, 1.0f);
+            //    break;
+            //default:
+            //    Debug.LogError("Unexpected result PreyController move function");
+            //    break;
             case 3:
-                mRigidBody.velocity = (transform.right * 0.5f + transform.forward * 0.5f).normalized * mAttributes.mSpeed;
+                mRigidBody.velocity = (transform.right + transform.forward).normalized * mAttributes.mSpeed;
                 break;
             case 4:
-                mRigidBody.velocity = -(transform.right * 0.5f + transform.forward * 0.5f).normalized * mAttributes.mSpeed;
+                mRigidBody.velocity = -(transform.right + transform.forward).normalized * mAttributes.mSpeed;
                 break; ;
         }
         //mRigidBody.velocity = transform.forward * mAttributes.mSpeed;
@@ -165,7 +165,8 @@ public class PreyController : MonoBehaviour
                     if (cone.mSensingContainer.ContainsKey(collision.gameObject.tag))
                         cone.mSensingContainer[collision.gameObject.tag].Remove(collision.collider);
                 }
-                collision.gameObject.SetActive(false);
+                StartCoroutine(fs.StartFoodDeactivation());
+
             }
             else
             {

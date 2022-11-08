@@ -508,7 +508,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3734262667457119066}
-  m_LocalRotation: {x: 0, y: -0.997285, z: 0, w: 0.07363836}
+  m_LocalRotation: {x: 0, y: 0.5266294, z: 0, w: -0.85009503}
   m_LocalPosition: {x: -21.528727, y: 1, z: 39.590588}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -615,10 +615,11 @@ MonoBehaviour:
   mFoodLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  mRigidBody: {fileID: 0}
   mAttributes:
-    mMaxEnergy: 15
-    energyLevel: 15
-    mLearningRate: 0.1
+    mMaxEnergy: 20
+    energyLevel: 20
+    mLearningRate: 0.15
     mSpeed: 10
     mFoodRequiredToReplicate: 3
     mCurrentFoodEaten: 0

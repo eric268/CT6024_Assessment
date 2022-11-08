@@ -16,6 +16,14 @@ public class FoodScript : MonoBehaviour
         yield return null;
     }
 
+    public IEnumerator StartFoodDeactivation()
+    {
+        transform.position = new Vector3(-1000, -1000, -1000);
+        yield return new WaitForSeconds(0.1f);
+        gameObject.SetActive(false);
+        yield return null;
+    }
+
     private void OnEnable()
     {
         //StartCoroutine(BeingCountdown());

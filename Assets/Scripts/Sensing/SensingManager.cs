@@ -58,26 +58,30 @@ public class SensingManager : MonoBehaviour
         //Input[1] 1 if moving right
         //Input[2] 1 if moving back
         //Input[3] 1 if moving left
-        for (int i = 0; i < 4; i++)
-        {
-            inputData.Add(0);
-        }
-        if (agent.GetComponent<Rigidbody>().velocity.x > 0.0)
-        {
-            inputData[0] = 1.0;
-        }
-        else if (agent.GetComponent<Rigidbody>().velocity.x < 0.0)
-        {
-            inputData[1] = 1.0;
-        }
-        else if (agent.GetComponent<Rigidbody>().velocity.z > 0.0)
-        {
-            inputData[2] = 1.0;
-        }
-        else
-        {
-            inputData[3] = 1.0;
-        }
+        PreyController controller = agent.GetComponent<PreyController>();   
+        inputData.Add(controller.mRigidBody.velocity.x/controller.mAttributes.mSpeed);
+        inputData.Add(controller.mRigidBody.velocity.z/controller.mAttributes.mSpeed);
+
+        //for (int i = 0; i < 4; i++)
+        //{
+        //    inputData.Add(0);
+        //}
+        //if (agent.GetComponent<Rigidbody>().velocity.x > 0.0)
+        //{
+        //    inputData[0] = 1.0;
+        //}
+        //else if (agent.GetComponent<Rigidbody>().velocity.x < 0.0)
+        //{
+        //    inputData[1] = 1.0;
+        //}
+        //else if (agent.GetComponent<Rigidbody>().velocity.z > 0.0)
+        //{
+        //    inputData[2] = 1.0;
+        //}
+        //else
+        //{
+        //    inputData[3] = 1.0;
+        //}
     }
 
     void GetInputForClosestObject(List<double> inputData, List<GameObject> objects, int offset, float radius, float angle)

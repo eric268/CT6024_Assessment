@@ -1466,7 +1466,8 @@ MonoBehaviour:
   foodPoolSize: 1500
   startingFoodAmount: 500
   foodPrefab: {fileID: 7685706745089078590, guid: 94247775a3259a041b481ab8f974271d, type: 3}
-  spawnRate: 0.2
+  spawnRate: 0.25
+  spawnRateDecreaseFrequency: 60
   groundPosition: {fileID: 1016317245}
 --- !u!1 &1701363591
 GameObject:
