@@ -28,7 +28,7 @@ public class PreyController : MonoBehaviour
 
     private void Awake()
     {
-        mNetworkLayerSizes = new int[3] { 11, 8, 5 };
+        mNetworkLayerSizes = new int[3] { 15, 30, 5 };
         mNeuralNetwork = new NeuralNetwork(mNetworkLayerSizes);
     }
 
@@ -99,36 +99,43 @@ public class PreyController : MonoBehaviour
         switch (result)
         {
             case 0:
-                //Move Forward
-                mRigidBody.velocity = Vector3.forward * mAttributes.mSpeed;
+                mRigidBody.velocity = transform.forward * mAttributes.mSpeed;
                 break;
             case 1:
                 //Move Right
-                mRigidBody.velocity = transform.right * mAttributes.mSpeed;
+                //mRigidBody.velocity = transform.right * mAttributes.mSpeed;
                 //float amount = (float)mNeuralNetwork.mNetworkLayers[mNeuralNetwork.mNetworkLayers.Length - 1].mNeurons[1].mActivation;
-                //transform.Rotate(0.0f, mTurnRate /** amount*/, 0.0f);
+                transform.Rotate(0.0f, mTurnRate /** amount*/, 0.0f);
+                //mRigidBody.velocity = transform.forward * mAttributes.mSpeed;
                 break;
             case 2:
-                mRigidBody.velocity = -transform.right * mAttributes.mSpeed;
+                //mRigidBody.velocity = -transform.right * mAttributes.mSpeed;
                 //float amount2 = (float)mNeuralNetwork.mNetworkLayers[mNeuralNetwork.mNetworkLayers.Length - 1].mNeurons[2].mActivation;
                 transform.Rotate(0.0f, -mTurnRate /** amount2*/, 0.0f);
+                //mRigidBody.velocity = transform.forward * mAttributes.mSpeed;
                 break;
-            //case 3:
-            //    //Move Left
-            //    mRigidBody.velocity = -Vector3.right * mAttributes.mSpeed;
-            //    transform.rotation = new Quaternion(0.0f, 270.0f, 0.0f, 1.0f);
-            //    break;
-            //default:
-            //    Debug.LogError("Unexpected result PreyController move function");
-            //    break;
             case 3:
-                mRigidBody.velocity = (transform.right + transform.forward).normalized * mAttributes.mSpeed;
+                    //Move Left
+                transform.Rotate(0.0f, mTurnRate /** amount*/, 0.0f);
+                mRigidBody.velocity = transform.forward * mAttributes.mSpeed;
                 break;
             case 4:
-                mRigidBody.velocity = -(transform.right + transform.forward).normalized * mAttributes.mSpeed;
-                break; ;
+                transform.Rotate(0.0f, -mTurnRate /** amount*/, 0.0f);
+                mRigidBody.velocity = transform.forward * mAttributes.mSpeed;
+                break;
+                //default:
+                //    Debug.LogError("Unexpected result PreyController move function");
+                //    break;
+                /*
+                case 3:
+                    mRigidBody.velocity = (transform.right + transform.forward).normalized * mAttributes.mSpeed;
+                    break;
+                case 4:
+                    mRigidBody.velocity = -(transform.right + transform.forward).normalized * mAttributes.mSpeed;
+                    break; ;
+                */
         }
-        //mRigidBody.velocity = transform.forward * mAttributes.mSpeed;
+
 
     }
 

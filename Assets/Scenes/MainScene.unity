@@ -1464,10 +1464,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foodPoolSize: 1500
-  startingFoodAmount: 500
+  startingFoodAmount: 100
   foodPrefab: {fileID: 7685706745089078590, guid: 94247775a3259a041b481ab8f974271d, type: 3}
-  spawnRate: 0.25
-  spawnRateDecreaseFrequency: 60
+  spawnRate: 0.4
+  spawnRateDecreaseFrequency: 45
+  maxSpawnRate: 0.5
   groundPosition: {fileID: 1016317245}
 --- !u!1 &1701363591
 GameObject:
@@ -1929,7 +1930,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03525abb717fa9d4c9380c2c297bb13b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mTimeSpeed: 2
+  mTimeSpeed: 10
 --- !u!4 &2096147080
 Transform:
   m_ObjectHideFlags: 0

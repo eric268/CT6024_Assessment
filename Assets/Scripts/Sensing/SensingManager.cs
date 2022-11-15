@@ -58,9 +58,11 @@ public class SensingManager : MonoBehaviour
         //Input[1] 1 if moving right
         //Input[2] 1 if moving back
         //Input[3] 1 if moving left
-        PreyController controller = agent.GetComponent<PreyController>();   
-        inputData.Add(controller.mRigidBody.velocity.x/controller.mAttributes.mSpeed);
-        inputData.Add(controller.mRigidBody.velocity.z/controller.mAttributes.mSpeed);
+        PreyController controller = agent.GetComponent<PreyController>();
+        inputData.Add(controller.gameObject.transform.forward.x);
+        inputData.Add(controller.gameObject.transform.forward.z);
+        inputData.Add(controller.mRigidBody.velocity.magnitude/controller.mAttributes.mSpeed);
+        //inputData.Add(controller.mRigidBody.velocity.z/controller.mAttributes.mSpeed);
 
         //for (int i = 0; i < 4; i++)
         //{
@@ -119,13 +121,13 @@ public class SensingManager : MonoBehaviour
         //Debug.Log("xPos" + (g.transform.position.x - transform.position.x));
         //Debug.Log("zPos" + (g.transform.position.z - transform.position.z));
 
-        float x = /*1.0f - */ Mathf.Abs(g.transform.position.x - transform.position.x)/maxX;
-        float z = /*1.0f - */ Mathf.Abs(g.transform.position.z - transform.position.z)/maxZ;
+        //float x = /*1.0f - */ Mathf.Abs(g.transform.position.x - transform.position.x)/maxX;
+        //float z = /*1.0f - */ Mathf.Abs(g.transform.position.z - transform.position.z)/maxZ;
         dist    = 1.0f -   (dist / radius);
 
-        //Vector3 dir = (g.transform.position - transform.position).normalized;
-        //float x = Mathf.Abs(dir.x);
-        //float z = Mathf.Abs(dir.z);
+        Vector3 dir = (g.transform.position - transform.position).normalized;
+        float x = Mathf.Abs(dir.x);
+        float z = Mathf.Abs(dir.z);
 
         inputData.Add(dist);
         inputData.Add(x);

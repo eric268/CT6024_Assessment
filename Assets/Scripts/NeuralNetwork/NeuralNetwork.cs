@@ -65,7 +65,7 @@ public class NeuralNetwork
             {
                 currentLayer.mNextLayer.mNeurons[i].mActivation += currentLayer.mWeights[i, j] * currentLayer.mNeurons[j].mActivation;
             }
-            currentLayer.mNextLayer.mNeurons[i].mActivation = Sigmoid(currentLayer.mNextLayer.mNeurons[i].mActivation + currentLayer.mNextLayer.mNeurons[i].mBias);
+            currentLayer.mNextLayer.mNeurons[i].mActivation = ReLU(currentLayer.mNextLayer.mNeurons[i].mActivation + currentLayer.mNextLayer.mNeurons[i].mBias);// Sigmoid(currentLayer.mNextLayer.mNeurons[i].mActivation + currentLayer.mNextLayer.mNeurons[i].mBias);
         }
     }
 
@@ -111,9 +111,6 @@ public class NeuralNetwork
         return ans;
     }
 
-    double Sigmoid(double x)
-    {
-        return (1.0 / (1.0 + Math.Exp(-x)));
-    }
-
+    double Sigmoid(double x) => (1.0 / (1.0 + Math.Exp(-x)));
+    double ReLU(double x) => Math.Max(0.0f, x);
 }

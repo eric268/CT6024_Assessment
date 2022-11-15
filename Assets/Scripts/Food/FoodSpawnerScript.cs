@@ -16,6 +16,8 @@ public class FoodSpawnerScript : MonoBehaviour
     [SerializeField]
     float spawnRateDecreaseFrequency = 60.0f;
     int nextItemToSpawn;
+    [SerializeField]
+    float maxSpawnRate;
 
     public static int mMaxFoodOnMap = 500;
     public static int mCurrentAmountofFoodOnMap = 0;
@@ -58,11 +60,11 @@ public class FoodSpawnerScript : MonoBehaviour
 
     void DecreaseSpawnRate()
     {
-        if (spawnRate > 1)
+        if (spawnRate > maxSpawnRate)
             return;
         spawnRate += 0.05f;
         Debug.Log("Spawn Rate Decreased to: " + spawnRate);
-        CancelInvoke();
+        CancelInvoke(nameof(SpawnFood));
         InvokeRepeating(nameof(SpawnFood), 0.0f, spawnRate);
     }
 

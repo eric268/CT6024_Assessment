@@ -44,7 +44,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 20
+  m_Radius: 30
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3734262665809166649
 MonoBehaviour:
@@ -62,7 +62,7 @@ MonoBehaviour:
   mVisionConeSpacing: 0
   mVisionDirectionOffset: 0
   mVisionColor: {r: 0, g: 0.054581642, b: 1, a: 1}
-  mRadius: 20
+  mRadius: 30
 --- !u!1 &3734262665857694418
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,7 +266,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 30
+  m_Radius: 40
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3734262666129129709
 MonoBehaviour:
@@ -284,7 +284,7 @@ MonoBehaviour:
   mVisionConeSpacing: 0
   mVisionDirectionOffset: -90
   mVisionColor: {r: 0.6627451, g: 0, b: 1, a: 1}
-  mRadius: 30
+  mRadius: 40
 --- !u!1 &3734262666164438622
 GameObject:
   m_ObjectHideFlags: 0
@@ -402,7 +402,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3734262666739405938
 Transform:
   m_ObjectHideFlags: 0
@@ -447,7 +447,7 @@ MonoBehaviour:
   mVisionConeSpacing: 0
   mVisionDirectionOffset: 180
   mVisionColor: {r: 0, g: 0.05490196, b: 1, a: 1}
-  mRadius: 0
+  mRadius: 10
 --- !u!1 &3734262666912512225
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,7 +508,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3734262667457119066}
-  m_LocalRotation: {x: 0, y: 0.5266294, z: 0, w: -0.85009503}
+  m_LocalRotation: {x: 0, y: -0.98708314, z: 0, w: 0.1602089}
   m_LocalPosition: {x: -21.528727, y: 1, z: 39.590588}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -617,14 +617,14 @@ MonoBehaviour:
     m_Bits: 64
   mRigidBody: {fileID: 0}
   mAttributes:
-    mMaxEnergy: 20
-    energyLevel: 20
-    mLearningRate: 0.15
+    mMaxEnergy: 30
+    energyLevel: 30
+    mLearningRate: 0.05
     mSpeed: 10
-    mFoodRequiredToReplicate: 3
+    mFoodRequiredToReplicate: 5
     mCurrentFoodEaten: 0
   spawn: 1
-  mTurnRate: 90
+  mTurnRate: 25
 --- !u!114 &3734262667457119063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -683,7 +683,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 30
+  m_Radius: 40
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3734262667606705541
 MonoBehaviour:
@@ -701,4 +701,4 @@ MonoBehaviour:
   mVisionConeSpacing: 0
   mVisionDirectionOffset: 90
   mVisionColor: {r: 0.66421795, g: 0, b: 1, a: 1}
-  mRadius: 30
+  mRadius: 40
