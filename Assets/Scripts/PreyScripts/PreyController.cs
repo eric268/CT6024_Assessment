@@ -1,6 +1,7 @@
 using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -19,17 +20,18 @@ public class PreyController : MonoBehaviour
     [SerializeField]
     public PreyAttributes mAttributes;
 
+    AgentSpawner preySpawner;
+
     private SensingManager mSensingManager;
     int prevResult;
     public bool spawn = true;
 
-    [SerializeField]
-    public float mTurnRate;
 
     private void Awake()
     {
-        mNetworkLayerSizes = new int[3] { 15, 30, 5 };
+        mNetworkLayerSizes = new int[3] { 15, 25, 3 };
         mNeuralNetwork = new NeuralNetwork(mNetworkLayerSizes);
+        preySpawner = GameObject.FindWithTag("PreySpawner").GetComponent<AgentSpawner>();
     }
 
     void Start()
@@ -52,13 +54,17 @@ public class PreyController : MonoBehaviour
 
     void SplitPrey()
     {
-        if (GameManagerScript.currentNumberOfPrey >= GameManagerScript.maxNumberOfPrey)
+        GameObject temp = preySpawner.SpawnAgent(gameObject);
+        if (temp == null)
             return;
 
         GameManagerScript.currentNumberOfPrey++;
         System.Random rand = new System.Random();
         Vector3 dir = (Vector3.zero - transform.position).normalized;
-        GameObject temp = Instantiate(gameObject, transform.position - transform.forward * 0.5f,new Quaternion(0.0f,0.0f,0.0f,1.0f), gameObject.transform.parent);
+
+        temp.transform.position = transform.position - transform.forward * 0.5f;
+        temp.transform.parent = gameObject.transform.parent;
+        //GameObject temp = Instantiate(gameObject, transform.position - transform.forward * 0.5f,new Quaternion(0.0f,0.0f,0.0f,1.0f), gameObject.transform.parent);
         int rot = rand.Next(360);
         temp.transform.Rotate(0.0f, rot, 0.0f);
         PreyController controller = temp.GetComponent<PreyController>();
@@ -66,6 +72,7 @@ public class PreyController : MonoBehaviour
         //controller.mAttributes.mLearningRate = mAttributes.mLearningRate;
         controller.mSensingManager = mSensingManager = GetComponentInChildren<SensingManager>();
         controller.mNeuralNetwork = this.mNeuralNetwork;
+        temp.GetComponent<PreyController>().mAttributes.mTurnRate = temp.GetComponent<PreyController>().mAttributes.mTurnRate + rand.Next(-1, 1);
 
         Debug.Assert(controller != null && controller.mNeuralNetwork != null);
 
@@ -80,19 +87,7 @@ public class PreyController : MonoBehaviour
     {
         int result = mNeuralNetwork.RunNetwork(mSensingManager.GetNeuralNetworkInputs(gameObject));
         Move(result);
-        //mNeuralNetwork.RunNetwork(mSensingManager.GetNeuralNetworkInputs(gameObject));
-        //Move(mNeuralNetwork.mNetworkLayers[mNeuralNetwork.mNetworkLayers.Length - 1]);
-
-
     }
-
-    //private void Move(NetworkLayer outputLayer)
-    //{
-    //    float val = (float)((outputLayer.mNeurons[0].mActivation > outputLayer.mNeurons[1].mActivation) ? -outputLayer.mNeurons[0].mActivation : outputLayer.mNeurons[1].mActivation);
-    //    transform.Rotate(0.0f, val, 0.0f);
-    //    mRigidBody.velocity = transform.forward * mAttributes.mSpeed;
-
-    //}
 
     private void Move(int result)
     {
@@ -105,24 +100,25 @@ public class PreyController : MonoBehaviour
                 //Move Right
                 //mRigidBody.velocity = transform.right * mAttributes.mSpeed;
                 //float amount = (float)mNeuralNetwork.mNetworkLayers[mNeuralNetwork.mNetworkLayers.Length - 1].mNeurons[1].mActivation;
-                transform.Rotate(0.0f, mTurnRate /** amount*/, 0.0f);
+                transform.Rotate(0.0f,mAttributes.mTurnRate /** amount*/, 0.0f);
                 //mRigidBody.velocity = transform.forward * mAttributes.mSpeed;
                 break;
             case 2:
                 //mRigidBody.velocity = -transform.right * mAttributes.mSpeed;
                 //float amount2 = (float)mNeuralNetwork.mNetworkLayers[mNeuralNetwork.mNetworkLayers.Length - 1].mNeurons[2].mActivation;
-                transform.Rotate(0.0f, -mTurnRate /** amount2*/, 0.0f);
+                transform.Rotate(0.0f, -mAttributes.mTurnRate /** amount2*/, 0.0f);
+                mRigidBody.velocity = transform.forward * mAttributes.mSpeed;
                 //mRigidBody.velocity = transform.forward * mAttributes.mSpeed;
                 break;
-            case 3:
-                    //Move Left
-                transform.Rotate(0.0f, mTurnRate /** amount*/, 0.0f);
-                mRigidBody.velocity = transform.forward * mAttributes.mSpeed;
-                break;
-            case 4:
-                transform.Rotate(0.0f, -mTurnRate /** amount*/, 0.0f);
-                mRigidBody.velocity = transform.forward * mAttributes.mSpeed;
-                break;
+            //case 3:
+            //        //Move Left
+            //    transform.Rotate(0.0f, mTurnRate /** amount*/, 0.0f);
+            //    mRigidBody.velocity = transform.forward * mAttributes.mSpeed;
+            //    break;
+            //case 4:
+            //    transform.Rotate(0.0f, -mTurnRate /** amount*/, 0.0f);
+            //    mRigidBody.velocity = transform.forward * mAttributes.mSpeed;
+            //    break;
                 //default:
                 //    Debug.LogError("Unexpected result PreyController move function");
                 //    break;
@@ -143,8 +139,7 @@ public class PreyController : MonoBehaviour
     {
         if (mAttributes.mEnergyLevel <= 0)
         {
-            GameManagerScript.currentNumberOfPrey--;
-            Destroy(gameObject);
+            AgentSpawner.ReturnPreyToPool(gameObject);
         }
         else
         {

@@ -697,7 +697,7 @@ GameObject:
   - component: {fileID: 919794846}
   m_Layer: 0
   m_Name: AgentSpawner
-  m_TagString: Untagged
+  m_TagString: PreySpawner
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -732,6 +732,7 @@ MonoBehaviour:
   groundPosition: {fileID: 1016317245}
   numPreyToSpawn: 100
   preyPrefab: {fileID: 3734262667457119066, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
+  mPreyArray: []
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0

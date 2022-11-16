@@ -623,8 +623,10 @@ MonoBehaviour:
     mSpeed: 10
     mFoodRequiredToReplicate: 5
     mCurrentFoodEaten: 0
+    mTurnRateStartMin: 1
+    mTurnRateStartMax: 90
+    mTurnRate: 0
   spawn: 1
-  mTurnRate: 25
 --- !u!114 &3734262667457119063
 MonoBehaviour:
   m_ObjectHideFlags: 0

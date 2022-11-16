@@ -27,4 +27,10 @@ public class PreyAttributes// : MonoBehaviour
     public int mFoodRequiredToReplicate;
     public int mCurrentFoodEaten;
 
+    [SerializeField]
+    public int mTurnRateStartMin;
+    [SerializeField]
+    public int mTurnRateStartMax;
+    public int mTurnRate;
+
 }

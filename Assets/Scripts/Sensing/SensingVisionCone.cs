@@ -86,7 +86,6 @@ public class SensingVisionCone : MonoBehaviour
                 if (Mathf.Abs(mVisionDirectionOffset) + mVisionConeAngle / 2.0f > 180)
                 {
                     float diff = Mathf.Abs(mVisionDirectionOffset) + mVisionConeAngle / 2.0f - 180;
-                    Debug.Log("Within: " + (180 - diff));
                     withinVision = angle >= 180 - diff || angle <= - 180 + diff;
                 }
                 else
