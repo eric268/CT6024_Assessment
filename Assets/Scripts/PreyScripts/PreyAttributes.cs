@@ -16,10 +16,14 @@ public class PreyAttributes// : MonoBehaviour
     public float mEnergyLevel
     {
         get => energyLevel;
-        set => this.energyLevel = Mathf.Clamp(value, 0, mMaxEnergy);
+        set => this.energyLevel = Mathf.Clamp(value, 0, 100);
     }
     [SerializeField]
-    public float mLearningRate = 0.05f;
+    public float mLearningRate;
+    [SerializeField]
+    public float mlearningRateMin = 0.05f;
+    [SerializeField]
+    public float mlearningRateMax = 0.3f;
 
     [Space(15)]
     [SerializeField]
@@ -33,4 +37,5 @@ public class PreyAttributes// : MonoBehaviour
     public int mTurnRateStartMax;
     public int mTurnRate;
 
+    public int mTotalFoodCollected = 0;
 }

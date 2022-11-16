@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEngine.Events;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,7 +22,6 @@ public class FoodSpawnerScript : MonoBehaviour
 
     public static int mMaxFoodOnMap = 500;
     public static int mCurrentAmountofFoodOnMap = 0;
-
 
     [SerializeField]
     Transform groundPosition;
@@ -70,6 +70,15 @@ public class FoodSpawnerScript : MonoBehaviour
 
     public static void ReturnFood(GameObject obj)
     {
+        foreach(GameObject prey in PreySpawner.mPreyArray)
+        {
+            if (prey.activeInHierarchy == true)
+            {
+                PreyController pc = prey.GetComponent<PreyController>();
+                Debug.Assert(pc != null);
+                pc.RemoveFoodFromSensing(obj.GetComponent<Collider>());
+            }
+        }
         obj.SetActive(false);
         foodPool.Enqueue(obj);
     }

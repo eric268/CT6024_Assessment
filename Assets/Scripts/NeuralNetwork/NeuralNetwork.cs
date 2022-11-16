@@ -51,7 +51,7 @@ public class NeuralNetwork
         {
             for (int j =0; j < currentLayer.mWeights.GetLength(1);j++)
             {
-                currentLayer.mWeights[i, j] = 0.00001 * rand.Next(-10000, 10000);
+                currentLayer.mWeights[i, j] = 0.00001 * rand.Next(-30000, 30000);
             }
         }
     }
@@ -77,20 +77,25 @@ public class NeuralNetwork
         {
             foreach(Neuron n in currentLayer.mNeurons)
             {
-                n.mBias += 0.00001 * rand.Next(-10000, 10000) * mLerningRate;
+                if (rand.Next(2) == 0)
+                {
+                    n.mBias += 0.00001 * rand.Next(-30000, 30000) * mLerningRate;
+                }
             }
             return;
         }
         
         bool doOnce = true;
         for (int i = 0; i < currentLayer.mWeights.GetLength(0); i++)
-        {
-            
+        {   
             for (int j = 0; j < currentLayer.mWeights.GetLength(1); j++)
             {
-                currentLayer.mWeights[i, j] += 0.00001 * rand.Next(-30000, 30000) * mLerningRate;
-                if (doOnce)
-                    currentLayer.mNeurons[j].mBias += 0.00001 * rand.Next(-10000, 10000) * mLerningRate;
+                if (rand.Next(2) == 0)
+                {
+                    currentLayer.mWeights[i, j] += 0.00001 * rand.Next(-30000, 30000) * mLerningRate;
+                    if (doOnce)
+                        currentLayer.mNeurons[j].mBias += 0.00001 * rand.Next(-30000, 30000) * mLerningRate;
+                }
             }
             doOnce = false;
         }
@@ -109,6 +114,46 @@ public class NeuralNetwork
             }
         }
         return ans;
+    }
+
+    public void CopyAndMutateNetwork(NetworkLayer[] layersToCopy, float mLerningRate)
+    {
+        System.Random rand = new System.Random();
+        for (int k = 0; k < mNetworkLayers.Length; k++)
+        {
+            if (mNetworkLayers[k].mNextLayer == null)
+            {
+                for(int j =0; j < mNetworkLayers[k].mNumberOfNeurons; j++)
+                {
+                    mNetworkLayers[k].mNeurons[j].mBias = layersToCopy[k].mNeurons[j].mBias;
+                    if (rand.Next(2) == 0)
+                    {
+                        mNetworkLayers[k].mNeurons[j].mBias += 0.00001 * rand.Next(-30000, 30000) * mLerningRate;
+                    }
+                }
+                return;
+            }
+
+            bool doOnce = true;
+            for (int i = 0; i < mNetworkLayers[k].mWeights.GetLength(0); i++)
+            {
+                for (int j = 0; j < mNetworkLayers[k].mWeights.GetLength(1); j++)
+                {
+
+                    mNetworkLayers[k].mWeights[i, j] = layersToCopy[k].mWeights[i, j];
+                    if (doOnce)
+                        mNetworkLayers[k].mNeurons[j].mBias = layersToCopy[k].mNeurons[j].mBias;
+
+                    if (rand.Next(2) == 0)
+                    {
+                        mNetworkLayers[k].mWeights[i, j] += 0.00001 * rand.Next(-30000, 30000) * mLerningRate;
+                        if (doOnce)
+                            mNetworkLayers[k].mNeurons[j].mBias += 0.00001 * rand.Next(-30000, 30000) * mLerningRate;
+                    }
+                }
+                doOnce = false;
+            }
+        }
     }
 
     double Sigmoid(double x) => (1.0 / (1.0 + Math.Exp(-x)));

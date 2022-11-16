@@ -53,43 +53,32 @@ public class SensingManager : MonoBehaviour
 
     void SetDirectionNetworkInput(GameObject agent, List<double> inputData)
     {
-        //First pass in current direction as inputs
-        //Input[0] 1 if moving forward
-        //Input[1] 1 if moving right
-        //Input[2] 1 if moving back
-        //Input[3] 1 if moving left
+        //4 inputs
         PreyController controller = agent.GetComponent<PreyController>();
-        inputData.Add(controller.gameObject.transform.forward.x);
-        inputData.Add(controller.gameObject.transform.forward.z);
-        inputData.Add(controller.mRigidBody.velocity.magnitude/controller.mAttributes.mSpeed);
-        //inputData.Add(controller.mRigidBody.velocity.z/controller.mAttributes.mSpeed);
-
-        //for (int i = 0; i < 4; i++)
-        //{
-        //    inputData.Add(0);
-        //}
-        //if (agent.GetComponent<Rigidbody>().velocity.x > 0.0)
-        //{
-        //    inputData[0] = 1.0;
-        //}
-        //else if (agent.GetComponent<Rigidbody>().velocity.x < 0.0)
-        //{
-        //    inputData[1] = 1.0;
-        //}
-        //else if (agent.GetComponent<Rigidbody>().velocity.z > 0.0)
-        //{
-        //    inputData[2] = 1.0;
-        //}
-        //else
-        //{
-        //    inputData[3] = 1.0;
-        //}
+        Vector2 tempV = new Vector2(Mathf.Abs(controller.mRigidBody.velocity.x), Mathf.Abs(controller.mRigidBody.velocity.z));
+        tempV.Normalize();
+        if (controller.mRigidBody.velocity.x < 0 || controller.mRigidBody.velocity.z < 0)
+        {
+            inputData.Add(0.0f);
+            inputData.Add(0.0f);
+            inputData.Add(tempV.x);
+            inputData.Add(tempV.y);
+        }
+        else
+        {
+            inputData.Add(tempV.x);
+            inputData.Add(tempV.y);
+            inputData.Add(0.0f);
+            inputData.Add(0.0f);
+        }
     }
 
     void GetInputForClosestObject(List<double> inputData, List<GameObject> objects, int offset, float radius, float angle)
     {
+        //5 inputs
         if (objects.Count == 0)
         {
+            inputData.Add(0);
             inputData.Add(0);
             inputData.Add(0);
             inputData.Add(0);
@@ -123,14 +112,38 @@ public class SensingManager : MonoBehaviour
 
         //float x = /*1.0f - */ Mathf.Abs(g.transform.position.x - transform.position.x)/maxX;
         //float z = /*1.0f - */ Mathf.Abs(g.transform.position.z - transform.position.z)/maxZ;
-        dist    = 1.0f -   (dist / radius);
+        dist    = /*1.0f -   */(dist / radius);
 
         Vector3 dir = (g.transform.position - transform.position).normalized;
-        float x = Mathf.Abs(dir.x);
-        float z = Mathf.Abs(dir.z);
+        float x = (dir.x);
+        float z = (dir.z);
 
+
+        inputData.Add(Mathf.Clamp(objects.Count / 10.0f, 0.0f,1.0f));
         inputData.Add(dist);
-        inputData.Add(x);
-        inputData.Add(z);
+        inputData.Add(Mathf.Abs(x));
+        inputData.Add(Mathf.Abs(z));
+        /*
+        if (x < 0)
+        {
+            inputData.Add(x);
+            inputData.Add(0.0f);
+        }
+        else
+        {
+            inputData.Add(0.0f);
+            inputData.Add(x);
+        }
+        if (z < 0)
+        {
+            inputData.Add(z);
+            inputData.Add(0.0f);
+        }
+        else
+        {
+            inputData.Add(0.0f);
+            inputData.Add(z);
+        }
+        */
     }
 }
