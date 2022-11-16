@@ -41,7 +41,7 @@ public class PreySpawner : MonoBehaviour
             PreyAttributes att = mPreyArray[i].GetComponent<PreyController>().mAttributes;
             Debug.Assert(att != null);
             att.mLearningRate = Random.Range(att.mlearningRateMin, att.mlearningRateMax);
-            //att.mTurnRate = rand.Next(att.mTurnRateStartMin, att.mTurnRateStartMax);
+            att.mTurnRate = rand.Next(att.mTurnRateStartMin, att.mTurnRateStartMax);
             if (i >= numPreyToSpawn)
             {
                 mPreyArray[i].SetActive(false);
@@ -63,6 +63,7 @@ public class PreySpawner : MonoBehaviour
             float randX = Random.Range(-groundPosition.localScale.x * 3f, groundPosition.localScale.x * 3f);
             float randZ = Random.Range(-groundPosition.localScale.z * 3f, groundPosition.localScale.z * 3f);
             obj.transform.position = new Vector3(randX, 1.0f, randZ);
+            obj.transform.Rotate(0,Random.Range(0, 360), 0);
             return obj;
         }
         return null;

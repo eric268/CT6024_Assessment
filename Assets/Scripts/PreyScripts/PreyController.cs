@@ -33,7 +33,7 @@ public class PreyController : MonoBehaviour
 
     private void Awake()
     {
-        mNetworkLayerSizes = new int[3] { 16, 40, 4 };
+        mNetworkLayerSizes = new int[3] { 16, 40, 3 };
         mNeuralNetwork = new NeuralNetwork(mNetworkLayerSizes);
         preySpawner = GameObject.FindWithTag("PreySpawner").GetComponent<PreySpawner>();
     }
@@ -65,24 +65,15 @@ public class PreyController : MonoBehaviour
             yield break;
 
         System.Random rand = new System.Random();
-        //Vector3 dir = (Vector3.zero - transform.position).normalized;
         temp.transform.position = pos;
         temp.transform.parent = gameObject.transform.parent;
-        //GameObject temp = Instantiate(gameObject, transform.position - transform.forward * 0.5f,new Quaternion(0.0f,0.0f,0.0f,1.0f), gameObject.transform.parent);
-        //int rot = rand.Next(360);
-        //temp.transform.Rotate(0.0f, rot, 0.0f);
         PreyController controller = temp.GetComponent<PreyController>();
         controller.mAttributes.mLearningRate = mAttributes.mLearningRate;
         controller.mAttributes.mEnergyLevel = mAttributes.mMaxEnergy;
         controller.mSensingManager = controller.GetComponentInChildren<SensingManager>();
         controller.mNeuralNetwork.CopyAndMutateNetwork(mNeuralNetwork.mNetworkLayers, controller.mAttributes.mLearningRate);
-
-
         temp.GetComponent<PreyController>().mAttributes.mTurnRate = temp.GetComponent<PreyController>().mAttributes.mTurnRate + rand.Next(-1, 1);
-
         Debug.Assert(controller != null && controller.mNeuralNetwork != null);
-
-
         yield return null;
     }
 
@@ -94,6 +85,7 @@ public class PreyController : MonoBehaviour
 
         System.Random rand = new System.Random();
         temp.transform.parent = gameObject.transform.parent;
+        transform.position = transform.position - transform.forward * 2.5f;
         PreyController controller = temp.GetComponent<PreyController>();
         controller.mAttributes.mLearningRate = mAttributes.mLearningRate;
         controller.mAttributes.mEnergyLevel = mAttributes.mMaxEnergy;
@@ -116,18 +108,19 @@ public class PreyController : MonoBehaviour
     {
         switch (result)
         {
+            /*
             case 0:
                 mRigidBody.velocity = Vector3.forward * mAttributes.mSpeed;
                 transform.eulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
                 break;
             case 1:
                 //Move Right
-                //transform.Rotate(0.0f,mAttributes.mTurnRate /** amount*/, 0.0f);
+                //transform.Rotate(0.0f,mAttributes.mTurnRate, 0.0f);
                 mRigidBody.velocity = -Vector3.forward * mAttributes.mSpeed;
                 transform.eulerAngles = new Vector3(0.0f, 180.0f, 0.0f);
                 break;
             case 2:
-                //transform.Rotate(0.0f, -mAttributes.mTurnRate /** amount2*/, 0.0f);
+                //transform.Rotate(0.0f, -mAttributes.mTurnRate, 0.0f);
                 mRigidBody.velocity = Vector3.right * mAttributes.mSpeed;
                 transform.eulerAngles = new Vector3(0.0f, 90.0f, 0.0f);
                 break;
@@ -135,7 +128,18 @@ public class PreyController : MonoBehaviour
                 mRigidBody.velocity = -Vector3.right * mAttributes.mSpeed;
                 transform.eulerAngles = new Vector3(0.0f, 270.0f, 0.0f);
                 break;
+            */
+            case 0:
+                break;
+            case 1:
+                transform.Rotate(0.0f, mAttributes.mTurnRate, 0.0f);
+                break;
+            case 2:
+                transform.Rotate(0.0f, -mAttributes.mTurnRate, 0.0f);
+                break;
+
         }
+        mRigidBody.velocity = transform.forward * mAttributes.mSpeed;
 
 
     }
@@ -173,7 +177,8 @@ public class PreyController : MonoBehaviour
                 mAttributes.mTotalFoodCollected++;
                 if (mAttributes.mCurrentFoodEaten >= mAttributes.mFoodRequiredToReplicate)
                 {
-                   StartCoroutine(SplitPrey());
+                    SplitPreyInstant();
+                   //StartCoroutine(SplitPrey());
                     mAttributes.mCurrentFoodEaten = 0;
                 }
                 mAttributes.mEnergyLevel += fs.mEnergyAmount;

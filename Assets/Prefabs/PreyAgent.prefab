@@ -628,6 +628,7 @@ MonoBehaviour:
     mTurnRateStartMin: 1
     mTurnRateStartMax: 90
     mTurnRate: 0
+    mTotalFoodCollected: 0
   direction: 0
   spawn: 1
 --- !u!114 &3734262667457119063

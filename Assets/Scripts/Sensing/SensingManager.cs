@@ -57,20 +57,43 @@ public class SensingManager : MonoBehaviour
         PreyController controller = agent.GetComponent<PreyController>();
         Vector2 tempV = new Vector2(Mathf.Abs(controller.mRigidBody.velocity.x), Mathf.Abs(controller.mRigidBody.velocity.z));
         tempV.Normalize();
-        if (controller.mRigidBody.velocity.x < 0 || controller.mRigidBody.velocity.z < 0)
+
+        if (controller.mRigidBody.velocity.x < 0)
         {
             inputData.Add(0.0f);
-            inputData.Add(0.0f);
             inputData.Add(tempV.x);
-            inputData.Add(tempV.y);
         }
         else
         {
             inputData.Add(tempV.x);
-            inputData.Add(tempV.y);
-            inputData.Add(0.0f);
             inputData.Add(0.0f);
         }
+
+        if (controller.mRigidBody.velocity.z < 0)
+        {
+            inputData.Add(0.0f);
+            inputData.Add(tempV.y);
+        }
+        else
+        {
+            inputData.Add(tempV.y);
+            inputData.Add(0.0f);
+        }
+
+        //if (controller.mRigidBody.velocity.x < 0 || controller.mRigidBody.velocity.z < 0)
+        //{
+        //    inputData.Add(0.0f);
+        //    inputData.Add(0.0f);
+        //    inputData.Add(tempV.x);
+        //    inputData.Add(tempV.y);
+        //}
+        //else
+        //{
+        //    inputData.Add(tempV.x);
+        //    inputData.Add(tempV.y);
+        //    inputData.Add(0.0f);
+        //    inputData.Add(0.0f);
+        //}
     }
 
     void GetInputForClosestObject(List<double> inputData, List<GameObject> objects, int offset, float radius, float angle)
