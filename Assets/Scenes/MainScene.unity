@@ -865,7 +865,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundPosition: {fileID: 1016317245}
-  numPreyToSpawn: 150
+  numPreyToSpawn: 100
   preyPrefab: {fileID: 3734262667457119066, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
   mRespawnPrey: 0
   mRespawnAmount: 100
@@ -1747,7 +1747,7 @@ MonoBehaviour:
   foodPrefab: {fileID: 7685706745089078590, guid: 94247775a3259a041b481ab8f974271d, type: 3}
   spawnRate: 0.3
   spawnRateDecreaseFrequency: 120
-  maxSpawnRate: 2
+  maxSpawnRate: 0.3
   groundPosition: {fileID: 1016317245}
 --- !u!1 &1701363591
 GameObject:
@@ -2344,7 +2344,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03525abb717fa9d4c9380c2c297bb13b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mTimeSpeed: 1
+  mTimeSpeed: 5
 --- !u!4 &2096147080
 Transform:
   m_ObjectHideFlags: 0

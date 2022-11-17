@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using UnityEngine;
 
 
@@ -48,6 +49,7 @@ public class PreySpawner : MonoBehaviour
                 GameManagerScript.currentNumberOfPrey--;
             }
         }
+        Debug.Log(GameManagerScript.currentNumberOfPrey);
     }
 
     public GameObject SpawnAgent(GameObject prefab)
@@ -71,13 +73,22 @@ public class PreySpawner : MonoBehaviour
 
     public static void ReturnPreyToPool(GameObject obj)
     {
-        GameManagerScript.currentNumberOfPrey--;
-        obj.SetActive(false);
-        preyPool.Enqueue(obj);
+        if (obj.activeInHierarchy)
+        {
+            GameManagerScript.currentNumberOfPrey--;
+            obj.SetActive(false);
+            preyPool.Enqueue(obj);
+            Debug.Log(GameManagerScript.currentNumberOfPrey);
+        }
     }
 
     private void Update()
     {
+        if (mRespawnPrey)
+        {
+            mRespawnPrey = false;
+            Debug.Log(GameManagerScript.currentNumberOfPrey);
+        }
         if (GameManagerScript.currentNumberOfPrey == 0)
         {
             FindBestPrey();
@@ -92,8 +103,8 @@ public class PreySpawner : MonoBehaviour
         {
             int obj = Random.Range(0, topInFitness);
             GameObject t2 = sortedArray[obj].GetComponent<PreyController>().SplitPreyInstant();
-            float randX = Random.Range(-groundPosition.localScale.x * 3f, groundPosition.localScale.x * 3f);
-            float randZ = Random.Range(-groundPosition.localScale.z * 3f, groundPosition.localScale.z * 3f);
+            float randX = Random.Range(-groundPosition.localScale.x * 3.5f, groundPosition.localScale.x * 3.5f);
+            float randZ = Random.Range(-groundPosition.localScale.z * 3.5f, groundPosition.localScale.z * 3.5f);
             t2.transform.position = new Vector3(randX, 1.0f, randZ);
         }
 

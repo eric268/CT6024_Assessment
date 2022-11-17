@@ -32,7 +32,7 @@ public class PreyUIManager : MonoBehaviour
     private void FixedUpdate()
     {
         healthBar.transform.position = cam.WorldToScreenPoint(transform.gameObject.transform.position + Vector3.up * screenOffset);
-        float percentageEnergyRemaining = preyController.mAttributes.mEnergyLevel / preyController.mAttributes.mMaxEnergy;
+        float percentageEnergyRemaining = preyController.mAttributes.mEnergyLevel / preyController.mAttributes.mStartingEnergy;
         image.rectTransform.sizeDelta = new Vector2(startingXDeltaSize * percentageEnergyRemaining, image.rectTransform.sizeDelta.y);
         image.rectTransform.anchoredPosition = new Vector2((startingXDeltaSize * percentageEnergyRemaining - startingXDeltaSize) / 2.0f, 0.0f);
 

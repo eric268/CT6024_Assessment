@@ -26,6 +26,8 @@ public class WallScript : MonoBehaviour
     {
         if (agentLayerMask == (agentLayerMask | 1 << collision.gameObject.layer))
         {
+            //PreySpawner.ReturnPreyToPool(collision.gameObject);
+
             if (xAxis)
             {
                 collision.gameObject.transform.position = new Vector3(newPos.x, collision.gameObject.transform.position.y, collision.gameObject.transform.position.z);

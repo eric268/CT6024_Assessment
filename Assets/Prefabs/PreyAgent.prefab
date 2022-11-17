@@ -617,10 +617,10 @@ MonoBehaviour:
     m_Bits: 64
   mRigidBody: {fileID: 0}
   mAttributes:
-    mMaxEnergy: 30
+    mStartingEnergy: 30
     energyLevel: 30
     mLearningRate: 0
-    mlearningRateMin: 0.05
+    mlearningRateMin: 0.02
     mlearningRateMax: 0.3
     mSpeed: 10
     mFoodRequiredToReplicate: 3

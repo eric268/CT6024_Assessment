@@ -33,6 +33,7 @@ public class PreyController : MonoBehaviour
 
     private void Awake()
     {
+        //mNetworkLayerSizes = new int[3] { 28, 40, 3 };
         mNetworkLayerSizes = new int[3] { 16, 40, 3 };
         mNeuralNetwork = new NeuralNetwork(mNetworkLayerSizes);
         preySpawner = GameObject.FindWithTag("PreySpawner").GetComponent<PreySpawner>();
@@ -69,7 +70,7 @@ public class PreyController : MonoBehaviour
         temp.transform.parent = gameObject.transform.parent;
         PreyController controller = temp.GetComponent<PreyController>();
         controller.mAttributes.mLearningRate = mAttributes.mLearningRate;
-        controller.mAttributes.mEnergyLevel = mAttributes.mMaxEnergy;
+        controller.mAttributes.mEnergyLevel = mAttributes.mStartingEnergy;
         controller.mSensingManager = controller.GetComponentInChildren<SensingManager>();
         controller.mNeuralNetwork.CopyAndMutateNetwork(mNeuralNetwork.mNetworkLayers, controller.mAttributes.mLearningRate);
         temp.GetComponent<PreyController>().mAttributes.mTurnRate = temp.GetComponent<PreyController>().mAttributes.mTurnRate + rand.Next(-1, 1);
@@ -84,15 +85,16 @@ public class PreyController : MonoBehaviour
             return null;
 
         System.Random rand = new System.Random();
+        temp.transform.position = transform.position  -transform.forward * 2.5f;
         temp.transform.parent = gameObject.transform.parent;
-        transform.position = transform.position - transform.forward * 2.5f;
         PreyController controller = temp.GetComponent<PreyController>();
-        controller.mAttributes.mLearningRate = mAttributes.mLearningRate;
-        controller.mAttributes.mEnergyLevel = mAttributes.mMaxEnergy;
+        controller.mAttributes.mEnergyLevel = mAttributes.mStartingEnergy;
         controller.mSensingManager = controller.GetComponentInChildren<SensingManager>();
         controller.mNeuralNetwork.CopyAndMutateNetwork(mNeuralNetwork.mNetworkLayers, controller.mAttributes.mLearningRate);
 
-        temp.GetComponent<PreyController>().mAttributes.mTurnRate = temp.GetComponent<PreyController>().mAttributes.mTurnRate + rand.Next(-1, 1);
+
+        temp.GetComponent<PreyController>().mAttributes.mTurnRate =  mAttributes.mTurnRate + Random.Range(-1, 2);
+        temp.GetComponent<PreyController>().mAttributes.mLearningRate = mAttributes.mLearningRate + Random.Range(-0.03f, 0.03f);
         Debug.Assert(controller != null && controller.mNeuralNetwork != null);
 
         return temp;
@@ -178,7 +180,6 @@ public class PreyController : MonoBehaviour
                 if (mAttributes.mCurrentFoodEaten >= mAttributes.mFoodRequiredToReplicate)
                 {
                     SplitPreyInstant();
-                   //StartCoroutine(SplitPrey());
                     mAttributes.mCurrentFoodEaten = 0;
                 }
                 mAttributes.mEnergyLevel += fs.mEnergyAmount;

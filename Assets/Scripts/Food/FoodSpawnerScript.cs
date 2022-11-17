@@ -53,8 +53,8 @@ public class FoodSpawnerScript : MonoBehaviour
         }
         GameObject food = foodPool.Dequeue();
         food.SetActive(true);
-        float randX = Random.Range(-groundPosition.localScale.x * 5f, groundPosition.localScale.x * 5f);
-        float randZ = Random.Range(-groundPosition.localScale.z * 5f, groundPosition.localScale.z * 5f);
+        float randX = Random.Range(-groundPosition.localScale.x * 4.5f, groundPosition.localScale.x * 4.5f);
+        float randZ = Random.Range(-groundPosition.localScale.z * 4.5f, groundPosition.localScale.z * 4.5f);
         food.transform.position = new Vector3(randX, 0.5f, randZ);
     }
 

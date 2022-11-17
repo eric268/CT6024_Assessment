@@ -5,18 +5,19 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 [Serializable]
-public class PreyAttributes// : MonoBehaviour
+public class PreyAttributes
 {
     [Header("Energy")]
+    private float mMaxEnergy = 100;
     [SerializeField]
-    public float mMaxEnergy;
+    public float mStartingEnergy;
     [SerializeField]
     private float energyLevel;
     [SerializeField]
     public float mEnergyLevel
     {
         get => energyLevel;
-        set => this.energyLevel = Mathf.Clamp(value, 0, 100);
+        set => this.energyLevel = Mathf.Clamp(value, 0, mMaxEnergy);
     }
     [SerializeField]
     public float mLearningRate;
