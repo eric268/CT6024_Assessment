@@ -96,26 +96,6 @@ public class SensingVisionCone : MonoBehaviour
                 if (withinVision)
                 {
                     objectsInVisionList[tag].Add(c.gameObject);
-                    //LOSCheckScript LOS = c.gameObject.GetComponentInChildren<LOSCheckScript>();
-                    //if (LOS)
-                    //{
-                    //    foreach (GameObject t in LOS.LOSCheckPositions)
-                    //    {
-                    //        if (!Physics.Linecast(transform.position, t.transform.position))
-                    //        {
-                    //            objectsInVisionList[tag].Add(t);
-                    //            break;
-                    //        }
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    //Debug.DrawLine(transform.position, c.transform.position, Color.green, Time.deltaTime);
-                    //    if (!Physics.Linecast(transform.position, c.transform.position))
-                    //    {
-                                //objectsInVisionList[tag].Add(c.gameObject);
-                        //}
-                    //}
                 }
             }
         }

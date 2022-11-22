@@ -54,7 +54,7 @@ public class SensingManager : MonoBehaviour
     void SetDirectionNetworkInput(GameObject agent, List<double> inputData)
     {
         //4 inputs
-        PreyController controller = agent.GetComponent<PreyController>();
+        AgentController controller = agent.GetComponent<AgentController>();
         Vector2 tempV = new Vector2(Mathf.Abs(controller.mRigidBody.velocity.x), Mathf.Abs(controller.mRigidBody.velocity.z));
         tempV.Normalize();
 

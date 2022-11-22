@@ -632,6 +632,7 @@ MonoBehaviour:
   mEnergyTag: Prey
   mSpawnerTag: PredatorSpawner
   mInputLayerSize: 16
+  mAgentType: 1
 --- !u!114 &3734262667457119063
 MonoBehaviour:
   m_ObjectHideFlags: 0

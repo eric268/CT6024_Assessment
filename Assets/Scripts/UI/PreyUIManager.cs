@@ -9,7 +9,7 @@ public class PreyUIManager : MonoBehaviour
     public float screenOffset = 2.0f;
     private Camera cam;
     private RawImage image;
-    PreyController preyController;
+    AgentController preyController;
     public GameObject healthBarPrefab;
     GameObject healthBar;
     Canvas canvas;
@@ -19,7 +19,7 @@ public class PreyUIManager : MonoBehaviour
     {
         canvas = FindObjectOfType<UIManager>().GetComponent<Canvas>();
         cam = Camera.main;
-        preyController = GetComponentInParent<PreyController>();
+        preyController = GetComponentInParent<AgentController>();
         healthBar = Instantiate(healthBarPrefab, canvas.transform);
         image = healthBar.transform.GetChild(1).GetComponent<RawImage>();
         startingXDeltaSize = image.rectTransform.sizeDelta.x;

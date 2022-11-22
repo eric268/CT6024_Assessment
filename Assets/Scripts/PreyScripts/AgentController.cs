@@ -1,14 +1,14 @@
-using Newtonsoft.Json.Linq;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
-using UnityEngine.XR;
-using static UnityEditor.PlayerSettings;
 
-public class PreyController : MonoBehaviour
+public enum AgentType
+{
+    Prey,
+    Predator,
+    NUM_OF_AGENTS
+}
+
+
+public class AgentController : MonoBehaviour
 {
     [Header("Neural Network")]
     [SerializeField]
@@ -19,11 +19,9 @@ public class PreyController : MonoBehaviour
     //LayerMask mFoodLayerMask;
     public Rigidbody mRigidBody;
     [SerializeField]
-    public PreyAttributes mAttributes;
+    public AgentAttributes mAttributes;
 
-    GameObject mSpawner;
-    AgentSpawner preySpawner;
-    AgentSpawner predatorSpawner;
+    AgentSpawner mAgentSpawner;
     FoodSpawnerScript mFoodSpawner;
 
     [SerializeField]
@@ -39,76 +37,64 @@ public class PreyController : MonoBehaviour
     [SerializeField]
     public int mInputLayerSize;
 
+    public AgentType mAgentType;
+
+    public bool mDebugDuplicate = false;
+
 
     private void Awake()
     {
         //mNetworkLayerSizes = new int[3] { 28, 40, 3 };
         mNetworkLayerSizes = new int[4] { mInputLayerSize, 40,40, 3 };
         mNeuralNetwork = new NeuralNetwork(mNetworkLayerSizes);
-        mSpawner = GameObject.FindGameObjectWithTag("Spawner");
-        mFoodSpawner = mSpawner.transform.GetChild(0).GetComponent<FoodSpawnerScript>();
-        preySpawner = mSpawner.transform.GetChild(1).GetComponent<AgentSpawner>();
-        predatorSpawner = mSpawner.transform.GetChild(2).GetComponent<AgentSpawner>();
-
-    }
-
-    void Start()
-    {
         mSensingManager = GetComponentInChildren<SensingManager>();
         mRigidBody = GetComponent<Rigidbody>();
-        //mAttributes.mLearningRate = Random.value * mLearningRate;
-        //mTurnRate *= Random.value;
+        if (mAgentType == AgentType.Prey)
+        {
+            InitalizeIfPrey();
+        }
+        else
+        {
+            InitalizeIfPredator();
+        }
     }
+
+    private void Start()
+    {
+
+    }
+
     private void Update()
     {
         UpdateEnergyLevels();
         UpdateNetwork();
-    }
 
-    private void OnEnable()
-    {
-        //InvokeRepeating(nameof(UpdateNetwork), Random.value, 0.05f);
-    }
-
-    public IEnumerator SplitPrey()
-    {
-        Vector3 pos = transform.position - transform.forward * 5.0f;
-        yield return new WaitForSeconds(1.5f);
-        GameObject temp = preySpawner.SpawnAgent(gameObject);
-        if (temp == null)
-            yield break;
-
-        System.Random rand = new System.Random();
-        temp.transform.position = pos;
-        temp.transform.parent = gameObject.transform.parent;
-        PreyController controller = temp.GetComponent<PreyController>();
-        controller.mAttributes.mLearningRate = mAttributes.mLearningRate;
-        controller.mAttributes.mEnergyLevel = mAttributes.mStartingEnergy;
-        controller.mSensingManager = controller.GetComponentInChildren<SensingManager>();
-        controller.mNeuralNetwork.CopyAndMutateNetwork(mNeuralNetwork.mNetworkLayers, controller.mAttributes.mLearningRate);
-        temp.GetComponent<PreyController>().mAttributes.mTurnRate = temp.GetComponent<PreyController>().mAttributes.mTurnRate + rand.Next(-1, 1);
-        Debug.Assert(controller != null && controller.mNeuralNetwork != null);
-        yield return null;
+        if (mDebugDuplicate)
+        {
+            mDebugDuplicate = false;
+            SplitPreyInstant();
+        }
     }
 
     public GameObject SplitPreyInstant()
     {
-        GameObject temp = preySpawner.SpawnAgent(gameObject);
+        Debug.Log(mAgentType);
+        GameObject temp = mAgentSpawner.SpawnAgent(gameObject);
         if (temp == null)
             return null;
 
         System.Random rand = new System.Random();
         temp.transform.position = transform.position  -transform.forward * 2.5f;
         temp.transform.parent = gameObject.transform.parent;
-        PreyController controller = temp.GetComponent<PreyController>();
+        AgentController controller = temp.GetComponent<AgentController>();
         controller.mAttributes.mEnergyLevel = mAttributes.mStartingEnergy;
         controller.mAttributes.mCurrentGeneration = mAttributes.mCurrentGeneration + 1;
         controller.mSensingManager = controller.GetComponentInChildren<SensingManager>();
         controller.mNeuralNetwork.CopyAndMutateNetwork(mNeuralNetwork.mNetworkLayers, controller.mAttributes.mLearningRate);
 
 
-        temp.GetComponent<PreyController>().mAttributes.mTurnRate =  mAttributes.mTurnRate + Random.Range(-1, 2);
-        temp.GetComponent<PreyController>().mAttributes.mLearningRate = mAttributes.mLearningRate + Random.Range(-0.03f, 0.03f);
+        temp.GetComponent<AgentController>().mAttributes.mTurnRate =  mAttributes.mTurnRate + Random.Range(-1, 2);
+        temp.GetComponent<AgentController>().mAttributes.mLearningRate = mAttributes.mLearningRate + Random.Range(-0.03f, 0.03f);
         Debug.Assert(controller != null && controller.mNeuralNetwork != null);
 
         return temp;
@@ -141,7 +127,7 @@ public class PreyController : MonoBehaviour
     {
         if (mAttributes.mEnergyLevel <= 0)
         {
-            preySpawner.ReturnPreyToPool(gameObject);
+            mAgentSpawner.ReturnPreyToPool(gameObject);
         }
         else
         {
@@ -172,7 +158,7 @@ public class PreyController : MonoBehaviour
             else
             {
                 EnergyConsumed(15.0f);
-                preySpawner.ReturnPreyToPool(collision.gameObject);
+                mAgentSpawner.ReturnPreyToPool(collision.gameObject);
             }
         }
     }
@@ -187,6 +173,19 @@ public class PreyController : MonoBehaviour
             mAttributes.mCurrentFoodEaten = 0;
         }
         mAttributes.mEnergyLevel += foodVal;
+    }
+
+    void InitalizeIfPrey()
+    {
+        mAgentSpawner = GameObject.FindGameObjectWithTag("PreySpawner").GetComponent<AgentSpawner>();
+        mFoodSpawner = FindObjectOfType<FoodSpawnerScript>();
+        string name = mAgentSpawner.gameObject.name;
+    }
+
+    void InitalizeIfPredator()
+    {
+        mAgentSpawner = GameObject.FindGameObjectWithTag("PredatorSpawner").GetComponent<AgentSpawner>();
+        string name = mAgentSpawner.gameObject.name;
     }
 }
 

@@ -77,11 +77,11 @@ public class FoodSpawnerScript : MonoBehaviour
 
     public void ReturnFood(GameObject obj)
     {
-        foreach(GameObject prey in mPreySpawner.mPreyArray)
+        foreach(GameObject prey in mPreySpawner.mAgentArray)
         {
             if (prey.activeInHierarchy == true)
             {
-                PreyController pc = prey.GetComponent<PreyController>();
+                AgentController pc = prey.GetComponent<AgentController>();
                 Debug.Assert(pc != null);
                 pc.RemoveFoodFromSensing(obj.GetComponent<Collider>());
             }

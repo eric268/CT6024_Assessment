@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 [Serializable]
-public class PreyAttributes
+public class AgentAttributes
 {
     [Header("Energy")]
     private float mMaxEnergy = 100;
