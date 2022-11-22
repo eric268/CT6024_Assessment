@@ -15,13 +15,16 @@ public class PreyController : MonoBehaviour
     public int[] mNetworkLayerSizes;
     public NeuralNetwork mNeuralNetwork;
 
-    [SerializeField]
-    LayerMask mFoodLayerMask;
+    //[SerializeField]
+    //LayerMask mFoodLayerMask;
     public Rigidbody mRigidBody;
     [SerializeField]
     public PreyAttributes mAttributes;
 
-    PreySpawner preySpawner;
+    GameObject mSpawner;
+    AgentSpawner preySpawner;
+    AgentSpawner predatorSpawner;
+    FoodSpawnerScript mFoodSpawner;
 
     [SerializeField]
     int direction;
@@ -30,13 +33,23 @@ public class PreyController : MonoBehaviour
     int prevResult;
     public bool spawn = true;
 
+    public string mEnergyTag;
+    public string mSpawnerTag;
+
+    [SerializeField]
+    public int mInputLayerSize;
+
 
     private void Awake()
     {
         //mNetworkLayerSizes = new int[3] { 28, 40, 3 };
-        mNetworkLayerSizes = new int[3] { 16, 40, 3 };
+        mNetworkLayerSizes = new int[4] { mInputLayerSize, 40,40, 3 };
         mNeuralNetwork = new NeuralNetwork(mNetworkLayerSizes);
-        preySpawner = GameObject.FindWithTag("PreySpawner").GetComponent<PreySpawner>();
+        mSpawner = GameObject.FindGameObjectWithTag("Spawner");
+        mFoodSpawner = mSpawner.transform.GetChild(0).GetComponent<FoodSpawnerScript>();
+        preySpawner = mSpawner.transform.GetChild(1).GetComponent<AgentSpawner>();
+        predatorSpawner = mSpawner.transform.GetChild(2).GetComponent<AgentSpawner>();
+
     }
 
     void Start()
@@ -89,6 +102,7 @@ public class PreyController : MonoBehaviour
         temp.transform.parent = gameObject.transform.parent;
         PreyController controller = temp.GetComponent<PreyController>();
         controller.mAttributes.mEnergyLevel = mAttributes.mStartingEnergy;
+        controller.mAttributes.mCurrentGeneration = mAttributes.mCurrentGeneration + 1;
         controller.mSensingManager = controller.GetComponentInChildren<SensingManager>();
         controller.mNeuralNetwork.CopyAndMutateNetwork(mNeuralNetwork.mNetworkLayers, controller.mAttributes.mLearningRate);
 
@@ -110,27 +124,6 @@ public class PreyController : MonoBehaviour
     {
         switch (result)
         {
-            /*
-            case 0:
-                mRigidBody.velocity = Vector3.forward * mAttributes.mSpeed;
-                transform.eulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
-                break;
-            case 1:
-                //Move Right
-                //transform.Rotate(0.0f,mAttributes.mTurnRate, 0.0f);
-                mRigidBody.velocity = -Vector3.forward * mAttributes.mSpeed;
-                transform.eulerAngles = new Vector3(0.0f, 180.0f, 0.0f);
-                break;
-            case 2:
-                //transform.Rotate(0.0f, -mAttributes.mTurnRate, 0.0f);
-                mRigidBody.velocity = Vector3.right * mAttributes.mSpeed;
-                transform.eulerAngles = new Vector3(0.0f, 90.0f, 0.0f);
-                break;
-            case 3:
-                mRigidBody.velocity = -Vector3.right * mAttributes.mSpeed;
-                transform.eulerAngles = new Vector3(0.0f, 270.0f, 0.0f);
-                break;
-            */
             case 0:
                 break;
             case 1:
@@ -142,15 +135,13 @@ public class PreyController : MonoBehaviour
 
         }
         mRigidBody.velocity = transform.forward * mAttributes.mSpeed;
-
-
     }
 
     private void UpdateEnergyLevels()
     {
         if (mAttributes.mEnergyLevel <= 0)
         {
-            PreySpawner.ReturnPreyToPool(gameObject);
+            preySpawner.ReturnPreyToPool(gameObject);
         }
         else
         {
@@ -162,34 +153,40 @@ public class PreyController : MonoBehaviour
     {
         foreach (SensingVisionCone cone in mSensingManager.sensingVisionCones)
         {
-            if (cone.mSensingContainer.ContainsKey("Food"))
+            if (cone.mSensingContainer.ContainsKey(mEnergyTag))
                 cone.mSensingContainer[foodCollider.gameObject.tag].Remove(foodCollider);
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Food"))
+        if (collision.gameObject.CompareTag(mEnergyTag))
         {
             FoodScript fs = collision.gameObject.GetComponent<FoodScript>();
             if (fs)
             {
                 FoodSpawnerScript.mCurrentAmountofFoodOnMap--;
-                mAttributes.mCurrentFoodEaten++;
-                mAttributes.mTotalFoodCollected++;
-                if (mAttributes.mCurrentFoodEaten >= mAttributes.mFoodRequiredToReplicate)
-                {
-                    SplitPreyInstant();
-                    mAttributes.mCurrentFoodEaten = 0;
-                }
-                mAttributes.mEnergyLevel += fs.mEnergyAmount;
-                FoodSpawnerScript.ReturnFood(collision.gameObject);
+                EnergyConsumed(fs.mEnergyAmount);
+                mFoodSpawner.ReturnFood(collision.gameObject);
             }
             else
             {
-                Debug.LogError("Item with food layer does not have food script attached");
+                EnergyConsumed(15.0f);
+                preySpawner.ReturnPreyToPool(collision.gameObject);
             }
         }
+    }
+
+    private void EnergyConsumed(float foodVal)
+    {
+        mAttributes.mCurrentFoodEaten++;
+        mAttributes.mTotalFoodCollected++;
+        if (mAttributes.mCurrentFoodEaten >= mAttributes.mFoodRequiredToReplicate)
+        {
+            SplitPreyInstant();
+            mAttributes.mCurrentFoodEaten = 0;
+        }
+        mAttributes.mEnergyLevel += foodVal;
     }
 }
 

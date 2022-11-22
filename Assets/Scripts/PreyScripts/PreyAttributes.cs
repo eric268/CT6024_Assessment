@@ -39,4 +39,6 @@ public class PreyAttributes
     public int mTurnRate;
 
     public int mTotalFoodCollected = 0;
+
+    public int mCurrentGeneration = 1;
 }

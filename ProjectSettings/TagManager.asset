@@ -6,6 +6,14 @@ TagManager:
   tags:
   - Agent
   - Temp
+  - Food
+  - Wall
+  - PreySpawner
+  - MainCanvas
+  - PredatorSpawner
+  - Predator
+  - Prey
+  - Spawner
   layers:
   - Default
   - TransparentFX
@@ -14,7 +22,7 @@ TagManager:
   - Water
   - UI
   - Food
-  - 
+  - Predator
   - 
   - 
   - 

@@ -6,7 +6,7 @@ using UnityEngine;
 
 
 
-public class PreySpawner : MonoBehaviour
+public class AgentSpawner : MonoBehaviour
 {
     [SerializeField]
     Transform groundPosition;
@@ -16,8 +16,8 @@ public class PreySpawner : MonoBehaviour
     [SerializeField]
     GameObject preyPrefab;
 
-    public static Queue<GameObject> preyPool;
-    public static GameObject[] mPreyArray;
+    public Queue<GameObject> preyPool;
+    public GameObject[] mPreyArray;
 
     [Header("Generation Debug")]
     public bool mRespawnPrey = false;
@@ -71,7 +71,7 @@ public class PreySpawner : MonoBehaviour
         return null;
     }
 
-    public static void ReturnPreyToPool(GameObject obj)
+    public void ReturnPreyToPool(GameObject obj)
     {
         if (obj.activeInHierarchy)
         {
@@ -116,16 +116,4 @@ public class PreySpawner : MonoBehaviour
             obj.GetComponent<PreyController>().mAttributes.mTotalFoodCollected = 0;
         }
     }
-
-    private void OnApplicationQuit()
-    {
-
-    }
-
 }
-
-public class TrainedWeightAndBiasData
-{
-
-}
-

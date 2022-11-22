@@ -24,7 +24,7 @@ public class WallScript : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (agentLayerMask == (agentLayerMask | 1 << collision.gameObject.layer))
+        if (collision.gameObject.CompareTag("Predator") || collision.gameObject.CompareTag("Prey"))
         {
             //PreySpawner.ReturnPreyToPool(collision.gameObject);
 
