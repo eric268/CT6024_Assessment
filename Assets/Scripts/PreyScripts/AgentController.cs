@@ -78,7 +78,6 @@ public class AgentController : MonoBehaviour
 
     public GameObject SplitPreyInstant()
     {
-        Debug.Log(mAgentType);
         GameObject temp = mAgentSpawner.SpawnAgent(gameObject);
         if (temp == null)
             return null;
@@ -161,6 +160,8 @@ public class AgentController : MonoBehaviour
                 mAgentSpawner.ReturnPreyToPool(collision.gameObject);
             }
         }
+        //TODO
+        //Need to remove prey from all collider containers
     }
 
     private void EnergyConsumed(float foodVal)

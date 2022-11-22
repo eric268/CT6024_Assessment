@@ -29,25 +29,31 @@ public class AgentSpawner : MonoBehaviour
 
     public int mMaxNumberOfAgents;
     public int mCurrentNumberOfAgents;
+
+    public string name;
     // Start is called before the first frame update
 
     private void Awake()
     {
+        name = gameObject.name;
         mainUI = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<UIManager>();
         mAgentQueue = new Queue<GameObject>();
         mAgentArray = new GameObject[mMaxNumberOfAgents];
         System.Random rand = new System.Random();
+
         for (int i = 0; i < mMaxNumberOfAgents; i++)
         {
-            mAgentArray[i] = SpawnAgent(preyPrefab);
-            //int rot = rand.Next(360);
-            //obj.transform.Rotate(0.0f, rot, 0.0f);
+            mAgentArray[i] = Instantiate(preyPrefab, gameObject.transform);
+            mCurrentNumberOfAgents++;
+            RandomizeAgentPosition(mAgentArray[i]);
             AgentAttributes att = mAgentArray[i].GetComponent<AgentController>().mAttributes;
             Debug.Assert(att != null);
             att.mLearningRate = Random.Range(att.mlearningRateMin, att.mlearningRateMax);
             att.mTurnRate = rand.Next(att.mTurnRateStartMin, att.mTurnRateStartMax);
+
             if (i >= numPreyToSpawn)
             {
+                mAgentQueue.Enqueue(mAgentArray[i]);
                 mAgentArray[i].SetActive(false);
                 mCurrentNumberOfAgents--;
             }
@@ -61,13 +67,8 @@ public class AgentSpawner : MonoBehaviour
             mCurrentNumberOfAgents++;
             if (mAgentQueue.Count <= 0)
                 mAgentQueue.Enqueue(Instantiate(preyPrefab, gameObject.transform));
-
             GameObject obj = mAgentQueue.Dequeue();
             obj.SetActive(true);
-            float randX = Random.Range(-groundPosition.localScale.x * 3f, groundPosition.localScale.x * 3f);
-            float randZ = Random.Range(-groundPosition.localScale.z * 3f, groundPosition.localScale.z * 3f);
-            obj.transform.position = new Vector3(randX, 1.0f, randZ);
-            obj.transform.Rotate(0,Random.Range(0, 360), 0);
             return obj;
         }
         return null;
@@ -81,6 +82,14 @@ public class AgentSpawner : MonoBehaviour
             obj.SetActive(false);
             mAgentQueue.Enqueue(obj);
         }
+    }
+
+    public void RandomizeAgentPosition(GameObject obj)
+    {
+        float randX = Random.Range(-groundPosition.localScale.x * 3f, groundPosition.localScale.x * 3f);
+        float randZ = Random.Range(-groundPosition.localScale.z * 3f, groundPosition.localScale.z * 3f);
+        obj.transform.position = new Vector3(randX, 1.0f, randZ);
+        obj.transform.Rotate(0, Random.Range(0, 360), 0);
     }
 
     private void Update()

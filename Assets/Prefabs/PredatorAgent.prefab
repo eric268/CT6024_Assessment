@@ -619,7 +619,7 @@ MonoBehaviour:
     mLearningRate: 0
     mlearningRateMin: 0.02
     mlearningRateMax: 0.3
-    mSpeed: 10
+    mSpeed: 12.5
     mFoodRequiredToReplicate: 3
     mCurrentFoodEaten: 0
     mTurnRateStartMin: 1
@@ -633,6 +633,7 @@ MonoBehaviour:
   mSpawnerTag: PredatorSpawner
   mInputLayerSize: 16
   mAgentType: 1
+  mDebugDuplicate: 0
 --- !u!114 &3734262667457119063
 MonoBehaviour:
   m_ObjectHideFlags: 0
