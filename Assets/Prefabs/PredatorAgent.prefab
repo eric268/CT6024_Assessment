@@ -383,7 +383,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensingVisionCones: []
   sensingTag:
-  - Agent
+  - Prey
   mDebugDrawVisionCones: 0
 --- !u!1 &3734262666739405937
 GameObject:
@@ -620,7 +620,7 @@ MonoBehaviour:
     mlearningRateMin: 0.02
     mlearningRateMax: 0.3
     mSpeed: 12.5
-    mFoodRequiredToReplicate: 3
+    mFoodRequiredToReplicate: 2
     mCurrentFoodEaten: 0
     mTurnRateStartMin: 1
     mTurnRateStartMax: 90

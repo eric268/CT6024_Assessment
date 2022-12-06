@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class FoodSpawnerScript : MonoBehaviour
+public class FoodSpawnerScript : SpawnerScript
 {
     [SerializeField]
     int foodPoolSize = 50;
@@ -39,18 +39,28 @@ public class FoodSpawnerScript : MonoBehaviour
     {
         foodPool = new Queue<GameObject>();
         nextItemToSpawn = foodPoolSize / 2;
-        InvokeRepeating(nameof(SpawnFood), 0.0f, spawnRate);
+        InvokeRepeating(nameof(SpawnObject), 0.0f, spawnRate);
         for (int i =0; i < startingFoodAmount; i++)
         {
-            SpawnFood();
+            SpawnObject();
         }
         InvokeRepeating(nameof(DecreaseSpawnRate), spawnRateDecreaseFrequency, spawnRateDecreaseFrequency);
     }
 
-    void SpawnFood()
+    void DecreaseSpawnRate()
+    {
+        if (spawnRate > maxSpawnRate)
+            return;
+        spawnRate += 0.05f;
+        Debug.Log("Spawn Rate Decreased to: " + spawnRate);
+        CancelInvoke(nameof(SpawnObject));
+        InvokeRepeating(nameof(SpawnObject), 0.0f, spawnRate);
+    }
+
+    public override GameObject SpawnObject()
     {
         if (mCurrentAmountofFoodOnMap >= mMaxFoodOnMap)
-            return;
+            return null;
 
         mCurrentAmountofFoodOnMap++;
 
@@ -63,27 +73,18 @@ public class FoodSpawnerScript : MonoBehaviour
         float randX = Random.Range(-groundPosition.localScale.x * 4.5f, groundPosition.localScale.x * 4.5f);
         float randZ = Random.Range(-groundPosition.localScale.z * 4.5f, groundPosition.localScale.z * 4.5f);
         food.transform.position = new Vector3(randX, 0.5f, randZ);
+        return food;
     }
 
-    void DecreaseSpawnRate()
+    public override void DespawnObject(GameObject obj)
     {
-        if (spawnRate > maxSpawnRate)
-            return;
-        spawnRate += 0.05f;
-        Debug.Log("Spawn Rate Decreased to: " + spawnRate);
-        CancelInvoke(nameof(SpawnFood));
-        InvokeRepeating(nameof(SpawnFood), 0.0f, spawnRate);
-    }
-
-    public void ReturnFood(GameObject obj)
-    {
-        foreach(GameObject prey in mPreySpawner.mAgentArray)
+        foreach (GameObject prey in mPreySpawner.mAgentArray)
         {
             if (prey.activeInHierarchy == true)
             {
                 AgentController pc = prey.GetComponent<AgentController>();
                 Debug.Assert(pc != null);
-                pc.RemoveFoodFromSensing(obj.GetComponent<Collider>());
+                pc.RemoveObjectFromSensingPool(obj.GetComponent<Collider>());
             }
         }
         obj.SetActive(false);

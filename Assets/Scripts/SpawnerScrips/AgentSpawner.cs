@@ -6,7 +6,7 @@ using UnityEngine;
 
 
 
-public class AgentSpawner : MonoBehaviour
+public class AgentSpawner : SpawnerScript
 {
     [SerializeField]
     Transform groundPosition;
@@ -60,30 +60,6 @@ public class AgentSpawner : MonoBehaviour
         }
     }
 
-    public GameObject SpawnAgent(GameObject prefab)
-    {
-        if (mMaxNumberOfAgents > mCurrentNumberOfAgents)
-        {
-            mCurrentNumberOfAgents++;
-            if (mAgentQueue.Count <= 0)
-                mAgentQueue.Enqueue(Instantiate(preyPrefab, gameObject.transform));
-            GameObject obj = mAgentQueue.Dequeue();
-            obj.SetActive(true);
-            return obj;
-        }
-        return null;
-    }
-
-    public void ReturnPreyToPool(GameObject obj)
-    {
-        if (obj.activeInHierarchy)
-        {
-            mCurrentNumberOfAgents--;
-            obj.SetActive(false);
-            mAgentQueue.Enqueue(obj);
-        }
-    }
-
     public void RandomizeAgentPosition(GameObject obj)
     {
         float randX = Random.Range(-groundPosition.localScale.x * 3f, groundPosition.localScale.x * 3f);
@@ -98,31 +74,45 @@ public class AgentSpawner : MonoBehaviour
         {
             mRespawnPrey = false;
         }
-        //if (GameManagerScript.currentNumberOfPrey == 0)
-        //{
-        //    FindBestPrey();
-        //}
     }
 
-    //void FindBestPrey()
-    //{
-    //    GameObject[] sortedArray = mAgentArray.OrderByDescending(c => c.GetComponent<AgentController>().mAttributes.mTotalFoodCollected).ToArray();
-    //    int topInFitness = 25;
-    //    for(int i =0; i < mRespawnAmount; i++)
-    //    {
-    //        int obj = Random.Range(0, topInFitness);
-    //        GameObject t2 = sortedArray[obj].GetComponent<AgentController>().SplitPreyInstant();
-    //        float randX = Random.Range(-groundPosition.localScale.x * 3.5f, groundPosition.localScale.x * 3.5f);
-    //        float randZ = Random.Range(-groundPosition.localScale.z * 3.5f, groundPosition.localScale.z * 3.5f);
-    //        t2.transform.position = new Vector3(randX, 1.0f, randZ);
-    //    }
+    public override GameObject SpawnObject()
+    {
+        if (mMaxNumberOfAgents > mCurrentNumberOfAgents)
+        {
+            mCurrentNumberOfAgents++;
+            if (mAgentQueue.Count <= 0)
+                mAgentQueue.Enqueue(Instantiate(preyPrefab, gameObject.transform));
+            GameObject obj = mAgentQueue.Dequeue();
+            obj.SetActive(true);
+            return obj;
+        }
+        return null;
 
-    //    mainUI.mGenerationText.text = "Current Generation: " + ++mCurrentGen;
-    //    mainUI.mFitnessText.text = "Highest Fitness: " + sortedArray[0].GetComponent<AgentController>().mAttributes.mTotalFoodCollected;
+        if (mMaxNumberOfAgents > mCurrentNumberOfAgents)
+        {
+            mCurrentNumberOfAgents++;
+            if (mAgentQueue.Count <= 0)
+                mAgentQueue.Enqueue(Instantiate(preyPrefab, gameObject.transform));
+            GameObject obj = mAgentQueue.Dequeue();
+            obj.SetActive(true);
+            return obj;
+        }
+        return null;
+    }
 
-    //    foreach (GameObject obj in sortedArray)
-    //    {
-    //        obj.GetComponent<AgentController>().mAttributes.mTotalFoodCollected = 0;
-    //    }
-    //}
+    public override void DespawnObject(GameObject obj)
+    {
+        foreach (GameObject agent in mAgentArray)
+        {
+            if (agent.activeInHierarchy == true)
+            {
+                AgentController pc = agent.GetComponent<AgentController>();
+                Debug.Assert(pc != null);
+                pc.RemoveObjectFromSensingPool(obj.GetComponent<Collider>());
+            }
+        }
+        obj.SetActive(false);
+        mAgentQueue.Enqueue(obj);
+    }
 }

@@ -78,7 +78,7 @@ public class AgentController : MonoBehaviour
 
     public GameObject SplitPreyInstant()
     {
-        GameObject temp = mAgentSpawner.SpawnAgent(gameObject);
+        GameObject temp = mAgentSpawner.SpawnObject();
         if (temp == null)
             return null;
 
@@ -126,7 +126,7 @@ public class AgentController : MonoBehaviour
     {
         if (mAttributes.mEnergyLevel <= 0)
         {
-            mAgentSpawner.ReturnPreyToPool(gameObject);
+            mAgentSpawner.DespawnObject(gameObject);
         }
         else
         {
@@ -134,12 +134,12 @@ public class AgentController : MonoBehaviour
         }
     }
 
-    public void RemoveFoodFromSensing(Collider foodCollider)
+    public void RemoveObjectFromSensingPool(Collider collider)
     {
         foreach (SensingVisionCone cone in mSensingManager.sensingVisionCones)
         {
             if (cone.mSensingContainer.ContainsKey(mEnergyTag))
-                cone.mSensingContainer[foodCollider.gameObject.tag].Remove(foodCollider);
+                cone.mSensingContainer[collider.gameObject.tag].Remove(collider);
         }
     }
 
@@ -152,12 +152,13 @@ public class AgentController : MonoBehaviour
             {
                 FoodSpawnerScript.mCurrentAmountofFoodOnMap--;
                 EnergyConsumed(fs.mEnergyAmount);
-                mFoodSpawner.ReturnFood(collision.gameObject);
+                mFoodSpawner.DespawnObject(collision.gameObject);
             }
             else
             {
+                Debug.Log("Prey eaten");
                 EnergyConsumed(15.0f);
-                mAgentSpawner.ReturnPreyToPool(collision.gameObject);
+                mAgentSpawner.DespawnObject(collision.gameObject);
             }
         }
         //TODO
