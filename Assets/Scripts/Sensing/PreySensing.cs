@@ -24,24 +24,29 @@ public class InputData
     }
 }
 
-public class SensingManager : MonoBehaviour
+public class PreySensing : SensingScript
 {
     List<double> inputData;
-    public SensingVisionCone[] sensingVisionCones;
-    public LayerMask[] mSensingLayerMasks;
     [SerializeField]
-    public bool mDebugDrawVisionCones;
-    void Start()
+    LayerMask mFoodLayerMask;
+    [SerializeField]
+    LayerMask mPredatorLayerMask;
+    LayerMask[] mSensingLayerMasks;
+
+    private void Awake()
     {
+        mSensingLayerMasks = new LayerMask[2];
+        mSensingLayerMasks[0] = mFoodLayerMask;
+        mSensingLayerMasks[1] = mPredatorLayerMask;
+
         inputData = new List<double>();
-        sensingVisionCones = GetComponentsInChildren<SensingVisionCone>();
+        sensingVisionCones = GetComponentsInChildren<VisionCone>();
     }
 
     public List<double> GetNeuralNetworkInputs(GameObject agent)
     {
         inputData.Clear();
         SetDirectionNetworkInput(agent, inputData);
-        
         //Iterating through every vision cone
         for (int i = 0; i < sensingVisionCones.Length; i++)
         {
@@ -96,29 +101,17 @@ public class SensingManager : MonoBehaviour
             inputData.Add(0);
             return;
         }
-
-        float closestDistance = Mathf.Infinity;
-        GameObject g = null;
-
-        float dist = 0.0f;
-        foreach (GameObject obj in objects)
-        {
-            dist = Vector3.Distance(obj.transform.position, transform.position);
-            if (dist < closestDistance)
-            {
-                closestDistance = dist;
-                g = obj;
-            }
-        }
-
-        dist = (dist / radius);
-        Vector3 dir = (g.transform.position - transform.position).normalized;
+        //Don't need a null check because guaranteed to have at least one object or above return will execute
+        GameObject closestObject = FindClosestObjectInVision(objects);
+        float distance = Vector3.Distance(transform.position, closestObject.transform.position);
+        distance = (distance / radius);
+        Vector3 dir = (closestObject.transform.position - transform.position).normalized;
         float x = (dir.x);
         float z = (dir.z);
 
 
         inputData.Add(Mathf.Clamp(objects.Count / 10.0f, 0.0f,1.0f));
-        inputData.Add(dist);
+        inputData.Add(distance);
         inputData.Add(Mathf.Abs(x));
         inputData.Add(Mathf.Abs(z));
     }

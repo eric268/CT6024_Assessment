@@ -7,12 +7,13 @@ namespace AIGOAP
     {
         public float mEatEffect;
         public float mSleepEffect;
-        public float mDrinkEffect;
-        public Action(float e, float s, float d)
+        public float mReproduce;
+        public float mFightEffect;
+        public Action(float e, float s, float r)
         {
             mEatEffect = e;
             mSleepEffect = s;
-            mDrinkEffect = d;
+            mReproduce = r;
         }
         public float GetGoalChanged(Goal goal)
         {
@@ -23,7 +24,7 @@ namespace AIGOAP
                 case GoalTypes.Sleep:
                     return goal.mValue + mSleepEffect;
                 case GoalTypes.Drink:
-                    return goal.mValue + mDrinkEffect;
+                    return goal.mValue + mReproduce;
                 default:
                     return goal.mValue;
             }

@@ -312,7 +312,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3734262666208508468}
-  - component: {fileID: 3416045646896263054}
+  - component: {fileID: 7850614301774302674}
   m_Layer: 3
   m_Name: Sensing
   m_TagString: Untagged
@@ -338,7 +338,7 @@ Transform:
   m_Father: {fileID: 3734262667457119060}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3416045646896263054
+--- !u!114 &7850614301774302674
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -350,13 +350,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e01f80ed38c4e8a4285ad80392bec0e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensingVisionCones: []
-  mSensingLayerMasks:
-  - serializedVersion: 2
+  mFoodLayerMask:
+    serializedVersion: 2
     m_Bits: 64
-  - serializedVersion: 2
+  mPredatorLayerMask:
+    serializedVersion: 2
     m_Bits: 128
-  mDebugDrawVisionCones: 0
 --- !u!1 &3734262666912512225
 GameObject:
   m_ObjectHideFlags: 0
@@ -521,27 +520,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mRigidBody: {fileID: 0}
+  mAgentSpawner: {fileID: 0}
   mAgentType: 0
   mNetworkLayerSizes: 
   mAttributes:
     mStartingEnergy: 30
     energyLevel: 30
     mSpeed: 10
+    mTotalObjectsEatten: 0
+    mCurrentGeneration: 1
     mObjectsEattenToReproduce: 3
     mCurrentNumObjectsEaten: 0
-    mTotalFoodCollected: 0
-    mCurrentGeneration: 1
     mLearningRate: 0
     mlearningRateMin: 0.02
     mlearningRateMax: 0.3
     mTurnRateStartMin: 1
     mTurnRateStartMax: 90
     mTurnRate: 0
-  spawn: 1
-  mEnergyTag: Food
-  mSpawnerTag: PreySpawner
+    mEnergyGivenWhenEaten: 15
   mInputLayerSize: 28
-  mEnergyConsumptionRate: 0
+  mNetworkUpdateRate: 0.05
 --- !u!114 &3734262667457119063
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ using UnityEngine.Jobs;
 using UnityEngine.UIElements;
 
 //[RequireComponent(typeof(SphereCollider))]
-public class SensingVisionCone : MonoBehaviour
+public class VisionCone : MonoBehaviour
 {
 
     public List<GameObject> mSensedObjects;

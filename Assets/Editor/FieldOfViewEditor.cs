@@ -5,12 +5,12 @@ using UnityEditor;
 using TMPro;
 using System.IO.MemoryMappedFiles;
 
-[CustomEditor(typeof(SensingVisionCone))]
+[CustomEditor(typeof(VisionCone))]
 public class FieldOfViewEditor : Editor
 {
     private void OnSceneGUI()
     {
-        SensingVisionCone cone = (SensingVisionCone)target; 
+        VisionCone cone = (VisionCone)target; 
         Handles.color = Color.white;
         Handles.DrawWireArc(cone.transform.position, Vector3.up, Vector3.forward, 360, cone.mRadius);
         Vector3 viewAngleA = cone.DirFromAngle(-cone.mVisionConeAngle / 2.0f, false);

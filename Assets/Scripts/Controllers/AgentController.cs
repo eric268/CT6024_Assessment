@@ -12,9 +12,9 @@ public enum AgentType
 public abstract class AgentController : MonoBehaviour
 {
     public Rigidbody mRigidBody;
-    protected AgentSpawner mAgentSpawner;
-    protected SensingManager mSensingManager;
+    public AgentSpawner mAgentSpawner;
     public AgentType mAgentType;
+    protected string mEnergyTag;
     protected abstract GameObject SpawnAgent();
     protected abstract void ObjectConsumed(float val);
 }

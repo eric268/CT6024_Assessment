@@ -8,7 +8,6 @@ using UnityEngine;
 
 public class AgentSpawner : MonoBehaviour
 {
-    [SerializeField]
     Transform groundPosition;
 
     [SerializeField]
@@ -17,42 +16,29 @@ public class AgentSpawner : MonoBehaviour
     GameObject agentPrefab;
 
     public Queue<GameObject> mAgentQueue;
-    public GameObject[] mAgentArray;
-
-    [Header("Generation Debug")]
-    public bool mRespawnPrey = false;
-    public int mRespawnAmount = 100;
-
-    UIManager mainUI;
-
     public int mCurrentGen = 1;
-
     public int mMaxNumberOfAgents;
     public int mCurrentNumberOfAgents;
     // Start is called before the first frame update
 
     private void Awake()
     {
-        name = gameObject.name;
-        mainUI = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<UIManager>();
+        groundPosition = GameObject.FindGameObjectWithTag("Ground").transform;
         mAgentQueue = new Queue<GameObject>();
-        mAgentArray = new GameObject[mMaxNumberOfAgents];
-        System.Random rand = new System.Random();
+    }
 
+    private void Start()
+    {
         for (int i = 0; i < mMaxNumberOfAgents; i++)
         {
-            mAgentArray[i] = Instantiate(agentPrefab, gameObject.transform);
+            GameObject obj = Instantiate(agentPrefab, gameObject.transform);
             mCurrentNumberOfAgents++;
-            RandomizeAgentPosition(mAgentArray[i]);
-            PreyAttributes att = mAgentArray[i].GetComponent<PreyController>().mAttributes;
-            Debug.Assert(att != null);
-            att.mLearningRate = Random.Range(att.mlearningRateMin, att.mlearningRateMax);
-            att.mTurnRate = rand.Next(att.mTurnRateStartMin, att.mTurnRateStartMax);
+            RandomizeAgentPosition(obj);
 
             if (i >= numPreyToSpawn)
             {
-                mAgentQueue.Enqueue(mAgentArray[i]);
-                mAgentArray[i].SetActive(false);
+                mAgentQueue.Enqueue(obj);
+                obj.SetActive(false);
                 mCurrentNumberOfAgents--;
             }
         }
@@ -72,7 +58,7 @@ public class AgentSpawner : MonoBehaviour
         return null;
     }
 
-    public void ReturnPreyToPool(GameObject obj)
+    public void ReturnAgentToPool(GameObject obj)
     {
         if (obj.activeInHierarchy)
         {
@@ -88,9 +74,5 @@ public class AgentSpawner : MonoBehaviour
         float randZ = Random.Range(-groundPosition.localScale.z * 3f, groundPosition.localScale.z * 3f);
         obj.transform.position = new Vector3(randX, 1.0f, randZ);
         obj.transform.Rotate(0, Random.Range(0, 360), 0);
-    }
-
-    private void Update()
-    {
     }
 }

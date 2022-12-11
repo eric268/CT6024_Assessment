@@ -1,6 +1,7 @@
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class PreyController : AgentController
 {
@@ -8,50 +9,44 @@ public class PreyController : AgentController
     [SerializeField]
     public int[] mNetworkLayerSizes;
     public NeuralNetwork mNeuralNetwork;
-
-    //[SerializeField]
-    //LayerMask mFoodLayerMask;
    
     [SerializeField]
     public PreyAttributes mAttributes;
     FoodSpawnerScript mFoodSpawner;
-    int prevResult;
-    public bool spawn = true;
-    public string mEnergyTag;
-    public string mSpawnerTag;
+
     [SerializeField]
     public int mInputLayerSize;
-    public double mEnergyConsumptionRate;
 
     [SerializeField]
     private float mNetworkUpdateRate = 0.05f;
 
+    PreySensing mSensingManager;
+
 
     private void Awake()
     {
+        mEnergyTag = "Food";
         mRigidBody = GetComponent<Rigidbody>();
-        mSensingManager = GetComponentInChildren<SensingManager>();
+        mSensingManager = GetComponentInChildren<PreySensing>();
         mFoodSpawner = FindObjectOfType<FoodSpawnerScript>();
         mAgentSpawner = GameObject.FindGameObjectWithTag("PreySpawner").GetComponent<AgentSpawner>();
-        mNetworkLayerSizes = new int[4] { mInputLayerSize, 40,40, 3 };
+        mNetworkLayerSizes = new int[4] { mInputLayerSize, 40, 40, 3 };
         mNeuralNetwork = new NeuralNetwork(mNetworkLayerSizes);
     }
 
     private void Start()
     {
-        //InvokeRepeating(nameof(UpdateNetwork), UnityEngine.Random.Range(0.01f, 0.25f), mNetworkUpdateRate);
-    }
-
-    private void Update()
-    {
-        UpdateEnergyLevels();
-        int result = mNeuralNetwork.RunNetwork(mSensingManager.GetNeuralNetworkInputs(gameObject));
-        Move(result);
+        mAttributes.mLearningRate = UnityEngine.Random.Range(mAttributes.mlearningRateMin, mAttributes.mlearningRateMax);
+        mAttributes.mTurnRate     = UnityEngine.Random.Range(mAttributes.mTurnRateStartMin, mAttributes.mTurnRateStartMax);
     }
 
     private void FixedUpdate()
     {
-        
+        UpdateEnergyLevels();
+        int result = mNeuralNetwork.RunNetwork(mSensingManager.GetNeuralNetworkInputs(gameObject));
+        Move(result);
+
+
     }
 
     protected override GameObject SpawnAgent()
@@ -66,7 +61,7 @@ public class PreyController : AgentController
         PreyController controller = temp.GetComponent<PreyController>();
         controller.mAttributes.mEnergyLevel = mAttributes.mStartingEnergy;
         controller.mAttributes.mCurrentGeneration = mAttributes.mCurrentGeneration + 1;
-        controller.mSensingManager = controller.GetComponentInChildren<SensingManager>();
+        controller.mSensingManager = controller.GetComponentInChildren<PreySensing>();
         controller.mNeuralNetwork.CopyAndMutateNetwork(mNeuralNetwork.mNetworkLayers, controller.mAttributes.mLearningRate);
 
         temp.GetComponent<PreyController>().mAttributes.mTurnRate = mAttributes.mTurnRate + UnityEngine.Random.Range(-1, 2);
@@ -80,10 +75,6 @@ public class PreyController : AgentController
     {
         int result = mNeuralNetwork.RunNetwork(mSensingManager.GetNeuralNetworkInputs(gameObject));
         Move(result);
-        //Tuple<int, double>
-
-        //mEnergyConsumptionRate = result.Item2;
-
     }
 
     private void Move(int result)
@@ -100,18 +91,18 @@ public class PreyController : AgentController
                 break;
 
         }
-        mRigidBody.velocity = transform.forward * (mAttributes.mSpeed);// * (float)mEnergyConsumptionRate);
+        mRigidBody.velocity = transform.forward * (mAttributes.mSpeed);
     }
 
     private void UpdateEnergyLevels()
     {
         if (mAttributes.mEnergyLevel <= 0)
         {
-            mAgentSpawner.ReturnPreyToPool(gameObject);
+            mAgentSpawner.ReturnAgentToPool(gameObject);
         }
         else
         {
-            mAttributes.mEnergyLevel -= Time.deltaTime;// * (float)mEnergyConsumptionRate;
+            mAttributes.mEnergyLevel -= Time.deltaTime;
         }
     }
 
@@ -126,18 +117,13 @@ public class PreyController : AgentController
                 ObjectConsumed(fs.mEnergyAmount);
                 mFoodSpawner.ReturnFood(collision.gameObject);
             }
-            else
-            {
-                ObjectConsumed(15.0f);
-                mAgentSpawner.ReturnPreyToPool(collision.gameObject);
-            }
         }
     }
 
     protected override void ObjectConsumed(float foodVal)
     {
         mAttributes.mCurrentNumObjectsEaten++;
-        mAttributes.mTotalFoodCollected++;
+        mAttributes.mTotalObjectsEatten++;
         if (mAttributes.mCurrentNumObjectsEaten >= mAttributes.mObjectsEattenToReproduce)
         {
             SpawnAgent();

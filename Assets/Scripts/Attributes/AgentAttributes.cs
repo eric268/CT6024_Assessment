@@ -19,12 +19,12 @@ public class AgentAttributes
         set => this.energyLevel = Mathf.Clamp(value, 0, mMaxEnergy);
     }
 
+
     [Space(15)]
     [SerializeField]
     public float mSpeed;
-    public int mObjectsEattenToReproduce;
-    public int mCurrentNumObjectsEaten;
-    public int mTotalFoodCollected = 0;
+
+    public int mTotalObjectsEatten = 0;
     public int mCurrentGeneration = 1;
 }
 
@@ -32,6 +32,8 @@ public class AgentAttributes
 [Serializable]
 public class PreyAttributes : AgentAttributes
 {
+    public int mObjectsEattenToReproduce;
+    public int mCurrentNumObjectsEaten;
 
     [SerializeField]
     public float mLearningRate;
@@ -45,4 +47,17 @@ public class PreyAttributes : AgentAttributes
     [SerializeField]
     public int mTurnRateStartMax;
     public int mTurnRate;
+
+    public float mEnergyGivenWhenEaten = 15.0f;
 }
+
+public class PredatorAttributes : AgentAttributes
+{
+    public float mFatigue;
+    public float mFatigueRate;
+    public float mHunger;
+    public float mHungerRate;
+    
+    //public float mReproductionDesire;
+}
+
