@@ -50,14 +50,12 @@ public class PreyAttributes : AgentAttributes
 
     public float mEnergyGivenWhenEaten = 15.0f;
 }
-
+[Serializable]
 public class PredatorAttributes : AgentAttributes
 {
-    public float mFatigue;
-    public float mFatigueRate;
-    public float mHunger;
     public float mHungerRate;
-    
-    //public float mReproductionDesire;
+    public float mFatigueRate;
+    public float mThirstRate;
+    public float mReproduceRate;
 }
 

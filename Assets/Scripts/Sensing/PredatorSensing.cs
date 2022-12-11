@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PredatorSensing : SensingScript
 {
@@ -20,12 +21,6 @@ public class PredatorSensing : SensingScript
 
     public GameObject FindClosestObject()
     {
-        float closest = -Mathf.Infinity;
-        GameObject closestObject = null;
-        foreach(VisionCone cone in sensingVisionCones)
-        {
-            //float dist = Vector3.Distance(gameObject)
-        }
         return FindClosestObjectInVision(sensingVisionCones[0].GetObjectsWithinVision(mPreyLayerMask));
     }
 }

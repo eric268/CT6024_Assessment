@@ -9,6 +9,7 @@ namespace AIGOAP
         Eat,
         Sleep,
         Drink,
+        Reproduce,
         Num_Goal_Types
     }
 
@@ -17,8 +18,9 @@ namespace AIGOAP
         public GoalTypes mGoalTypes;
         public float mValue;
 
-        public Goal(float v)
+        public Goal(GoalTypes type, float v)
         {
+            mGoalTypes = type;
             mValue = v;
         }
         public float GetDiscomfort()

@@ -532,10 +532,10 @@ MonoBehaviour:
     mObjectsEattenToReproduce: 3
     mCurrentNumObjectsEaten: 0
     mLearningRate: 0
-    mlearningRateMin: 0.02
+    mlearningRateMin: 0.05
     mlearningRateMax: 0.3
     mTurnRateStartMin: 1
-    mTurnRateStartMax: 90
+    mTurnRateStartMax: 45
     mTurnRate: 0
     mEnergyGivenWhenEaten: 15
   mInputLayerSize: 28

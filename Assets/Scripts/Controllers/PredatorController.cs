@@ -8,11 +8,16 @@ using UnityEngine.AI;
 public class PredatorController : AgentController
 {
     [SerializeField]
-    private PredatorAttributes mAttributes;
+    public PredatorAttributes mAttributes;
     private GOBScript mGOB;
     private NavMeshAgent mNavMeshAgent;
     private GameObject mCurrentTarget;
     PredatorSensing mSensingManager;
+    [SerializeField]
+    private Action mCurrentAction;
+
+    [SerializeField]
+    private bool mChooseAction = false;
 
     private void Awake()
     {
@@ -25,7 +30,11 @@ public class PredatorController : AgentController
 
     private void Update()
     {
-
+        if (mChooseAction) 
+        {
+            mChooseAction = false;
+            mCurrentAction = mGOB.GetAction();
+        }
     }
 
     void SetCurrentTarget()
@@ -37,7 +46,8 @@ public class PredatorController : AgentController
     {
         mAttributes.mTotalObjectsEatten++;
         mAttributes.mEnergyLevel += val;
-        mAttributes.mFatigue++;
+
+        //Change Goal Values
     }
 
     protected override GameObject SpawnAgent()

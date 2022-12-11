@@ -349,6 +349,7 @@ GameObject:
   - component: {fileID: 3734262667457119056}
   - component: {fileID: 3064740730617123691}
   - component: {fileID: 5604341981506692050}
+  - component: {fileID: 7205041893405811892}
   m_Layer: 7
   m_Name: PredatorAgent
   m_TagString: Predator
@@ -491,3 +492,25 @@ MonoBehaviour:
   mRigidBody: {fileID: 0}
   mAgentSpawner: {fileID: 0}
   mAgentType: 1
+  mAttributes:
+    mStartingEnergy: 30
+    energyLevel: 30
+    mSpeed: 10
+    mTotalObjectsEatten: 0
+    mCurrentGeneration: 1
+    mHungerRate: 0.15
+    mFatigueRate: 0.1
+    mThirstRate: 0.05
+    mReproduceRate: 0.01
+--- !u!114 &7205041893405811892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3734262667457119066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed87a2a273e62b343bb718de1ad7b6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
