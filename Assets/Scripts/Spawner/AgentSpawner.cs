@@ -6,7 +6,7 @@ using UnityEngine;
 
 
 
-public class AgentSpawner : SpawnerScript
+public class AgentSpawner : MonoBehaviour
 {
     [SerializeField]
     Transform groundPosition;
@@ -14,7 +14,7 @@ public class AgentSpawner : SpawnerScript
     [SerializeField]
     int numPreyToSpawn = 100;
     [SerializeField]
-    GameObject preyPrefab;
+    GameObject agentPrefab;
 
     public Queue<GameObject> mAgentQueue;
     public GameObject[] mAgentArray;
@@ -29,8 +29,6 @@ public class AgentSpawner : SpawnerScript
 
     public int mMaxNumberOfAgents;
     public int mCurrentNumberOfAgents;
-
-    public string name;
     // Start is called before the first frame update
 
     private void Awake()
@@ -43,10 +41,10 @@ public class AgentSpawner : SpawnerScript
 
         for (int i = 0; i < mMaxNumberOfAgents; i++)
         {
-            mAgentArray[i] = Instantiate(preyPrefab, gameObject.transform);
+            mAgentArray[i] = Instantiate(agentPrefab, gameObject.transform);
             mCurrentNumberOfAgents++;
             RandomizeAgentPosition(mAgentArray[i]);
-            AgentAttributes att = mAgentArray[i].GetComponent<AgentController>().mAttributes;
+            PreyAttributes att = mAgentArray[i].GetComponent<PreyController>().mAttributes;
             Debug.Assert(att != null);
             att.mLearningRate = Random.Range(att.mlearningRateMin, att.mlearningRateMax);
             att.mTurnRate = rand.Next(att.mTurnRateStartMin, att.mTurnRateStartMax);
@@ -60,6 +58,30 @@ public class AgentSpawner : SpawnerScript
         }
     }
 
+    public GameObject SpawnAgent(GameObject prefab)
+    {
+        if (mMaxNumberOfAgents > mCurrentNumberOfAgents)
+        {
+            mCurrentNumberOfAgents++;
+            if (mAgentQueue.Count <= 0)
+                mAgentQueue.Enqueue(Instantiate(agentPrefab, gameObject.transform));
+            GameObject obj = mAgentQueue.Dequeue();
+            obj.SetActive(true);
+            return obj;
+        }
+        return null;
+    }
+
+    public void ReturnPreyToPool(GameObject obj)
+    {
+        if (obj.activeInHierarchy)
+        {
+            mCurrentNumberOfAgents--;
+            obj.SetActive(false);
+            mAgentQueue.Enqueue(obj);
+        }
+    }
+
     public void RandomizeAgentPosition(GameObject obj)
     {
         float randX = Random.Range(-groundPosition.localScale.x * 3f, groundPosition.localScale.x * 3f);
@@ -70,49 +92,5 @@ public class AgentSpawner : SpawnerScript
 
     private void Update()
     {
-        if (mRespawnPrey)
-        {
-            mRespawnPrey = false;
-        }
-    }
-
-    public override GameObject SpawnObject()
-    {
-        if (mMaxNumberOfAgents > mCurrentNumberOfAgents)
-        {
-            mCurrentNumberOfAgents++;
-            if (mAgentQueue.Count <= 0)
-                mAgentQueue.Enqueue(Instantiate(preyPrefab, gameObject.transform));
-            GameObject obj = mAgentQueue.Dequeue();
-            obj.SetActive(true);
-            return obj;
-        }
-        return null;
-
-        if (mMaxNumberOfAgents > mCurrentNumberOfAgents)
-        {
-            mCurrentNumberOfAgents++;
-            if (mAgentQueue.Count <= 0)
-                mAgentQueue.Enqueue(Instantiate(preyPrefab, gameObject.transform));
-            GameObject obj = mAgentQueue.Dequeue();
-            obj.SetActive(true);
-            return obj;
-        }
-        return null;
-    }
-
-    public override void DespawnObject(GameObject obj)
-    {
-        foreach (GameObject agent in mAgentArray)
-        {
-            if (agent.activeInHierarchy == true)
-            {
-                AgentController pc = agent.GetComponent<AgentController>();
-                Debug.Assert(pc != null);
-                pc.RemoveObjectFromSensingPool(obj.GetComponent<Collider>());
-            }
-        }
-        obj.SetActive(false);
-        mAgentQueue.Enqueue(obj);
     }
 }

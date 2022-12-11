@@ -24,7 +24,7 @@ public class NeuralNetwork
         }
     }
 
-    public int RunNetwork(List<double> input)
+    public /*Tuple<int,double>*/ int RunNetwork(List<double> input)
     {
         Debug.Assert(mNetworkLayers.Length > 0 && mNetworkLayers[0].mNeurons.Length == input.Count);
         for (int i =0; i < input.Count; i++)
@@ -101,12 +101,13 @@ public class NeuralNetwork
         }
     }
 
-    int GetFinalOutput(NetworkLayer outputLayer)
+   /* Tuple<int,double>*/ int GetFinalOutput(NetworkLayer outputLayer)
     {
         double highestActivation = -Mathf.Infinity;
         int i, ans = -1;
-        for (i = 0; i < outputLayer.mNeurons.Length; i++)
+        for (i = 0; i < outputLayer.mNeurons.Length -1; i++)
         {
+            outputLayer.mNeurons[i].mActivation = Sigmoid(outputLayer.mNeurons[i].mActivation);
             if (highestActivation < outputLayer.mNeurons[i].mActivation)
             {
                 highestActivation = outputLayer.mNeurons[i].mActivation;
@@ -114,6 +115,9 @@ public class NeuralNetwork
             }
         }
         return ans;
+        //double speedActivation = outputLayer.mNeurons[outputLayer.mNeurons.Length - 1].mActivation;
+        //Debug.Assert(speedActivation >= 0 && speedActivation <= 1.0);
+        //return new Tuple<int, double>(ans, speedActivation);
     }
 
     public void CopyAndMutateNetwork(NetworkLayer[] layersToCopy, float mLerningRate)

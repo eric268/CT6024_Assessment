@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class FoodSpawnerScript : SpawnerScript
+public class FoodSpawnerScript : MonoBehaviour
 {
     [SerializeField]
     int foodPoolSize = 50;
@@ -39,28 +39,18 @@ public class FoodSpawnerScript : SpawnerScript
     {
         foodPool = new Queue<GameObject>();
         nextItemToSpawn = foodPoolSize / 2;
-        InvokeRepeating(nameof(SpawnObject), 0.0f, spawnRate);
+        InvokeRepeating(nameof(SpawnFood), 0.0f, spawnRate);
         for (int i =0; i < startingFoodAmount; i++)
         {
-            SpawnObject();
+            SpawnFood();
         }
         InvokeRepeating(nameof(DecreaseSpawnRate), spawnRateDecreaseFrequency, spawnRateDecreaseFrequency);
     }
 
-    void DecreaseSpawnRate()
-    {
-        if (spawnRate > maxSpawnRate)
-            return;
-        spawnRate += 0.05f;
-        Debug.Log("Spawn Rate Decreased to: " + spawnRate);
-        CancelInvoke(nameof(SpawnObject));
-        InvokeRepeating(nameof(SpawnObject), 0.0f, spawnRate);
-    }
-
-    public override GameObject SpawnObject()
+    void SpawnFood()
     {
         if (mCurrentAmountofFoodOnMap >= mMaxFoodOnMap)
-            return null;
+            return;
 
         mCurrentAmountofFoodOnMap++;
 
@@ -73,20 +63,20 @@ public class FoodSpawnerScript : SpawnerScript
         float randX = Random.Range(-groundPosition.localScale.x * 4.5f, groundPosition.localScale.x * 4.5f);
         float randZ = Random.Range(-groundPosition.localScale.z * 4.5f, groundPosition.localScale.z * 4.5f);
         food.transform.position = new Vector3(randX, 0.5f, randZ);
-        return food;
     }
 
-    public override void DespawnObject(GameObject obj)
+    void DecreaseSpawnRate()
     {
-        foreach (GameObject prey in mPreySpawner.mAgentArray)
-        {
-            if (prey.activeInHierarchy == true)
-            {
-                AgentController pc = prey.GetComponent<AgentController>();
-                Debug.Assert(pc != null);
-                pc.RemoveObjectFromSensingPool(obj.GetComponent<Collider>());
-            }
-        }
+        if (spawnRate > maxSpawnRate)
+            return;
+        spawnRate += 0.05f;
+        Debug.Log("Spawn Rate Decreased to: " + spawnRate);
+        CancelInvoke(nameof(SpawnFood));
+        InvokeRepeating(nameof(SpawnFood), 0.0f, spawnRate);
+    }
+
+    public void ReturnFood(GameObject obj)
+    {
         obj.SetActive(false);
         foodPool.Enqueue(obj);
     }

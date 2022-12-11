@@ -26,26 +26,30 @@ public class InputData
 
 public class SensingManager : MonoBehaviour
 {
+    List<double> inputData;
     public SensingVisionCone[] sensingVisionCones;
-    public List<string> sensingTag;
+    public LayerMask[] mSensingLayerMasks;
     [SerializeField]
     public bool mDebugDrawVisionCones;
     void Start()
     {
+        inputData = new List<double>();
         sensingVisionCones = GetComponentsInChildren<SensingVisionCone>();
     }
 
     public List<double> GetNeuralNetworkInputs(GameObject agent)
     {
-        List<double> inputData = new List<double>();
+        inputData.Clear();
         SetDirectionNetworkInput(agent, inputData);
-        //Pass in x, z and distance values for closest object in each vision cone
+        
+        //Iterating through every vision cone
         for (int i = 0; i < sensingVisionCones.Length; i++)
         {
-            var objectsWithVision = sensingVisionCones[i].GetObjectsWithinVision();
-            foreach (string tag in sensingTag)
+            //Getting all objects that are within field of view and match layer mask
+            foreach (LayerMask mask in mSensingLayerMasks)
             {
-                GetInputForClosestObject(inputData, objectsWithVision[tag],sensingVisionCones[i].mVisionDirectionOffset, sensingVisionCones[i].mRadius, sensingVisionCones[i].mVisionConeAngle);
+                List<GameObject> objectsWithVision = sensingVisionCones[i].GetObjectsWithinVision(mask);
+                GetInputForClosestObject(inputData, objectsWithVision, sensingVisionCones[i].mRadius);
             }
         }
         return inputData;
@@ -54,7 +58,7 @@ public class SensingManager : MonoBehaviour
     void SetDirectionNetworkInput(GameObject agent, List<double> inputData)
     {
         //4 inputs
-        AgentController controller = agent.GetComponent<AgentController>();
+        PreyController controller = agent.GetComponent<PreyController>();
         Vector2 tempV = new Vector2(Mathf.Abs(controller.mRigidBody.velocity.x), Mathf.Abs(controller.mRigidBody.velocity.z));
         tempV.Normalize();
 
@@ -79,24 +83,9 @@ public class SensingManager : MonoBehaviour
             inputData.Add(tempV.y);
             inputData.Add(0.0f);
         }
-
-        //if (controller.mRigidBody.velocity.x < 0 || controller.mRigidBody.velocity.z < 0)
-        //{
-        //    inputData.Add(0.0f);
-        //    inputData.Add(0.0f);
-        //    inputData.Add(tempV.x);
-        //    inputData.Add(tempV.y);
-        //}
-        //else
-        //{
-        //    inputData.Add(tempV.x);
-        //    inputData.Add(tempV.y);
-        //    inputData.Add(0.0f);
-        //    inputData.Add(0.0f);
-        //}
     }
 
-    void GetInputForClosestObject(List<double> inputData, List<GameObject> objects, int offset, float radius, float angle)
+    void GetInputForClosestObject(List<double> inputData, List<GameObject> objects, float radius)
     {
         //5 inputs
         if (objects.Count == 0)
@@ -122,21 +111,7 @@ public class SensingManager : MonoBehaviour
             }
         }
 
-        //This is for passing in x z values based on how close the object is relative to max distance
-        float maxX = Mathf.Abs(Mathf.Sin((offset + Mathf.Cos(offset * Mathf.Deg2Rad) * angle * 0.5f) * Mathf.Deg2Rad) * radius);
-        float maxZ = Mathf.Abs(Mathf.Cos((offset + Mathf.Sin(offset * Mathf.Deg2Rad) * 0.5f * angle) * Mathf.Deg2Rad) * radius);
-        //float maxX = Mathf.Max(Mathf.Sin((offset + angle * 0.5f) * Mathf.Deg2Rad), Mathf.Sin((offset - angle * 0.5f) * Mathf.Deg2Rad)) * radius;
-        //float maxZ = Mathf.Max(Mathf.Cos((offset + angle * 0.5f) * Mathf.Deg2Rad), Mathf.Cos((offset - angle * 0.5f) * Mathf.Deg2Rad)) * radius;
-
-        //Debug.Log("MaxX" + maxX);
-        //Debug.Log("MaxZ" + maxZ);
-        //Debug.Log("xPos" + (g.transform.position.x - transform.position.x));
-        //Debug.Log("zPos" + (g.transform.position.z - transform.position.z));
-
-        //float x = /*1.0f - */ Mathf.Abs(g.transform.position.x - transform.position.x)/maxX;
-        //float z = /*1.0f - */ Mathf.Abs(g.transform.position.z - transform.position.z)/maxZ;
-        dist    = /*1.0f -   */(dist / radius);
-
+        dist = (dist / radius);
         Vector3 dir = (g.transform.position - transform.position).normalized;
         float x = (dir.x);
         float z = (dir.z);
@@ -146,27 +121,5 @@ public class SensingManager : MonoBehaviour
         inputData.Add(dist);
         inputData.Add(Mathf.Abs(x));
         inputData.Add(Mathf.Abs(z));
-        /*
-        if (x < 0)
-        {
-            inputData.Add(x);
-            inputData.Add(0.0f);
-        }
-        else
-        {
-            inputData.Add(0.0f);
-            inputData.Add(x);
-        }
-        if (z < 0)
-        {
-            inputData.Add(z);
-            inputData.Add(0.0f);
-        }
-        else
-        {
-            inputData.Add(0.0f);
-            inputData.Add(z);
-        }
-        */
     }
 }

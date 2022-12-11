@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3734262665809166648}
-  - component: {fileID: 3734262665809166650}
   - component: {fileID: 3734262665809166649}
   m_Layer: 3
   m_Name: ForwardSensing
@@ -33,19 +32,6 @@ Transform:
   m_Father: {fileID: 3734262666208508468}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &3734262665809166650
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3734262665809166631}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 30
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3734262665809166649
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58,10 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef6721081f5f60a44a61bf6c51fab927, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mSensedObjects: []
   mVisionConeAngle: 90
-  mVisionConeSpacing: 0
   mVisionDirectionOffset: 0
-  mVisionColor: {r: 0, g: 0.054581642, b: 1, a: 1}
   mRadius: 30
 --- !u!1 &3734262665857694418
 GameObject:
@@ -231,7 +216,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3734262666129129708}
-  - component: {fileID: 3734262666129129710}
   - component: {fileID: 3734262666129129709}
   m_Layer: 3
   m_Name: RightSensing
@@ -255,19 +239,6 @@ Transform:
   m_Father: {fileID: 3734262666208508468}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &3734262666129129710
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3734262666129129707}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 40
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3734262666129129709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,10 +251,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef6721081f5f60a44a61bf6c51fab927, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mSensedObjects: []
   mVisionConeAngle: 90
-  mVisionConeSpacing: 0
   mVisionDirectionOffset: -90
-  mVisionColor: {r: 0.6627451, g: 0, b: 1, a: 1}
   mRadius: 40
 --- !u!1 &3734262666164438622
 GameObject:
@@ -364,7 +334,6 @@ Transform:
   m_Children:
   - {fileID: 3734262665809166648}
   - {fileID: 3734262666129129708}
-  - {fileID: 3734262666739405938}
   - {fileID: 3734262667606705540}
   m_Father: {fileID: 3734262667457119060}
   m_RootOrder: -1
@@ -382,73 +351,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sensingVisionCones: []
-  sensingTag:
-  - Food
-  - Predator
+  mSensingLayerMasks:
+  - serializedVersion: 2
+    m_Bits: 64
+  - serializedVersion: 2
+    m_Bits: 128
   mDebugDrawVisionCones: 0
---- !u!1 &3734262666739405937
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3734262666739405938}
-  - component: {fileID: 3734262666739405940}
-  - component: {fileID: 3734262666739405939}
-  m_Layer: 3
-  m_Name: BackSensing
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &3734262666739405938
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3734262666739405937}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.753, z: -0.004998716}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3734262666208508468}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &3734262666739405940
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3734262666739405937}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 20
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3734262666739405939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3734262666739405937}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef6721081f5f60a44a61bf6c51fab927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mVisionConeAngle: 90
-  mVisionConeSpacing: 0
-  mVisionDirectionOffset: 180
-  mVisionColor: {r: 0, g: 0.05490196, b: 1, a: 1}
-  mRadius: 20
 --- !u!1 &3734262666912512225
 GameObject:
   m_ObjectHideFlags: 0
@@ -612,27 +520,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4db76fcd23372b14393b4c3224e93b7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mNetworkLayerSizes: 
   mRigidBody: {fileID: 0}
+  mAgentType: 0
+  mNetworkLayerSizes: 
   mAttributes:
     mStartingEnergy: 30
     energyLevel: 30
+    mSpeed: 10
+    mObjectsEattenToReproduce: 3
+    mCurrentNumObjectsEaten: 0
+    mTotalFoodCollected: 0
+    mCurrentGeneration: 1
     mLearningRate: 0
     mlearningRateMin: 0.02
     mlearningRateMax: 0.3
-    mSpeed: 10
-    mFoodRequiredToReplicate: 3
-    mCurrentFoodEaten: 0
     mTurnRateStartMin: 1
     mTurnRateStartMax: 90
     mTurnRate: 0
-    mTotalFoodCollected: 0
-    mCurrentGeneration: 1
-  direction: 0
   spawn: 1
   mEnergyTag: Food
   mSpawnerTag: PreySpawner
   mInputLayerSize: 28
+  mEnergyConsumptionRate: 0
 --- !u!114 &3734262667457119063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -656,7 +565,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3734262667606705540}
-  - component: {fileID: 3734262667606705542}
   - component: {fileID: 3734262667606705541}
   m_Layer: 3
   m_Name: LeftSensing
@@ -680,19 +588,6 @@ Transform:
   m_Father: {fileID: 3734262666208508468}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &3734262667606705542
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3734262667606705539}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 40
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3734262667606705541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -705,8 +600,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef6721081f5f60a44a61bf6c51fab927, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mSensedObjects: []
   mVisionConeAngle: 90
-  mVisionConeSpacing: 0
   mVisionDirectionOffset: 90
-  mVisionColor: {r: 0.66421795, g: 0, b: 1, a: 1}
   mRadius: 40

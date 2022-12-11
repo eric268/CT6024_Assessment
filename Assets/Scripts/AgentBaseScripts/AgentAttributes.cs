@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-[Serializable]
 public class AgentAttributes
 {
     [Header("Energy")]
@@ -19,6 +18,21 @@ public class AgentAttributes
         get => energyLevel;
         set => this.energyLevel = Mathf.Clamp(value, 0, mMaxEnergy);
     }
+
+    [Space(15)]
+    [SerializeField]
+    public float mSpeed;
+    public int mObjectsEattenToReproduce;
+    public int mCurrentNumObjectsEaten;
+    public int mTotalFoodCollected = 0;
+    public int mCurrentGeneration = 1;
+}
+
+
+[Serializable]
+public class PreyAttributes : AgentAttributes
+{
+
     [SerializeField]
     public float mLearningRate;
     [SerializeField]
@@ -26,19 +40,9 @@ public class AgentAttributes
     [SerializeField]
     public float mlearningRateMax = 0.3f;
 
-    [Space(15)]
-    [SerializeField]
-    public float mSpeed;
-    public int mFoodRequiredToReplicate;
-    public int mCurrentFoodEaten;
-
     [SerializeField]
     public int mTurnRateStartMin;
     [SerializeField]
     public int mTurnRateStartMax;
     public int mTurnRate;
-
-    public int mTotalFoodCollected = 0;
-
-    public int mCurrentGeneration = 1;
 }

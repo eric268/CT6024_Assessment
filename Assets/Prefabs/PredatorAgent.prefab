@@ -383,7 +383,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensingVisionCones: []
   sensingTag:
-  - Prey
+  - Agent
   mDebugDrawVisionCones: 0
 --- !u!1 &3734262666739405937
 GameObject:
@@ -492,8 +492,6 @@ GameObject:
   - component: {fileID: 3734262667457119058}
   - component: {fileID: 3734262667457119057}
   - component: {fileID: 3734262667457119056}
-  - component: {fileID: 3734262667457119062}
-  - component: {fileID: 3734262667457119063}
   m_Layer: 7
   m_Name: PredatorAgent
   m_TagString: Predator
@@ -599,55 +597,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &3734262667457119062
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3734262667457119066}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4db76fcd23372b14393b4c3224e93b7a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mNetworkLayerSizes: 
-  mRigidBody: {fileID: 0}
-  mAttributes:
-    mStartingEnergy: 30
-    energyLevel: 30
-    mLearningRate: 0
-    mlearningRateMin: 0.02
-    mlearningRateMax: 0.3
-    mSpeed: 12.5
-    mFoodRequiredToReplicate: 2
-    mCurrentFoodEaten: 0
-    mTurnRateStartMin: 1
-    mTurnRateStartMax: 90
-    mTurnRate: 0
-    mTotalFoodCollected: 0
-    mCurrentGeneration: 1
-  direction: 0
-  spawn: 1
-  mEnergyTag: Prey
-  mSpawnerTag: PredatorSpawner
-  mInputLayerSize: 16
-  mAgentType: 1
-  mDebugDuplicate: 0
---- !u!114 &3734262667457119063
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3734262667457119066}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72235a4f3c42817418adaecacead24b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  screenOffset: 2
-  healthBarPrefab: {fileID: 7328123084311905740, guid: 982bdda7d46059444ae4a629b31c2a80, type: 3}
 --- !u!1 &3734262667606705539
 GameObject:
   m_ObjectHideFlags: 0
