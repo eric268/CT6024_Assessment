@@ -32,7 +32,7 @@ public class PreyController : AgentController
         mSensingManager = GetComponentInChildren<PreySensing>();
         mFoodSpawner = FindObjectOfType<FoodSpawnerScript>();
         mAgentSpawner = GameObject.FindGameObjectWithTag("PreySpawner").GetComponent<AgentSpawner>();
-        mNetworkLayerSizes = new int[4] { mInputLayerSize, 40, 40, 3 };
+        mNetworkLayerSizes = new int[4] { mInputLayerSize, 55, 55, 3 };
         mNeuralNetwork = new NeuralNetwork(mNetworkLayerSizes);
     }
 
@@ -46,14 +46,15 @@ public class PreyController : AgentController
     {
         UpdateEnergyLevels();
         mResult = mNeuralNetwork.RunNetwork(mSensingManager.GetNeuralNetworkInputs(gameObject));
+        Move(mResult);
     }
 
     private void FixedUpdate()
     {
-        Move(mResult);
+       
     }
 
-    protected override GameObject SpawnAgent()
+    protected GameObject SpawnAgent()
     {
         GameObject temp = mAgentSpawner.SpawnAgent(gameObject);
         if (temp == null)
@@ -73,12 +74,6 @@ public class PreyController : AgentController
         Debug.Assert(controller != null && controller.mNeuralNetwork != null);
 
         return temp;
-    }
-
-    void UpdateNetwork()
-    {
-        int result = mNeuralNetwork.RunNetwork(mSensingManager.GetNeuralNetworkInputs(gameObject));
-        Move(result);
     }
 
     private void Move(int result)

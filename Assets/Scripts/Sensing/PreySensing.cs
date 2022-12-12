@@ -31,13 +31,17 @@ public class PreySensing : SensingScript
     LayerMask mFoodLayerMask;
     [SerializeField]
     LayerMask mPredatorLayerMask;
+    [SerializeField]
+    LayerMask mWallLayerMask;
     LayerMask[] mSensingLayerMasks;
+    VisionCone[] sensingVisionCones;
 
     private void Awake()
     {
-        mSensingLayerMasks = new LayerMask[2];
+        mSensingLayerMasks = new LayerMask[3];
         mSensingLayerMasks[0] = mFoodLayerMask;
         mSensingLayerMasks[1] = mPredatorLayerMask;
+        mSensingLayerMasks[2] = mWallLayerMask;
 
         inputData = new List<double>();
         sensingVisionCones = GetComponentsInChildren<VisionCone>();
@@ -92,7 +96,7 @@ public class PreySensing : SensingScript
 
     void GetInputForClosestObject(List<double> inputData, List<GameObject> objects, float radius)
     {
-        //5 inputs
+        //4 inputs
         if (objects.Count == 0)
         {
             inputData.Add(0);

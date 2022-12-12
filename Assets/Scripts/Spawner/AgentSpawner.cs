@@ -15,6 +15,8 @@ public class AgentSpawner : MonoBehaviour
     [SerializeField]
     GameObject agentPrefab;
 
+    [SerializeField]
+    private string mAgentName;
     public Queue<GameObject> mAgentQueue;
     public int mCurrentGen = 1;
     public int mMaxNumberOfAgents;
@@ -32,6 +34,7 @@ public class AgentSpawner : MonoBehaviour
         for (int i = 0; i < mMaxNumberOfAgents; i++)
         {
             GameObject obj = Instantiate(agentPrefab, gameObject.transform);
+            obj.name = mAgentName + " #" + i.ToString();
             mCurrentNumberOfAgents++;
             RandomizeAgentPosition(obj);
 

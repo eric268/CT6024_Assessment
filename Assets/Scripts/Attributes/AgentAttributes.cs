@@ -7,6 +7,7 @@ using UnityEngine;
 public class AgentAttributes
 {
     [Header("Energy")]
+    [SerializeField]
     private float mMaxEnergy = 100;
     [SerializeField]
     public float mStartingEnergy;
@@ -55,5 +56,10 @@ public class PredatorAttributes : AgentAttributes
 {
     public bool mIsSprinting;
     public float mSprintMultiplier;
+    public float mMateSensingRadius;
+    public float mLookingForMateEnergyMultiplier;
+    public float mTimeToReproduce;
+    public bool mMateFound;
+    public float mAngularSpeed;
 }
 

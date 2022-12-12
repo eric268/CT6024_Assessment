@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 3734262665809166648}
   - component: {fileID: 3734262665809166649}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: ForwardSensing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &3734262665809166648
 Transform:
@@ -60,7 +60,7 @@ GameObject:
   - component: {fileID: 3734262665857694422}
   - component: {fileID: 3734262665857694421}
   - component: {fileID: 3734262665857694420}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: HeadDir
   m_TagString: Temp
   m_Icon: {fileID: 0}
@@ -154,7 +154,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3734262666039735230}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Pos3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -185,7 +185,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3734262666074084784}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Pos1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -217,7 +217,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3734262666164438623}
   - component: {fileID: 3734262666164438608}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: LOSCheckPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -265,7 +265,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3734262666208508468}
   - component: {fileID: 6874153612787295863}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Sensing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -318,7 +318,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3734262666912512226}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Pos2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -474,7 +474,7 @@ NavMeshAgent:
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 300
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -499,14 +499,19 @@ MonoBehaviour:
   mAgentSpawner: {fileID: 0}
   mAgentType: 1
   mAttributes:
+    mMaxEnergy: 100
     mStartingEnergy: 30
     energyLevel: 30
-    mSpeed: 10
+    mSpeed: 8.5
     mTotalObjectsEatten: 0
     mCurrentGeneration: 1
     mIsSprinting: 0
     mSprintMultiplier: 0
-  mMatingDistance: 1
+    mMateSensingRadius: 125
+    mLookingForMateEnergyMultiplier: 0
+    mTimeToReproduce: 2
+    mMateFound: 0
+  mMatingDistance: 2
 --- !u!114 &7205041893405811892
 MonoBehaviour:
   m_ObjectHideFlags: 0

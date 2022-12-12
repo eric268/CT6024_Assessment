@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3734262665809166648}
   - component: {fileID: 3734262665809166649}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: ForwardSensing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60,7 +60,7 @@ GameObject:
   - component: {fileID: 3734262665857694422}
   - component: {fileID: 3734262665857694421}
   - component: {fileID: 3734262665857694420}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: HeadDir
   m_TagString: Temp
   m_Icon: {fileID: 0}
@@ -154,7 +154,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3734262666039735230}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Pos3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -185,7 +185,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3734262666074084784}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Pos1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -217,7 +217,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3734262666129129708}
   - component: {fileID: 3734262666129129709}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: RightSensing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -265,7 +265,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3734262666164438623}
   - component: {fileID: 3734262666164438608}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: LOSCheckPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -313,7 +313,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3734262666208508468}
   - component: {fileID: 7850614301774302674}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Sensing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -356,6 +356,9 @@ MonoBehaviour:
   mPredatorLayerMask:
     serializedVersion: 2
     m_Bits: 128
+  mWallLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &3734262666912512225
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,7 +368,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3734262666912512226}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Pos2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -524,6 +527,7 @@ MonoBehaviour:
   mAgentType: 0
   mNetworkLayerSizes: 
   mAttributes:
+    mMaxEnergy: 100
     mStartingEnergy: 30
     energyLevel: 30
     mSpeed: 10
@@ -538,7 +542,7 @@ MonoBehaviour:
     mTurnRateStartMax: 45
     mTurnRate: 0
     mEnergyGivenWhenEaten: 15
-  mInputLayerSize: 28
+  mInputLayerSize: 40
   mNetworkUpdateRate: 0.05
 --- !u!114 &3734262667457119063
 MonoBehaviour:
@@ -564,7 +568,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3734262667606705540}
   - component: {fileID: 3734262667606705541}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: LeftSensing
   m_TagString: Untagged
   m_Icon: {fileID: 0}

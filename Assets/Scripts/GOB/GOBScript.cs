@@ -17,12 +17,14 @@ namespace AIGOAP
         private void Awake()
         {
             mPredatorController = GetComponent<PredatorController>();
-        }
-        // Start is called before the first frame update
-        void Start()
-        {
             Initalize();
         }
+
+        private void Start()
+        {
+            ChooseAction();
+        }
+
         private void LateUpdate()
         {
             UpdateDiscontentmentValues();
@@ -31,16 +33,14 @@ namespace AIGOAP
         public void Initalize()
         {
             mActionArray = new Action[(int)ActionType.NUM_ACTION_TYPES];
-            mActionArray[0] = new Action(ActionType.Hunt, -5.0f, 3.0f, 2.0f, 5.0f);
-            mActionArray[1] = new Action(ActionType.Sleep, 3.0f, -3.0f, -1.0f, 2.0f);
-            mActionArray[2] = new Action(ActionType.Reproduce, 3.0f, 3.0f, -10.0f, 4.0f);
+            mActionArray[0] = new Action(ActionType.Hunt, -5.0f, 3.0f, 5.0f, 4.0f);
+            mActionArray[1] = new Action(ActionType.Sleep, 5.0f, -3.0f, 1.0f, 2.0f);
+            mActionArray[2] = new Action(ActionType.Reproduce, 3.5f, 2.5f, -25.0f, 7.0f);
 
             mGoalArray = new Goal[(int)GoalTypes.Num_Goal_Types];
             mGoalArray[0] = new Goal(GoalTypes.Eat, 0.0f, 1.0f);
             mGoalArray[1] = new Goal(GoalTypes.Sleep, 0.0f, 0.5f);
-            mGoalArray[2] = new Goal(GoalTypes.Reproduce, 0.0f, 0.5f);
-
-            ChooseAction();
+            mGoalArray[2] = new Goal(GoalTypes.Reproduce, 0.0f, 0.35f);
         }
 
         void UpdateDiscontentmentValues()

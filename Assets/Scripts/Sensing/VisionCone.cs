@@ -7,6 +7,7 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Jobs;
 using UnityEngine.UIElements;
+using System.Linq;
 
 //[RequireComponent(typeof(SphereCollider))]
 public class VisionCone : MonoBehaviour
@@ -35,6 +36,11 @@ public class VisionCone : MonoBehaviour
         return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0.0f, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
     }
 
+    public List<GameObject> GetObjectsWithinRadius(LayerMask mask, float radius)
+    {
+        return Physics.OverlapSphere(transform.position, mRadius, mask).Select(target => target.gameObject).ToList();   
+    }
+
     public List<GameObject> GetObjectsWithinVision(LayerMask objectToFind)
     {
         Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, mRadius, objectToFind);
@@ -42,22 +48,25 @@ public class VisionCone : MonoBehaviour
 
         for (int i =0; i < targetsInViewRadius.Length; i++) 
         {
-            Transform target = targetsInViewRadius[i].transform;
-            Vector3 dirToTarget = (target.position - transform.position).normalized;
-            float angle = Vector2.SignedAngle(new Vector2(transform.forward.x, transform.forward.z), new Vector2(dirToTarget.x, dirToTarget.z));
-            bool withinVision;
-            if (Mathf.Abs(mVisionDirectionOffset) + mVisionConeAngle / 2.0f > 180)
+            if (targetsInViewRadius[i].gameObject != transform.root)
             {
-                float diff = Mathf.Abs(mVisionDirectionOffset) + mVisionConeAngle / 2.0f - 180;
-                withinVision = angle >= 180 - diff || angle <= -180 + diff;
-            }
-            else
-            {
-                withinVision = mVisionDirectionOffset - mVisionConeAngle / 2.0f <= angle && angle <= mVisionDirectionOffset + mVisionConeAngle / 2.0f;
-            }
-            if (withinVision)
-            {
-                mSensedObjects.Add(targetsInViewRadius[i].gameObject);
+                Transform target = targetsInViewRadius[i].transform;
+                Vector3 dirToTarget = (target.position - transform.position).normalized;
+                float angle = Vector2.SignedAngle(new Vector2(transform.forward.x, transform.forward.z), new Vector2(dirToTarget.x, dirToTarget.z));
+                bool withinVision;
+                if (Mathf.Abs(mVisionDirectionOffset) + mVisionConeAngle / 2.0f > 180)
+                {
+                    float diff = Mathf.Abs(mVisionDirectionOffset) + mVisionConeAngle / 2.0f - 180;
+                    withinVision = angle >= 180 - diff || angle <= -180 + diff;
+                }
+                else
+                {
+                    withinVision = mVisionDirectionOffset - mVisionConeAngle / 2.0f <= angle && angle <= mVisionDirectionOffset + mVisionConeAngle / 2.0f;
+                }
+                if (withinVision)
+                {
+                    mSensedObjects.Add(targetsInViewRadius[i].gameObject);
+                }
             }
         }
         return mSensedObjects;

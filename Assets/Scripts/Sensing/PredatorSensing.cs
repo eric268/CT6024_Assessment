@@ -12,25 +12,30 @@ public class PredatorSensing : SensingScript
     LayerMask mMateLayerMask;
     [SerializeField]
     LayerMask mWallLayerMask;
+
+    PredatorAttributes mAttributes;
+    public VisionCone mVisionCone;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        sensingVisionCones = GetComponentsInChildren<VisionCone>();
+        mAttributes = GetComponentInParent<PredatorController>().mAttributes;
+        mVisionCone = GetComponentInChildren<VisionCone>();
     }
 
     public GameObject FindClosestPrey()
     {
-        return FindClosestObjectInVision(sensingVisionCones[0].GetObjectsWithinVision(mPreyLayerMask));
+        return FindClosestObjectInVision(mVisionCone.GetObjectsWithinVision(mPreyLayerMask));
     }
 
     public GameObject FindClosestMate()
     {
-        List<GameObject> objects = sensingVisionCones[0].GetObjectsWithinVision(mMateLayerMask);
+        List<GameObject> objects = mVisionCone.GetObjectsWithinRadius(mMateLayerMask, mAttributes.mMateSensingRadius);
         GameObject mate = null;
         float closestDistance = Mathf.Infinity;
+        PredatorController controller = GetComponentInParent<PredatorController>();
         foreach (GameObject obj in objects) 
         {
-            if (obj != gameObject)
+            if (controller && obj != controller.gameObject && !controller.mAttributes.mMateFound)
             {
                 GOBScript gob = obj.GetComponent<GOBScript>();
                 if (gob && gob.mCurrentAction.mActionTypes == ActionType.Reproduce)
@@ -43,12 +48,25 @@ public class PredatorSensing : SensingScript
                     }
                 }
             }
+            
         }
         return mate;
     }
 
     public bool IsFacingWall()
     {
-        return sensingVisionCones[0].GetObjectsWithinVision(mWallLayerMask).Count > 0 ? true : false;
+        bool hit = Physics.Raycast(transform.position, transform.forward, mVisionCone.mRadius, mWallLayerMask);
+        Color color;
+        if (hit)
+        {
+            color = Color.red;
+        }
+        else
+        {
+            color = Color.green;
+        }
+
+        Debug.DrawLine(transform.position, transform.position + transform.forward * mVisionCone.mRadius, color, 1.0f);        
+        return hit;
     }
 }
