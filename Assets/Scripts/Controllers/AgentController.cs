@@ -15,6 +15,8 @@ public abstract class AgentController : MonoBehaviour
     public AgentSpawner mAgentSpawner;
     public AgentType mAgentType;
     protected string mEnergyTag;
+
+    protected abstract void UpdateEnergyLevels();
     protected abstract GameObject SpawnAgent();
     protected abstract void ObjectConsumed(float val);
 }

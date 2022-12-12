@@ -10,50 +10,66 @@ namespace AIGOAP
         Action[] mActionArray;
         [SerializeField]
         Goal[] mGoalArray;
-        PredatorAttributes predatorAttributes;
+        PredatorController mPredatorController;
+        public Action mCurrentAction;
+        public bool mActionSuccessful = false;
 
         private void Awake()
         {
-            predatorAttributes = GetComponent<PredatorController>().mAttributes;
+            mPredatorController = GetComponent<PredatorController>();
         }
         // Start is called before the first frame update
         void Start()
         {
-            mActionArray = new Action[(int)ActionType.NUM_ACTION_TYPES];
-            
-            mActionArray[0] = new Action(ActionType.Eat, -5.0f, 3.0f, 1.0f, 2.0f);
-            mActionArray[1] = new Action(ActionType.Sleep, 3.0f, -3.0f, 3.0f, -1.0f);
-            mActionArray[2] = new Action(ActionType.Drink, 2.0f, 1.0f, -2.0f, 1.0f);
-            mActionArray[3] = new Action(ActionType.Reproduce, 3.0f, 3.0f, 1.0f, -10.0f);
-
-            mGoalArray = new Goal[(int)GoalTypes.Num_Goal_Types];
-            mGoalArray[0] = new Goal(GoalTypes.Eat, 0.0f);
-            mGoalArray[1] = new Goal(GoalTypes.Sleep, 0.0f);
-            mGoalArray[2] = new Goal(GoalTypes.Drink, 0.0f);
-            mGoalArray[3] = new Goal(GoalTypes.Reproduce, 0.0f);
+            Initalize();
         }
-
-        void UpdateDiscontentmentValues()
-        {
-            mGoalArray[0].mValue += predatorAttributes.mHungerRate;
-            mGoalArray[1].mValue += predatorAttributes.mFatigueRate;
-            mGoalArray[2].mValue += predatorAttributes.mThirstRate;
-            mGoalArray[3].mValue += predatorAttributes.mReproduceRate;
-        }
-
-        private void FixedUpdate()
+        private void LateUpdate()
         {
             UpdateDiscontentmentValues();
         }
 
-        public Action GetAction()
+        public void Initalize()
         {
-            Action action = ChooseAction(mActionArray, mGoalArray);
-            for (int i =0; i < (int)ActionType.NUM_ACTION_TYPES; i++) 
+            mActionArray = new Action[(int)ActionType.NUM_ACTION_TYPES];
+            mActionArray[0] = new Action(ActionType.Hunt, -5.0f, 3.0f, 2.0f, 5.0f);
+            mActionArray[1] = new Action(ActionType.Sleep, 3.0f, -3.0f, -1.0f, 2.0f);
+            mActionArray[2] = new Action(ActionType.Reproduce, 3.0f, 3.0f, -10.0f, 4.0f);
+
+            mGoalArray = new Goal[(int)GoalTypes.Num_Goal_Types];
+            mGoalArray[0] = new Goal(GoalTypes.Eat, 0.0f, 1.0f);
+            mGoalArray[1] = new Goal(GoalTypes.Sleep, 0.0f, 0.5f);
+            mGoalArray[2] = new Goal(GoalTypes.Reproduce, 0.0f, 0.5f);
+
+            ChooseAction();
+        }
+
+        void UpdateDiscontentmentValues()
+        {
+            for (int i =0; i < mGoalArray.Length; i++) 
             {
-                mGoalArray[i].mValue += action.mActionEffects[i];
+                mGoalArray[i].UpdateValue(Time.deltaTime);
             }
-            return action;
+        }
+
+        public void OnActionComplete()
+        {
+            for (int i = 0; i < (int)ActionType.NUM_ACTION_TYPES; i++)
+            {
+                mGoalArray[i].mValue += mCurrentAction.mActionEffects[i];
+            }
+        }
+
+        public Action ChooseAction()
+        {
+            //Call stop coroutine because action maybe complete earlier than expected like when hunting for instance
+            if (mActionSuccessful)
+            {
+                OnActionComplete();
+                mActionSuccessful = false;
+            }
+            mCurrentAction = ChooseAction(mActionArray, mGoalArray);
+            mPredatorController.ImplementAction(mCurrentAction.mActionTypes);
+            return mCurrentAction;
         }
 
         public Action ChooseAction(Action[] actionArr, Goal[] goalArr)
@@ -77,10 +93,11 @@ namespace AIGOAP
         {
             float discontentment = 0.0f;
 
-            foreach (Goal goal in goals)
+            for (int i =0; i < (int)GoalTypes.Num_Goal_Types; i++)
             {
-                float value = goal.mValue + action.GetGoalChanged(goal);
-                discontentment += value;
+                float value = goals[i].mValue + action.GetGoalChanged(goals[i]);
+                value += action.mActionDuration * goals[i].mChange;
+                discontentment += goals[i].GetDiscontentment(value);
             }
 
             return discontentment;

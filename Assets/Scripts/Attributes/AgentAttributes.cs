@@ -53,9 +53,7 @@ public class PreyAttributes : AgentAttributes
 [Serializable]
 public class PredatorAttributes : AgentAttributes
 {
-    public float mHungerRate;
-    public float mFatigueRate;
-    public float mThirstRate;
-    public float mReproduceRate;
+    public bool mIsSprinting;
+    public float mSprintMultiplier;
 }
 

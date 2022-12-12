@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mSensedObjects: []
-  mVisionConeAngle: 50
+  mVisionConeAngle: 60
   mVisionDirectionOffset: 0
-  mRadius: 100
+  mRadius: 75
 --- !u!1 &3734262665857694418
 GameObject:
   m_ObjectHideFlags: 0
@@ -303,6 +303,12 @@ MonoBehaviour:
   mPreyLayerMask:
     serializedVersion: 2
     m_Bits: 8
+  mMateLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  mWallLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &3734262666912512225
 GameObject:
   m_ObjectHideFlags: 0
@@ -498,10 +504,9 @@ MonoBehaviour:
     mSpeed: 10
     mTotalObjectsEatten: 0
     mCurrentGeneration: 1
-    mHungerRate: 0.15
-    mFatigueRate: 0.1
-    mThirstRate: 0.05
-    mReproduceRate: 0.01
+    mIsSprinting: 0
+    mSprintMultiplier: 0
+  mMatingDistance: 1
 --- !u!114 &7205041893405811892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -514,3 +519,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed87a2a273e62b343bb718de1ad7b6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mActionSuccessful: 0

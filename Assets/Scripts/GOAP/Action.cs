@@ -5,9 +5,8 @@ namespace AIGOAP
 {
     public enum ActionType
     {
-        Eat,
+        Hunt,
         Sleep,
-        Drink,
         Reproduce,
         NUM_ACTION_TYPES
     }
@@ -19,23 +18,21 @@ namespace AIGOAP
         public float mEatEffect;
         public float mSleepEffect;
         public float mReproduceEffect;
-        public float mFightEffect;
-        public float mThirstEffect;
+        public float mActionDuration;
 
         public float[] mActionEffects;
-        public Action(ActionType a, float e, float s, float t, float r)
+        public Action(ActionType a, float e, float s, float r, float d)
         {
             mActionTypes = a;
             mEatEffect = e;
             mSleepEffect = s;
-            mThirstEffect = t;
             mReproduceEffect = r;
+            mActionDuration = d;
 
             mActionEffects = new float[(int)ActionType.NUM_ACTION_TYPES];
             mActionEffects[0] = mEatEffect;
             mActionEffects[1] = mSleepEffect;
-            mActionEffects[2] = mThirstEffect;
-            mActionEffects[3] = mReproduceEffect;
+            mActionEffects[2] = mReproduceEffect;
         }
         public float GetGoalChanged(Goal goal)
         {
@@ -45,8 +42,6 @@ namespace AIGOAP
                     return Mathf.Max(0,goal.mValue + mEatEffect);
                 case GoalTypes.Sleep:
                     return Mathf.Max(0, goal.mValue + mSleepEffect);
-                case GoalTypes.Drink:
-                    return Mathf.Max(0, goal.mValue + mThirstEffect);
                 case GoalTypes.Reproduce:
                     return Mathf.Max(0, goal.mValue + mReproduceEffect);
                 default:

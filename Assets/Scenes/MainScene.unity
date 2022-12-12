@@ -307,7 +307,7 @@ GameObject:
   - component: {fileID: 343496798}
   - component: {fileID: 343496802}
   - component: {fileID: 343496803}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wall
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -439,7 +439,7 @@ GameObject:
   - component: {fileID: 673583672}
   - component: {fileID: 673583676}
   - component: {fileID: 673583677}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wall
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -1050,7 +1050,7 @@ GameObject:
   - component: {fileID: 1106141713}
   - component: {fileID: 1106141717}
   - component: {fileID: 1106141718}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wall
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -1338,7 +1338,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1458155460
 Transform:
   m_ObjectHideFlags: 0
@@ -1369,9 +1369,9 @@ MonoBehaviour:
   foodPoolSize: 1500
   startingFoodAmount: 300
   foodPrefab: {fileID: 7685706745089078590, guid: 94247775a3259a041b481ab8f974271d, type: 3}
-  spawnRate: 0.3
+  spawnRate: 0.15
   spawnRateDecreaseFrequency: 120
-  maxSpawnRate: 1.2
+  maxSpawnRate: 0.3
   mPreySpawner: {fileID: 0}
   groundPosition: {fileID: 1016317245}
 --- !u!1 &1657069351
@@ -1386,11 +1386,11 @@ GameObject:
   - component: {fileID: 1657069353}
   m_Layer: 0
   m_Name: PredatorSpawner
-  m_TagString: Untagged
+  m_TagString: PredatorSpawner
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1657069352
 Transform:
   m_ObjectHideFlags: 0
@@ -1418,7 +1418,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19c9fe228a3b7947b2fc8e11a050774, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numPreyToSpawn: 1
+  mNumberAgentsToSpawn: 1
   agentPrefab: {fileID: 3734262667457119066, guid: eb466924bc7d52b40ad1d57269ccecc6, type: 3}
   mCurrentGen: 1
   mMaxNumberOfAgents: 300
@@ -1437,7 +1437,7 @@ GameObject:
   - component: {fileID: 1701363592}
   - component: {fileID: 1701363596}
   - component: {fileID: 1701363597}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wall
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -1571,7 +1571,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1759343740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1584,7 +1584,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19c9fe228a3b7947b2fc8e11a050774, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numPreyToSpawn: 250
+  mNumberAgentsToSpawn: 300
   agentPrefab: {fileID: 3734262667457119066, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
   mCurrentGen: 1
   mMaxNumberOfAgents: 300
@@ -1634,6 +1634,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1879270386
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1879270387}
+  m_Layer: 0
+  m_Name: Target
+  m_TagString: Target
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1879270387
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1879270386}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2080586114
 GameObject:

@@ -22,6 +22,8 @@ public class PreyController : AgentController
 
     PreySensing mSensingManager;
 
+    private int mResult;
+
 
     private void Awake()
     {
@@ -40,13 +42,15 @@ public class PreyController : AgentController
         mAttributes.mTurnRate     = UnityEngine.Random.Range(mAttributes.mTurnRateStartMin, mAttributes.mTurnRateStartMax);
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         UpdateEnergyLevels();
-        int result = mNeuralNetwork.RunNetwork(mSensingManager.GetNeuralNetworkInputs(gameObject));
-        Move(result);
+        mResult = mNeuralNetwork.RunNetwork(mSensingManager.GetNeuralNetworkInputs(gameObject));
+    }
 
-
+    private void FixedUpdate()
+    {
+        Move(mResult);
     }
 
     protected override GameObject SpawnAgent()
@@ -94,7 +98,7 @@ public class PreyController : AgentController
         mRigidBody.velocity = transform.forward * (mAttributes.mSpeed);
     }
 
-    private void UpdateEnergyLevels()
+    protected override void UpdateEnergyLevels()
     {
         if (mAttributes.mEnergyLevel <= 0)
         {

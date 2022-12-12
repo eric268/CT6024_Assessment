@@ -11,7 +11,7 @@ public class AgentSpawner : MonoBehaviour
     Transform groundPosition;
 
     [SerializeField]
-    int numPreyToSpawn = 100;
+    int mNumberAgentsToSpawn = 100;
     [SerializeField]
     GameObject agentPrefab;
 
@@ -35,7 +35,7 @@ public class AgentSpawner : MonoBehaviour
             mCurrentNumberOfAgents++;
             RandomizeAgentPosition(obj);
 
-            if (i >= numPreyToSpawn)
+            if (i >= mNumberAgentsToSpawn)
             {
                 mAgentQueue.Enqueue(obj);
                 obj.SetActive(false);
