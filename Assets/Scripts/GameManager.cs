@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField]
-    private float mTimeSpeed;
-    private void OnValidate()
+    public void SetGameTimeScale(int time)
     {
-        Time.timeScale = mTimeSpeed;
+        Time.timeScale = time;
     }
 }

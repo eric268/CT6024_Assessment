@@ -34,7 +34,7 @@ public class PreySensing : SensingScript
     [SerializeField]
     LayerMask mWallLayerMask;
     LayerMask[] mSensingLayerMasks;
-    VisionCone[] sensingVisionCones;
+
 
     private void Awake()
     {

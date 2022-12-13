@@ -4,6 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum VisionConeTypes
+{
+    Close_Cone,
+    Far_Cone,
+    NUM_VISION_CONE_TYPES
+}
+
+
 public class PredatorSensing : SensingScript
 {
     [SerializeField]
@@ -14,26 +22,35 @@ public class PredatorSensing : SensingScript
     LayerMask mWallLayerMask;
 
     PredatorAttributes mAttributes;
-    public VisionCone mVisionCone;
+
     // Start is called before the first frame update
     void Awake()
     {
         mAttributes = GetComponentInParent<PredatorController>().mAttributes;
-        mVisionCone = GetComponentInChildren<VisionCone>();
+        sensingVisionCones = GetComponentsInChildren<VisionCone>();
+        Debug.Assert(sensingVisionCones.Length == (int)VisionConeTypes.NUM_VISION_CONE_TYPES);
     }
 
     public GameObject FindClosestPrey()
     {
-        return FindClosestObjectInVision(mVisionCone.GetObjectsWithinVision(mPreyLayerMask));
+        foreach (VisionCone cone in sensingVisionCones)
+        {
+            List<GameObject> prey = sensingVisionCones[(int)VisionConeTypes.Close_Cone].GetObjectsWithinVision(mPreyLayerMask);
+            if (prey.Count > 0)
+            {
+                return FindClosestObjectInVision(prey);
+            }
+        }
+        return null;
     }
 
     public GameObject FindClosestMate()
     {
-        List<GameObject> objects = mVisionCone.GetObjectsWithinRadius(mMateLayerMask, mAttributes.mMateSensingRadius);
+        List<GameObject> objects = sensingVisionCones[(int)VisionConeTypes.Far_Cone].GetObjectsWithinRadius(mMateLayerMask, mAttributes.mMateSensingRadius);
         GameObject mate = null;
         float closestDistance = Mathf.Infinity;
         PredatorController controller = GetComponentInParent<PredatorController>();
-        foreach (GameObject obj in objects) 
+        foreach (GameObject obj in objects)
         {
             if (controller && obj != controller.gameObject && !controller.mAttributes.mMateFound)
             {
@@ -48,14 +65,14 @@ public class PredatorSensing : SensingScript
                     }
                 }
             }
-            
+
         }
         return mate;
     }
 
     public bool IsFacingWall()
     {
-        bool hit = Physics.Raycast(transform.position, transform.forward, mVisionCone.mRadius, mWallLayerMask);
+        bool hit = Physics.Raycast(transform.position, transform.forward, sensingVisionCones[(int)VisionConeTypes.Far_Cone].mRadius, mWallLayerMask);
         Color color;
         if (hit)
         {
@@ -66,7 +83,7 @@ public class PredatorSensing : SensingScript
             color = Color.green;
         }
 
-        Debug.DrawLine(transform.position, transform.position + transform.forward * mVisionCone.mRadius, color, 1.0f);        
+        Debug.DrawLine(transform.position, transform.position + transform.forward * sensingVisionCones[(int)VisionConeTypes.Far_Cone].mRadius, color, 1.0f);
         return hit;
     }
 }

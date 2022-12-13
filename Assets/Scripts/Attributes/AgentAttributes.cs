@@ -61,5 +61,6 @@ public class PredatorAttributes : AgentAttributes
     public float mTimeToReproduce;
     public bool mMateFound;
     public float mAngularSpeed;
+    public float mMatingDistance;
 }
 

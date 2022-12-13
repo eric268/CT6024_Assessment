@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class SensingScript : MonoBehaviour
 {
+    protected VisionCone[] sensingVisionCones;
     protected GameObject FindClosestObjectInVision(List<GameObject> objects)
     {
         float closestDistance = Mathf.Infinity;
