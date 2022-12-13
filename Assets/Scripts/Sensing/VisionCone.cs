@@ -9,10 +9,8 @@ using UnityEngine.Jobs;
 using UnityEngine.UIElements;
 using System.Linq;
 
-//[RequireComponent(typeof(SphereCollider))]
 public class VisionCone : MonoBehaviour
 {
-
     public List<GameObject> mSensedObjects;
     [Range(0,360)]
     public float mVisionConeAngle = 90;
@@ -26,6 +24,16 @@ public class VisionCone : MonoBehaviour
         mSensedObjects = new List<GameObject>();
     }
 
+    public void SetAngle(float angle)
+    {
+        mVisionConeAngle = angle;
+    }
+
+    public void SetRadius(float radius)
+    {
+        mRadius= radius;
+    }
+
     public Vector3 DirFromAngle(float angleInDegrees,bool angleIsGlobal)
     {
         if (!angleIsGlobal) 
@@ -36,9 +44,9 @@ public class VisionCone : MonoBehaviour
         return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0.0f, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
     }
 
-    public List<GameObject> GetObjectsWithinRadius(LayerMask mask, float radius)
+    public static List<GameObject> GetObjectsWithinRadius(LayerMask mask, Vector3 position, float radius)
     {
-        return Physics.OverlapSphere(transform.position, mRadius, mask).Select(target => target.gameObject).ToList();   
+        return Physics.OverlapSphere(position, radius, mask).Select(target => target.gameObject).ToList();   
     }
 
     public List<GameObject> GetObjectsWithinVision(LayerMask objectToFind)

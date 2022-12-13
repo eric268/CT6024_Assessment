@@ -1,31 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class SleepAction
+using AIGOAP;
+public class SleepAction : Action
 {
-    float mActionTimer;
     private PredatorController mController;
-    public SleepAction(PredatorController c)
+    public SleepAction(PredatorController c, GOBScript g, float e, float s, float r, float d) : base(g, e,s,r,d)
     {
         mController = c;
         ResetAction();
     }
 
-    public void ResetAction()
+    public override void ResetAction()
     {
-        mActionTimer = 0.0f;
+        //Do not need anything here as of right now as there are not variables to reset.
     }
 
-    public IEnumerator Sleep()
+    public override IEnumerator BeginAction()
     {
         if (!mController.gameObject.activeInHierarchy)
             yield break;
+
+        mActionColor = Color.blue;
         mController.mNavMeshAgent.isStopped = true;
-        Debug.Log("Sleep");
         mController.mCurrentTarget = null;
         yield return new WaitForSeconds(mController.mGOB.mCurrentAction.mActionDuration);
-        mController.mGOB.mActionSuccessful = true;
-        mController.mGOB.ChooseAction();
+        mGOB.mActionSuccessful = true;
+        mGOB.StopAllCoroutines();
+        mGOB.SelectNewAction();
+    }
+
+    public override void StopAction()
+    {
+        //Do not need anything here as of right now because this action cannot be completed early and therefore stops itself
     }
 }

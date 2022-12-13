@@ -1,6 +1,7 @@
 using AIGOAP;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -15,15 +16,9 @@ public class PredatorController : AgentController
     public GOBScript mGOB;
     public NavMeshAgent mNavMeshAgent;
     public GameObject mCurrentTarget;
-    PredatorSensing mSensingManager;
-    public delegate GameObject FindTargetDelegate();
-    public FindTargetDelegate FFindPreyTarget;
-    public FindTargetDelegate FFindMateTarget;
-
+    public PredatorSensing mSensingManager;
     public GameObject mMate;
-    private HuntAction mHuntAction;
-    private SleepAction mSleepAction;
-    private ReproduceAction mReproduceAction;
+    public PredatorGeneticManager mGeneticManager;
 
     private void Awake()
     {
@@ -43,69 +38,40 @@ public class PredatorController : AgentController
 
     private void Update()
     {
+        Move(mCurrentTarget);
         UpdateEnergyLevels();
-        if (mCurrentTarget!= null) 
-        {
-            Debug.DrawLine(mCurrentTarget.transform.position, transform.position, Color.green, Time.deltaTime);
-        }
     }
 
     void Initalize()
     {
-        FFindPreyTarget = mSensingManager.FindClosestPrey;
-        FFindMateTarget = mSensingManager.FindClosestMate;
         mAttributes.mEnergyLevel = mAttributes.mStartingEnergy;
-        mHuntAction = new HuntAction(this);
-        mSleepAction = new SleepAction(this);
-        mReproduceAction = new ReproduceAction(this);
+        mGeneticManager = new PredatorGeneticManager(100);
+        BindGeneticAttributesEvent();
+        mGeneticManager.BroadcastAllAttributes();
     }
 
-    void ChangeAppearance(Color color)
+    public void ChangeAppearance(Color color)
     {
         GetComponent<Renderer>().material.SetColor("_Color", color);
     }
 
-    public void ImplementAction(ActionType action)
+    public void Move(GameObject target)
     {
-        ResetAttributes();
-        switch (action)
-        {
-            case ActionType.Hunt:
-                ChangeAppearance(Color.red);
-                mHuntAction.ResetAction();
-                StartCoroutine(mHuntAction.Hunt());
-                break;
-            case ActionType.Sleep:
-                ChangeAppearance(Color.blue);
-                mSleepAction.ResetAction();
-                StartCoroutine(mSleepAction.Sleep());
-                break;
-            case ActionType.Reproduce:
-                mAttributes.mLookingForMateEnergyMultiplier = 0.7f;
-                ChangeAppearance(Color.white);
-                mReproduceAction.ResetAction();
-                StartCoroutine(mReproduceAction.SearchForMate());
-                break;
-        }
-        
-    }
-
-    public void Move(FindTargetDelegate targetSelection)
-    {
-        mCurrentTarget = targetSelection();
         if (mCurrentTarget)
         {
+            mNavMeshAgent.speed = mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.Speed].mAttribute * mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.Sprint].mAttribute;
             mNavMeshAgent.SetDestination(mCurrentTarget.transform.position);
         }
         else
         {
+            mNavMeshAgent.speed = mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.Speed].mAttribute;
             if (mSensingManager.IsFacingWall())
             {
                 mNavMeshAgent.SetDestination(transform.position + (5.0f * -transform.forward));
             }
             else
             {
-                mNavMeshAgent.SetDestination(transform.position + (5.0f * transform.forward));
+                mNavMeshAgent.SetDestination(transform.forward);
             }
         }
     }
@@ -120,11 +86,11 @@ public class PredatorController : AgentController
 
     void OnPreyEatten(PreyController prey)
     {
-        mHuntAction.mRecentlyEatten = true;
+        mGOB.mCurrentAction.StopAction();
         ObjectConsumed(prey.mAttributes.mEnergyGivenWhenEaten);
         prey.mAgentSpawner.ReturnAgentToPool(prey.gameObject);
         mGOB.mActionSuccessful = true;
-        mGOB.ChooseAction();
+        mGOB.SelectNewAction();
     }
 
     protected override void UpdateEnergyLevels()
@@ -137,7 +103,7 @@ public class PredatorController : AgentController
         {
             // Lose energy in relation to sprinting or not
             //Lose less energy when looking for mate
-            mAttributes.mEnergyLevel -= Time.deltaTime * mAttributes.mSprintMultiplier * mAttributes.mLookingForMateEnergyMultiplier;
+            mAttributes.mEnergyLevel -= Time.deltaTime *  mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.Sprint].mAttribute;
         }
     }
 
@@ -166,21 +132,17 @@ public class PredatorController : AgentController
         if (gob)
         {
             gob.Initalize();
-            gob.ChooseAction();
+            gob.SelectNewAction();
         }
-        mGOB.mActionSuccessful = true;
-        mReproduceAction.mRecentlyReproduced = true;
-        mGOB.ChooseAction();
         return temp;
     }
 
-    private void ResetAttributes()
+    public void ResetAttributes()
     {
         mMate = null;
-        mAttributes.mLookingForMateEnergyMultiplier = 1.0f;
-        mAttributes.mSprintMultiplier = 1.0f;
         mNavMeshAgent.isStopped = false;
         mAttributes.mMateFound = false;
+        mCurrentTarget = null;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -190,11 +152,26 @@ public class PredatorController : AgentController
             PreyController prey = collision.gameObject.GetComponent<PreyController>();
             if (prey)
             {
-                if (mGOB.mCurrentAction != null && mGOB.mCurrentAction.mActionTypes == ActionType.Hunt)
+                if (mGOB.mCurrentAction != null && mGOB.mCurrentAction is HuntAction)
                 {
                     OnPreyEatten(prey);
                 }
             }
         }
+    }
+
+    void BindGeneticAttributesEvent()
+    {
+        mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.AngularSpeed].OnAttributeChanged += SetAngularSpeed;
+        mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.MateSensingRadius].OnAttributeChanged += mSensingManager.SetMateSensingRadius;
+        mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.FarSensingAngle].OnAttributeChanged += mSensingManager.SetFarSensingAngle;
+        mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.FarSensingRadius].OnAttributeChanged += mSensingManager.SetFarSensingRadius;
+        mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.CloseSensingAngle].OnAttributeChanged += mSensingManager.SetCloseSensingAngle;
+        mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.CloseSensingRadius].OnAttributeChanged += mSensingManager.SetCloseSensingRadius;
+    }
+
+    void SetAngularSpeed(float speed)
+    {
+        mNavMeshAgent.angularSpeed = speed;
     }
 }

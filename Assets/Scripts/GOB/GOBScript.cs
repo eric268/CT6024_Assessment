@@ -22,10 +22,10 @@ namespace AIGOAP
 
         private void Start()
         {
-            ChooseAction();
+            SelectNewAction();
         }
 
-        private void LateUpdate()
+        private void Update()
         {
             UpdateDiscontentmentValues();
         }
@@ -33,14 +33,14 @@ namespace AIGOAP
         public void Initalize()
         {
             mActionArray = new Action[(int)ActionType.NUM_ACTION_TYPES];
-            mActionArray[0] = new Action(ActionType.Hunt, -5.0f, 3.0f, 5.0f, 4.0f);
-            mActionArray[1] = new Action(ActionType.Sleep, 5.0f, -3.0f, 1.0f, 2.0f);
-            mActionArray[2] = new Action(ActionType.Reproduce, 3.5f, 2.5f, -25.0f, 7.0f);
+            mActionArray[0] = new HuntAction(mPredatorController, this, -5.0f, 3.0f, 2.5f, 4.0f);
+            mActionArray[1] = new SleepAction(mPredatorController, this,  5.0f, -3.0f, 1.0f, 2.0f);
+            mActionArray[2] = new ReproduceAction(mPredatorController,this, 3.5f, 2.5f, -15.0f, 7.0f);
 
             mGoalArray = new Goal[(int)GoalTypes.Num_Goal_Types];
-            mGoalArray[0] = new Goal(GoalTypes.Eat, 0.0f, 1.0f);
+            mGoalArray[0] = new Goal(GoalTypes.Eat, 0.0f, 1.25f);
             mGoalArray[1] = new Goal(GoalTypes.Sleep, 0.0f, 0.5f);
-            mGoalArray[2] = new Goal(GoalTypes.Reproduce, 0.0f, 0.35f);
+            mGoalArray[2] = new Goal(GoalTypes.Reproduce, 0.0f, 0.25f);
         }
 
         void UpdateDiscontentmentValues()
@@ -56,20 +56,26 @@ namespace AIGOAP
             for (int i = 0; i < (int)ActionType.NUM_ACTION_TYPES; i++)
             {
                 mGoalArray[i].mValue += mCurrentAction.mActionEffects[i];
+                mGoalArray[i].mValue = Mathf.Max(0, mGoalArray[i].mValue);
             }
         }
 
-        public Action ChooseAction()
+        public void SelectNewAction()
         {
-            //Call stop coroutine because action maybe complete earlier than expected like when hunting for instance
             if (mActionSuccessful)
             {
                 OnActionComplete();
-                mActionSuccessful = false;
             }
+            if (mCurrentAction != null)
+            {
+                mCurrentAction.ResetAction();
+            }
+            mActionSuccessful = false;
+            mPredatorController.ResetAttributes();
             mCurrentAction = ChooseAction(mActionArray, mGoalArray);
-            mPredatorController.ImplementAction(mCurrentAction.mActionTypes);
-            return mCurrentAction;
+            StartCoroutine(mCurrentAction.BeginAction());
+            mPredatorController.ChangeAppearance(mCurrentAction.mActionColor);
+            
         }
 
         public Action ChooseAction(Action[] actionArr, Goal[] goalArr)

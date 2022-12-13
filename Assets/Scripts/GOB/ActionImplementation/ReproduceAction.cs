@@ -1,53 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class ReproduceAction 
+using AIGOAP;
+public class ReproduceAction : Action
 {
     PredatorController mController;
-    float mActionTimer;
     float mReproduceTimer;
     public bool mRecentlyReproduced;
 
-    public ReproduceAction(PredatorController c)
+    public ReproduceAction(PredatorController c, GOBScript g, float e, float s, float r, float d) : base(g,e,s,r,d)
     {
         mController = c;
         ResetAction();
     }  
     
-    public void ResetAction()
+    public override void ResetAction()
     {
         mActionTimer = 0.0f;
         mReproduceTimer = 0.0f;
         mRecentlyReproduced = false;
     }
 
-    public IEnumerator SearchForMate()
+    public override IEnumerator BeginAction()
     {
-        while (mActionTimer < mController.mGOB.mCurrentAction.mActionDuration)
+        mActionColor = Color.white;
+        while (mActionTimer < mGOB.mCurrentAction.mActionDuration)
         {
-            if (!mController.gameObject.activeInHierarchy || mRecentlyReproduced)
+            if (!mController.gameObject.activeInHierarchy)
                 yield break;
+
             mActionTimer += Time.deltaTime;
-            if (mController.mCurrentTarget != null && Vector3.Distance(mController.mCurrentTarget.transform.position, mController.gameObject.transform.position) < mController.mAttributes.mMatingDistance)
+            mController.mCurrentTarget = mController.mSensingManager.FindClosestMate();
+            if (mController.mCurrentTarget != null && Vector3.Distance(mController.mCurrentTarget.transform.position, mController.transform.position) < mController.mAttributes.mMatingDistance)
             {
                 mController.mMate = mController.mCurrentTarget;
-                mController.mAttributes.mMateFound = true;
+
                 foreach (var item in Reproduce(mController.mCurrentTarget, mController.gameObject))
                 {
-                    yield return null;
+                    yield return item;
                 }
+                //mGOB.StopCoroutine(nameof(Reproduce));
+                mGOB.SelectNewAction();
+                yield break;
             }
-            else
-            {
-                mController.Move(mController.FFindMateTarget);
-            }
-            Debug.Log("Reproduce");
             yield return null;
         }
+        mGOB.SelectNewAction();
         //If this section is reached it means that no mate was found
-        mController.mGOB.mActionSuccessful = false;
-        mController.mGOB.ChooseAction();
     }
 
     IEnumerable Reproduce(GameObject p1, GameObject p2)
@@ -63,5 +62,11 @@ public class ReproduceAction
             yield return null;
         }
         mController.SpawnAgent(p1, p2);
+        mGOB.mActionSuccessful = true;
+    }
+
+    public override void StopAction()
+    {
+        mRecentlyReproduced = true;
     }
 }

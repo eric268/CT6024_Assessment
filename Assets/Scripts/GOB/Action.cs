@@ -11,42 +11,39 @@ namespace AIGOAP
         NUM_ACTION_TYPES
     }
 
-    public class Action
+    public abstract class Action
     {
-        public ActionType mActionTypes;
-
-        public float mEatEffect;
-        public float mSleepEffect;
-        public float mReproduceEffect;
+        protected GOBScript mGOB;
+        protected float mActionTimer;
         public float mActionDuration;
-
         public float[] mActionEffects;
-        public Action(ActionType a, float e, float s, float r, float d)
+        public Color mActionColor;
+        public Action(GOBScript g, float e, float s, float r, float d)
         {
-            mActionTypes = a;
-            mEatEffect = e;
-            mSleepEffect = s;
-            mReproduceEffect = r;
-            mActionDuration = d;
-
+            mGOB = g;
             mActionEffects = new float[(int)ActionType.NUM_ACTION_TYPES];
-            mActionEffects[0] = mEatEffect;
-            mActionEffects[1] = mSleepEffect;
-            mActionEffects[2] = mReproduceEffect;
+            mActionEffects[(int)ActionType.Hunt] = e;
+            mActionEffects[(int)ActionType.Sleep] = s;
+            mActionEffects[(int)ActionType.Reproduce] = r;
+            mActionDuration = d;
         }
         public float GetGoalChanged(Goal goal)
         {
             switch (goal.mGoalTypes)
             {
                 case GoalTypes.Eat:
-                    return Mathf.Max(0,goal.mValue + mEatEffect);
+                    return Mathf.Max(0,goal.mValue + mActionEffects[(int)ActionType.Hunt]);
                 case GoalTypes.Sleep:
-                    return Mathf.Max(0, goal.mValue + mSleepEffect);
+                    return Mathf.Max(0, goal.mValue + mActionEffects[(int)ActionType.Sleep]);
                 case GoalTypes.Reproduce:
-                    return Mathf.Max(0, goal.mValue + mReproduceEffect);
+                    return Mathf.Max(0, goal.mValue + mActionEffects[(int)ActionType.Reproduce]);
                 default:
                     return Mathf.Max(0, goal.mValue);
             }
         }
+
+        public abstract IEnumerator BeginAction();
+        public abstract void ResetAction();
+        public abstract void StopAction();
     }
 }

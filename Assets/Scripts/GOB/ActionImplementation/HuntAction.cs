@@ -3,44 +3,41 @@ using System.Collections.Generic;
 using UnityEngine;
 using AIGOAP;
 
-public class HuntAction
+public class HuntAction : Action
 {
     private PredatorController mController;
-    private float mActionTimer;
     public bool mRecentlyEatten;
-    public HuntAction(PredatorController c)
+    public HuntAction(PredatorController c,GOBScript g, float e, float s, float r, float d) : base(g,e,s,r,d)
     {
         mController = c;
         ResetAction();
     }
 
-    public void ResetAction()
+    public override void ResetAction()
     {
         mActionTimer = 0.0f;
         mRecentlyEatten = false;
     }
-    public IEnumerator Hunt()
+    public override IEnumerator BeginAction()
     {
-        while (mActionTimer < mController.mGOB.mCurrentAction.mActionDuration)
+        mActionColor = Color.red;
+        while (mActionTimer < mGOB.mCurrentAction.mActionDuration && !mRecentlyEatten)
         {
-            if (mRecentlyEatten || !mController.gameObject.activeInHierarchy)
+            if (!mController.gameObject.activeInHierarchy)
                 yield break;
+
             mActionTimer += Time.deltaTime;
-            mController.Move(mController.FFindPreyTarget);
-            if (mController.mCurrentTarget)
-            {
-                mController.mAttributes.mSprintMultiplier = 1.25f;
-                mController.mNavMeshAgent.speed = mController.mAttributes.mSpeed * mController.mAttributes.mSprintMultiplier;
-            }
-            else
-            {
-                mController.mAttributes.mSprintMultiplier = 1.0f;
-            }
-            Debug.Log("Hunt");
+            mController.mCurrentTarget = mController.mSensingManager.FindClosestPrey();
             yield return null;
         }
         //If this section is reached it means no food was found
-        mController.mGOB.mActionSuccessful = false;
-        mController.mGOB.ChooseAction();
+        mGOB.SelectNewAction();
+    }
+
+    public override void StopAction()
+    {
+        mRecentlyEatten = true;
+        mGOB.mActionSuccessful = true;
+        mGOB.StopAllCoroutines();
     }
 }

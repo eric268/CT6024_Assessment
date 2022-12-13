@@ -2149,7 +2149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19c9fe228a3b7947b2fc8e11a050774, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mNumberAgentsToSpawn: 50
+  mNumberAgentsToSpawn: 1
   agentPrefab: {fileID: 3734262667457119066, guid: eb466924bc7d52b40ad1d57269ccecc6, type: 3}
   mAgentName: Predator
   mCurrentGen: 1
@@ -2654,4 +2654,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f26c1ec584d88f8488917a9e7b12596b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mTimeSpeed: 1

@@ -54,13 +54,10 @@ public class PreyAttributes : AgentAttributes
 [Serializable]
 public class PredatorAttributes : AgentAttributes
 {
-    public bool mIsSprinting;
-    public float mSprintMultiplier;
-    public float mMateSensingRadius;
+    public bool  mIsSprinting;
     public float mLookingForMateEnergyMultiplier;
-    public float mTimeToReproduce;
-    public bool mMateFound;
-    public float mAngularSpeed;
+    public bool  mMateFound;
     public float mMatingDistance;
+    public float mTimeToReproduce;
 }
 
