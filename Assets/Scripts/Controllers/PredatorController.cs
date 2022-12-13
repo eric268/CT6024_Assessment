@@ -2,6 +2,7 @@ using AIGOAP;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -11,6 +12,8 @@ using UnityEngine.AI;
 
 public class PredatorController : AgentController
 {
+    [SerializeField]
+    public int mNumberGeneticPoints = 100;
     [SerializeField]
     public PredatorAttributes mAttributes;
     public GOBScript mGOB;
@@ -33,6 +36,7 @@ public class PredatorController : AgentController
 
     private void Start()
     {
+        mGeneticManager = new PredatorGeneticManager(mNumberGeneticPoints);
         Initalize();
     }
 
@@ -45,7 +49,6 @@ public class PredatorController : AgentController
     void Initalize()
     {
         mAttributes.mEnergyLevel = mAttributes.mStartingEnergy;
-        mGeneticManager = new PredatorGeneticManager(100);
         BindGeneticAttributesEvent();
         mGeneticManager.BroadcastAllAttributes();
     }
@@ -57,10 +60,19 @@ public class PredatorController : AgentController
 
     public void Move(GameObject target)
     {
-        if (mCurrentTarget)
+        if (mCurrentTarget != null)
         {
             mNavMeshAgent.speed = mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.Speed].mAttribute * mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.Sprint].mAttribute;
-            mNavMeshAgent.SetDestination(mCurrentTarget.transform.position);
+            
+            if (target.CompareTag(mEnergyTag))
+            {
+                mNavMeshAgent.SetDestination(mCurrentTarget.transform.position + mCurrentTarget.transform.forward * 2.0f);
+            }
+            else
+            {
+                mNavMeshAgent.SetDestination(mCurrentTarget.transform.position);
+            }
+            
         }
         else
         {
@@ -71,7 +83,7 @@ public class PredatorController : AgentController
             }
             else
             {
-                mNavMeshAgent.SetDestination(transform.forward);
+                mNavMeshAgent.SetDestination(transform.position + transform.forward * 5.0f);
             }
         }
     }
@@ -113,27 +125,19 @@ public class PredatorController : AgentController
         mAgentSpawner.ReturnAgentToPool(gameObject);
     }
 
-    public GameObject SpawnAgent(GameObject p1, GameObject p2)
+    public GameObject SpawnAgent(GameObject otherParent)
     {
         GameObject temp = mAgentSpawner.SpawnAgent(gameObject);
-        if (temp == null)
-            return null;
-
+        Debug.Assert(temp);
         temp.transform.position = transform.position - transform.forward * 2.5f;
         temp.transform.parent = gameObject.transform.parent;
         PredatorController controller = temp.GetComponent<PredatorController>();
         if (controller) 
         {
-            controller.Initalize();
-            controller.mAttributes.mCurrentGeneration = mAttributes.mCurrentGeneration + 1;
+            controller.gameObject.name = "Newly Spawned Predator";
+            controller.OnSpawn(this, otherParent);
         }
-
-        GOBScript gob = temp.GetComponent<GOBScript>();
-        if (gob)
-        {
-            gob.Initalize();
-            gob.SelectNewAction();
-        }
+        
         return temp;
     }
 
@@ -142,7 +146,18 @@ public class PredatorController : AgentController
         mMate = null;
         mNavMeshAgent.isStopped = false;
         mAttributes.mMateFound = false;
-        mCurrentTarget = null;
+        //mCurrentTarget = null;
+    }
+
+    void OnSpawn(PredatorController parent1Controller, GameObject parent2)
+    {
+        mGeneticManager = new PredatorGeneticManager(GetParentGeneticPoints(parent1Controller, parent2));
+        LimitGeneticAttributes();
+        Initalize();
+        MutateGeneticAttributes();
+        mGOB.Initalize();
+        mGOB.SelectNewAction();
+        mAttributes.mCurrentGeneration = mAttributes.mCurrentGeneration + 1;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -173,5 +188,68 @@ public class PredatorController : AgentController
     void SetAngularSpeed(float speed)
     {
         mNavMeshAgent.angularSpeed = speed;
+    }
+
+    List<float> GetParentGeneticPoints(PredatorController parent1Controller, GameObject parent2)
+    {
+        PredatorController parent2Controller = parent2.GetComponent<PredatorController>();
+        Debug.Assert(parent1Controller && parent2Controller);
+
+        List<float> parent1GeneticPoints = parent1Controller.mGeneticManager.GetFirstHalfGenetics();
+        List<float> parent2GeneticPoints = parent2Controller.mGeneticManager.GetSecondHalfGenetics();
+
+        foreach (float f in parent2GeneticPoints)
+        {
+            parent1GeneticPoints.Add(f);
+        }
+
+        return parent1GeneticPoints;
+    }
+
+    void MutateGeneticAttributes()
+    {
+        //Want to randomly increase one attribute
+        while(true)
+        {
+            int randomAttribute = Random.Range(0, (int)TypeGeneticAttributes.NUM_GENETIC_ATTRITBUES);
+            if (mGeneticManager.ImproveAttribute(randomAttribute))
+            {
+                break;
+            }
+        }
+        //Want to randomly decrease one attribute as long as it's point count is greater than 1
+        while(true)
+        {
+            int randomAttribute = Random.Range(0, (int)TypeGeneticAttributes.NUM_GENETIC_ATTRITBUES);
+            if (mGeneticManager.DeteriorateAttribute(randomAttribute))
+            {
+                break;
+            }
+        }
+
+
+    }
+    //When getting the attribute genes from both parents the total may add up to above or below what the max number of points should
+    //This function will randomly select attributes to either add a point or take a point away from to ensure it is equal to mNumberGeneticPoints
+    //Only one of these while loops will run depending on whether we need to add or subtract if it is equal to mNumberGeneticPoints neither will run
+    void LimitGeneticAttributes()
+    {
+        while(mGeneticManager.mNumberOfStartingPoints < mNumberGeneticPoints)
+        {
+            int randomAttribute = Random.Range(0, (int)TypeGeneticAttributes.NUM_GENETIC_ATTRITBUES);
+            if (mGeneticManager.ImproveAttribute(randomAttribute))
+            {
+                mGeneticManager.mNumberOfStartingPoints++;
+            }
+        }
+
+        while (mGeneticManager.mNumberOfStartingPoints > mNumberGeneticPoints)
+        {
+            int randomAttribute = Random.Range(0, (int)TypeGeneticAttributes.NUM_GENETIC_ATTRITBUES);
+            if (mGeneticManager.DeteriorateAttribute(randomAttribute))
+            {
+                mGeneticManager.mNumberOfStartingPoints--;
+            }
+        }
     }
 }

@@ -4,14 +4,19 @@ using System.Linq;
 using System.Security.Cryptography;
 using UnityEngine;
 
+public enum SpawnerType
+{
+    Food,
+    Prey,
+    Predator
+}
 
 
 public class AgentSpawner : MonoBehaviour
 {
     Transform groundPosition;
-
     [SerializeField]
-    int mNumberAgentsToSpawn = 100;
+    int mNumberAgentsToSpawn;
     [SerializeField]
     GameObject agentPrefab;
 
@@ -21,6 +26,13 @@ public class AgentSpawner : MonoBehaviour
     public int mCurrentGen = 1;
     public int mMaxNumberOfAgents;
     public int mCurrentNumberOfAgents;
+
+    public int mMaxNumberOfExtraPoints = 25;
+    public int mExtraPointCounter = 0;
+    public int mExtraPointGivenRate = 60;
+
+    [SerializeField]
+    private SpawnerType mSpawnerType;
     // Start is called before the first frame update
 
     private void Awake()
@@ -44,6 +56,10 @@ public class AgentSpawner : MonoBehaviour
                 obj.SetActive(false);
                 mCurrentNumberOfAgents--;
             }
+        }
+        if (mSpawnerType == SpawnerType.Predator)
+        {
+            InvokeRepeating(nameof(IncreaseAllPredatorGeneticPoints), mExtraPointGivenRate, mExtraPointGivenRate);
         }
     }
 
@@ -77,5 +93,25 @@ public class AgentSpawner : MonoBehaviour
         float randZ = Random.Range(-groundPosition.localScale.z * 3f, groundPosition.localScale.z * 3f);
         obj.transform.position = new Vector3(randX, 1.0f, randZ);
         obj.transform.Rotate(0, Random.Range(0, 360), 0);
+    }
+
+    public void IncreaseAllPredatorGeneticPoints()
+    {
+        if (mExtraPointCounter <= mExtraPointGivenRate)
+        {
+            Debug.Log("Extra point given");
+            mExtraPointCounter++;
+            for (int i =0; i < gameObject.transform.childCount; i++) 
+            {
+                if (TryGetComponent(out PredatorController controller))
+                {
+                    controller.mNumberGeneticPoints++;
+                }
+            }
+        }
+        else
+        {
+            CancelInvoke(nameof(IncreaseAllPredatorGeneticPoints));
+        }
     }
 }

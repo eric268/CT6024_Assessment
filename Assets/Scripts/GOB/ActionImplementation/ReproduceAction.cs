@@ -35,7 +35,7 @@ public class ReproduceAction : Action
             {
                 mController.mMate = mController.mCurrentTarget;
 
-                foreach (var item in Reproduce(mController.mCurrentTarget, mController.gameObject))
+                foreach (var item in Reproduce())
                 {
                     yield return item;
                 }
@@ -49,7 +49,7 @@ public class ReproduceAction : Action
         //If this section is reached it means that no mate was found
     }
 
-    IEnumerable Reproduce(GameObject p1, GameObject p2)
+    IEnumerable Reproduce()
     {
         mController.mNavMeshAgent.isStopped = true;
         mController.mNavMeshAgent.velocity = Vector3.zero;
@@ -61,7 +61,7 @@ public class ReproduceAction : Action
             mReproduceTimer += Time.deltaTime;
             yield return null;
         }
-        mController.SpawnAgent(p1, p2);
+        mController.SpawnAgent(mController.mMate);
         mGOB.mActionSuccessful = true;
     }
 

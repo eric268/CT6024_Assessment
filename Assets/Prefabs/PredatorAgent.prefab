@@ -177,6 +177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15f6424d4dacd6348b2ccd3514600ad3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sensingVisionCones: []
   mPreyLayerMask:
     serializedVersion: 2
     m_Bits: 8
@@ -343,6 +344,7 @@ MonoBehaviour:
   mRigidBody: {fileID: 0}
   mAgentSpawner: {fileID: 0}
   mAgentType: 1
+  mNumberGeneticPoints: 150
   mAttributes:
     mMaxEnergy: 100
     mStartingEnergy: 30
@@ -351,18 +353,18 @@ MonoBehaviour:
     mTotalObjectsEatten: 0
     mCurrentGeneration: 1
     mIsSprinting: 0
-    mSprintMultiplier: 0
-    mMateSensingRadius: 125
     mLookingForMateEnergyMultiplier: 0
-    mTimeToReproduce: 2
     mMateFound: 0
-    mAngularSpeed: 0
     mMatingDistance: 2
+    mTimeToReproduce: 2
   mGOB: {fileID: 0}
   mNavMeshAgent: {fileID: 0}
   mCurrentTarget: {fileID: 0}
   mSensingManager: {fileID: 0}
   mMate: {fileID: 0}
+  mGeneticManager:
+    mNumberOfStartingPoints: 0
+    mGeneticAttributes: []
 --- !u!114 &7205041893405811892
 MonoBehaviour:
   m_ObjectHideFlags: 0

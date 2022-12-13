@@ -2102,7 +2102,7 @@ MonoBehaviour:
   foodPrefab: {fileID: 7685706745089078590, guid: 94247775a3259a041b481ab8f974271d, type: 3}
   spawnRate: 0.1
   spawnRateDecreaseFrequency: 120
-  maxSpawnRate: 0.1
+  maxSpawnRate: 0.5
   mPreySpawner: {fileID: 0}
   groundPosition: {fileID: 1016317245}
 --- !u!1 &1657069351
@@ -2149,12 +2149,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19c9fe228a3b7947b2fc8e11a050774, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mNumberAgentsToSpawn: 1
+  mNumberAgentsToSpawn: 100
   agentPrefab: {fileID: 3734262667457119066, guid: eb466924bc7d52b40ad1d57269ccecc6, type: 3}
   mAgentName: Predator
   mCurrentGen: 1
   mMaxNumberOfAgents: 300
   mCurrentNumberOfAgents: 0
+  mMaxNumberOfExtraPoints: 0
+  mExtraPointCounter: 0
+  mExtraPointGivenRate: 60
+  mSpawnerType: 2
 --- !u!1 &1695056355
 GameObject:
   m_ObjectHideFlags: 0
@@ -2398,6 +2402,10 @@ MonoBehaviour:
   mCurrentGen: 1
   mMaxNumberOfAgents: 300
   mCurrentNumberOfAgents: 0
+  mMaxNumberOfExtraPoints: 0
+  mExtraPointCounter: 0
+  mExtraPointGivenRate: 60
+  mSpawnerType: 1
 --- !u!4 &1759343741
 Transform:
   m_ObjectHideFlags: 0

@@ -37,13 +37,13 @@ public class WallScript : MonoBehaviour
                 collision.gameObject.transform.position = new Vector3(collision.gameObject.transform.position.x, collision.gameObject.transform.position.y, newPos.z);
             }
         }
-        else if (collision.gameObject.CompareTag("Predator"))
-        {
-            PredatorController controller = collision.gameObject.GetComponent<PredatorController>();
-            if (controller)
-            {
-                controller.KillPredator();
-            }
-        }
+        //else if (collision.gameObject.CompareTag("Predator"))
+        //{
+        //    PredatorController controller = collision.gameObject.GetComponent<PredatorController>();
+        //    if (controller)
+        //    {
+        //        controller.KillPredator();
+        //    }
+        //}
     }
 }
