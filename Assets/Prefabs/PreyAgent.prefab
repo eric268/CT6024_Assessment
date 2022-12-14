@@ -418,13 +418,13 @@ MonoBehaviour:
   mAgentType: 0
   mNetworkLayerSizes: 
   mAttributes:
-    mMaxEnergy: 100
-    mStartingEnergy: 30
-    energyLevel: 30
+    mMaxEnergy: 60
+    mStartingEnergy: 15
+    energyLevel: 15
     mSpeed: 10
     mTotalObjectsEatten: 0
     mCurrentGeneration: 1
-    mObjectsEattenToReproduce: 3
+    mObjectsEattenToReproduce: 2
     mCurrentNumObjectsEaten: 0
     mLearningRate: 0
     mlearningRateMin: 0.05
@@ -434,7 +434,6 @@ MonoBehaviour:
     mTurnRate: 0
     mEnergyGivenWhenEaten: 15
   mInputLayerSize: 40
-  mNetworkUpdateRate: 0.05
 --- !u!114 &3734262667457119063
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -5,6 +5,7 @@ using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.XR;
 
+//Container for neural network inputs
 public class InputData
 {
     public float distance;
@@ -24,6 +25,7 @@ public class InputData
     }
 }
 
+//Handles all sensing for prey agents
 public class PreySensing : SensingScript
 {
     List<double> inputData;
@@ -46,10 +48,11 @@ public class PreySensing : SensingScript
         inputData = new List<double>();
         sensingVisionCones = GetComponentsInChildren<VisionCone>();
     }
-
+    //Returns all neural network inputs
     public List<double> GetNeuralNetworkInputs(GameObject agent)
     {
         inputData.Clear();
+        //First gets the prey agents current direction inputs
         SetDirectionNetworkInput(agent, inputData);
         //Iterating through every vision cone
         for (int i = 0; i < sensingVisionCones.Length; i++)
@@ -58,15 +61,19 @@ public class PreySensing : SensingScript
             foreach (LayerMask mask in mSensingLayerMasks)
             {
                 List<GameObject> objectsWithVision = sensingVisionCones[i].GetObjectsWithinVision(mask);
+                //Gets input for the closest object
                 GetInputForClosestObject(inputData, objectsWithVision, sensingVisionCones[i].mRadius);
             }
         }
         return inputData;
     }
-
+    //This sets 4 inputs in the neural network
+    //The first two inputs are for the x direction
+    //1 will be set to 0 if it is moving in a negative x direction, with 2 being set to the absolute value of the direction
+    //If moving in a positive direction 1 will be set to absolute value of direction and 2 will be set to 0
+    //Same is true for z direction except are inputs 3 & 4
     void SetDirectionNetworkInput(GameObject agent, List<double> inputData)
     {
-        //4 inputs
         PreyController controller = agent.GetComponent<PreyController>();
         Vector2 tempV = new Vector2(Mathf.Abs(controller.mRigidBody.velocity.x), Mathf.Abs(controller.mRigidBody.velocity.z));
         tempV.Normalize();
@@ -93,7 +100,9 @@ public class PreySensing : SensingScript
             inputData.Add(0.0f);
         }
     }
-
+    //If no object is found set the values to zero
+    //Otherwise return the absolute value of the direction of the object, the distance to the object
+    //Also adds weighted value for the number of objects in that vision cone
     void GetInputForClosestObject(List<double> inputData, List<GameObject> objects, float radius)
     {
         //4 inputs

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//This script allows for agents to be selected so that their attributes can be seen by the user
 public class AgentSelectionScript : MonoBehaviour
 {
     [SerializeField]
@@ -24,7 +25,9 @@ public class AgentSelectionScript : MonoBehaviour
             CheckIfAgentClicked();
         }
     }
-
+    //Checks if an agent has been clicked
+    //If so it will display their UI element
+    //Also will deactivate the UI for the previously selected agent
     void CheckIfAgentClicked()
     {
 

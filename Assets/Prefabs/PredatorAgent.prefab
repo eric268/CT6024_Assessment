@@ -346,10 +346,10 @@ MonoBehaviour:
   mRigidBody: {fileID: 0}
   mAgentSpawner: {fileID: 0}
   mAgentType: 1
-  mNumberGeneticPoints: 135
+  mNumberGeneticPoints: 100
   mAttributes:
-    mMaxEnergy: 100
-    mStartingEnergy: 30
+    mMaxEnergy: 125
+    mStartingEnergy: 40
     energyLevel: 30
     mSpeed: 8.5
     mTotalObjectsEatten: 0

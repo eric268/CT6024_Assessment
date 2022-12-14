@@ -9,6 +9,7 @@ using UnityEngine.Jobs;
 using UnityEngine.UIElements;
 using System.Linq;
 
+//Returns information about objects that are being looked for
 public class VisionCone : MonoBehaviour
 {
     public List<GameObject> mSensedObjects;
@@ -34,6 +35,7 @@ public class VisionCone : MonoBehaviour
         mRadius= radius;
     }
 
+    //Used to draw the agent vision cone in the editor script
     public Vector3 DirFromAngle(float angleInDegrees,bool angleIsGlobal)
     {
         if (!angleIsGlobal) 
@@ -43,12 +45,14 @@ public class VisionCone : MonoBehaviour
         angleInDegrees -= mVisionDirectionOffset;
         return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0.0f, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
     }
-
+    //Returns all objects within a certain range regardless of angle
     public static List<GameObject> GetObjectsWithinRadius(LayerMask mask, Vector3 position, float radius)
     {
         return Physics.OverlapSphere(position, radius, mask).Select(target => target.gameObject).ToList();   
     }
 
+    //Returns all objects that are within a vision cone
+    //Accounts for vision cones that do not point in forward vector direction of object
     public List<GameObject> GetObjectsWithinVision(LayerMask objectToFind)
     {
         Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, mRadius, objectToFind);
@@ -79,7 +83,7 @@ public class VisionCone : MonoBehaviour
         }
         return mSensedObjects;
     }
-
+    //Used for debugging vision cones
     private void OnValidate()
     {
         mVisionDirectionOffset = Mathf.Clamp(mVisionDirectionOffset, -180, 180);

@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace AIGOAP
 {
+    //Class which manages the GOB of the predator agent
     public class GOBScript : MonoBehaviour
     {
         [SerializeField]
@@ -29,20 +30,20 @@ namespace AIGOAP
         {
             UpdateDiscontentmentValues();
         }
-
+        //Initalizes the goals and actions of the GOB
         public void Initalize()
         {
             mActionArray = new Action[(int)ActionType.NUM_ACTION_TYPES];
-            mActionArray[0] = new HuntAction(mPredatorController, this, -10.0f, 2.0f, 4.5f, 4.0f);
-            mActionArray[1] = new SleepAction(mPredatorController, this,  5.0f, -5.0f, 1.0f, 2.0f);
+            mActionArray[0] = new HuntAction(mPredatorController, this, -10.0f, 3.0f, 2.0f, 4.0f);
+            mActionArray[1] = new SleepAction(mPredatorController, this,  5.0f, -15.0f, 3.0f, 2.5f);
             mActionArray[2] = new ReproduceAction(mPredatorController,this, 3.5f, 2.5f, -15.0f, 7.0f);
 
             mGoalArray = new Goal[(int)GoalTypes.Num_Goal_Types];
-            mGoalArray[0] = new Goal(GoalTypes.Eat, UnityEngine.Random.Range(0.0f,5.0f), 1.0f);
-            mGoalArray[1] = new Goal(GoalTypes.Sleep, UnityEngine.Random.Range(0.0f, 5.0f), 0.5f);
-            mGoalArray[2] = new Goal(GoalTypes.Reproduce, UnityEngine.Random.Range(0.0f, 5.0f), 0.25f);
+            mGoalArray[0] = new Goal(GoalTypes.Eat, UnityEngine.Random.Range(0.0f,4.0f), 0.25f);
+            mGoalArray[1] = new Goal(GoalTypes.Sleep, UnityEngine.Random.Range(0.0f, 3.0f), 0.15f);
+            mGoalArray[2] = new Goal(GoalTypes.Reproduce, UnityEngine.Random.Range(0.0f, 2.0f), 0.06f);
         }
-
+        //Updates all of the goal discontentment values over time
         void UpdateDiscontentmentValues()
         {
             for (int i =0; i < mGoalArray.Length; i++) 
@@ -50,7 +51,9 @@ namespace AIGOAP
                 mGoalArray[i].UpdateValue(Time.deltaTime);
             }
         }
-
+        //If an action is complete then the resulting effects on goal discontentment are updated
+        //This function will not be called on failed actions and therefore not effect from the action will be felt
+        //The discontentment is still updated over time by its discontentment increase rate
         public void OnActionComplete()
         {
             for (int i = 0; i < (int)ActionType.NUM_ACTION_TYPES; i++)
@@ -60,6 +63,8 @@ namespace AIGOAP
             }
         }
 
+        //Updates results of the previous action
+        //Resets values for next action
         public void SelectNewAction()
         {
             if (mActionSuccessful)
@@ -77,7 +82,7 @@ namespace AIGOAP
             mPredatorController.ChangeAppearance(mCurrentAction.mActionColor);
             
         }
-
+        //Returns a new action that will lead to lowest overall discontentment
         public Action ChooseAction(Action[] actionArr, Goal[] goalArr)
         {
             Action bestAction = null;
@@ -94,7 +99,7 @@ namespace AIGOAP
             }
             return bestAction;
         }
-
+        //Calculates the effect of an action on each goals discontentment level
         float Discontentment(Action action, Goal[] goals)
         {
             float discontentment = 0.0f;

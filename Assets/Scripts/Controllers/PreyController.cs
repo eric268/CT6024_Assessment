@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.XR;
 
+//Controller for prey agent
 public class PreyController : AgentController
 {
     [Header("Neural Network")]
@@ -16,9 +19,6 @@ public class PreyController : AgentController
 
     [SerializeField]
     public int mInputLayerSize;
-
-    [SerializeField]
-    private float mNetworkUpdateRate = 0.05f;
 
     PreySensing mSensingManager;
 
@@ -45,42 +45,54 @@ public class PreyController : AgentController
     private void Update()
     {
         UpdateEnergyLevels();
-        mResult = mNeuralNetwork.RunNetwork(mSensingManager.GetNeuralNetworkInputs(gameObject));
-        Move(mResult);
+        Move(RunNetwork());
     }
 
-    private void FixedUpdate()
+    private int RunNetwork()
     {
-       
+        List<double> networkInputs = mSensingManager.GetNeuralNetworkInputs(gameObject);
+        return  mNeuralNetwork.RunNetwork(networkInputs);
     }
 
+    private void OnSpawn(PreyController parent)
+    {
+        transform.position = parent.transform.position - transform.forward * 2.5f;
+        transform.parent = parent.gameObject.transform.parent;
+        mAttributes.mEnergyLevel = mAttributes.mStartingEnergy;
+        mAttributes.mCurrentGeneration = parent.mAttributes.mCurrentGeneration + 1;
+        mSensingManager = GetComponentInChildren<PreySensing>();
+        mNeuralNetwork.CopyAndMutateNetwork(mNeuralNetwork.mNetworkLayers, mAttributes.mLearningRate);
+
+        mAttributes.mTurnRate = parent.mAttributes.mTurnRate + UnityEngine.Random.Range(-1, 2);
+        mAttributes.mLearningRate = parent.mAttributes.mLearningRate + UnityEngine.Random.Range(-0.03f, 0.03f);
+    }
+
+    //Called when a prey agent has eaten enough food items to reproduce
     protected GameObject SpawnAgent()
     {
         GameObject temp = mAgentSpawner.SpawnAgent(gameObject);
+        //Need null check because if max number of prey agents have been spawned SpawnAgent() will return a null GameObject
         if (temp == null)
             return null;
 
-        System.Random rand = new System.Random();
-        temp.transform.position = transform.position - transform.forward * 2.5f;
-        temp.transform.parent = gameObject.transform.parent;
-        PreyController controller = temp.GetComponent<PreyController>();
-        controller.mAttributes.mEnergyLevel = mAttributes.mStartingEnergy;
-        controller.mAttributes.mCurrentGeneration = mAttributes.mCurrentGeneration + 1;
-        controller.mSensingManager = controller.GetComponentInChildren<PreySensing>();
-        controller.mNeuralNetwork.CopyAndMutateNetwork(mNeuralNetwork.mNetworkLayers, controller.mAttributes.mLearningRate);
-
-        temp.GetComponent<PreyController>().mAttributes.mTurnRate = mAttributes.mTurnRate + UnityEngine.Random.Range(-1, 2);
-        temp.GetComponent<PreyController>().mAttributes.mLearningRate = mAttributes.mLearningRate + UnityEngine.Random.Range(-0.03f, 0.03f);
-        Debug.Assert(controller != null && controller.mNeuralNetwork != null);
-
+        if (temp.TryGetComponent(out PreyController controller))
+        {
+            controller.OnSpawn(this);
+        }
+        else
+        {
+            return null;
+        }
         return temp;
     }
-
+    //Move takes in the neuron from the neural network output layer with the highest activation
+    //This dictates whether the agent should continue moving in it's current direction, turn left or turn right
     private void Move(int result)
     {
         switch (result)
         {
             case 0:
+                //Intentionally left blank since neural network has decided moving straight is correct
                 break;
             case 1:
                 transform.Rotate(0.0f, mAttributes.mTurnRate, 0.0f);
@@ -90,9 +102,11 @@ public class PreyController : AgentController
                 break;
 
         }
+        //Agent always moves forward. The network simply determines which direction it should move in
         mRigidBody.velocity = transform.forward * (mAttributes.mSpeed);
     }
-
+    //Checks if the prey agent has run out of energy. If so agent is killed and returned to pool
+    //Otherwise energy is reduced 
     protected override void UpdateEnergyLevels()
     {
         if (mAttributes.mEnergyLevel <= 0)
@@ -104,7 +118,7 @@ public class PreyController : AgentController
             mAttributes.mEnergyLevel -= Time.deltaTime;
         }
     }
-
+    //Checks if prey agent has collided with food, if so it updates it's energy and returns the food item to the food object pool
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag(mEnergyTag))
@@ -118,7 +132,8 @@ public class PreyController : AgentController
             }
         }
     }
-
+    //Updates some attributes when food is consumed. 
+    //If enough food items have been eaten the agent reproduces 
     protected override void ObjectConsumed(float foodVal)
     {
         mAttributes.mCurrentNumObjectsEaten++;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AIGOAP
 {
+    //Describes the different types of GOB actions
     public enum ActionType
     {
         Hunt,
@@ -10,7 +11,8 @@ namespace AIGOAP
         Reproduce,
         NUM_ACTION_TYPES
     }
-
+    //Base class for GOB actions
+    //Child class actions are Hunt, Sleep & Reproduce
     public abstract class Action
     {
         protected GOBScript mGOB;
@@ -27,6 +29,7 @@ namespace AIGOAP
             mActionEffects[(int)ActionType.Reproduce] = r;
             mActionDuration = d;
         }
+        //Determined what the effect an action will have on goal discontentment
         public float GetGoalChanged(Goal goal)
         {
             switch (goal.mGoalTypes)
@@ -41,7 +44,6 @@ namespace AIGOAP
                     return Mathf.Max(0, goal.mValue);
             }
         }
-
         public abstract IEnumerator BeginAction();
         public abstract void ResetAction();
         public abstract void StopAction();

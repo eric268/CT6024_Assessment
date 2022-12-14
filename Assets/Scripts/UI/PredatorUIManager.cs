@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+//Types of predator UI objects to display
 public enum PredatorUITypes
 {
     General,
@@ -13,7 +14,9 @@ public enum PredatorUITypes
     NUM_PREDATOR_UI_TYPES
 }
 
-
+//Contains all of the UI elements that the predator agent will display when clicked
+//This includes all the genetic attribute information, general information, and GOB information
+//These UI items can be changed by clicking the buttons at the top of the attribute page window
 public class PredatorUIManager : AgentUIManager
 {
     PredatorController mPredatorController;
@@ -46,25 +49,27 @@ public class PredatorUIManager : AgentUIManager
         mButtons[(int)PredatorUITypes.Genetics].onClick.AddListener(delegate () { OnGeneticsButtonPressed(); });
         mButtons[(int)PredatorUITypes.GOB].onClick.AddListener(delegate () { OnGOBButtonPressed(); });
     }
-
+    //Called when general button is pressed on predator attribute UI element
     void OnGeneralButtonPressed()
     {
         HideAllAttributes();
         mAttributeContainer[(int)PredatorUITypes.General].gameObject.SetActive(true);
     }
 
+    //Called when genetic button is pressed on predator attribute UI element
     void OnGeneticsButtonPressed()
     {
         HideAllAttributes();
         mAttributeContainer[(int)PredatorUITypes.Genetics].gameObject.SetActive(true);
     }
 
+    //Called when GOB button is pressed on predator attribute UI element
     void OnGOBButtonPressed()
     {
         HideAllAttributes();
         mAttributeContainer[(int)PredatorUITypes.GOB].gameObject.SetActive(true);
     }
-
+    //Hides all of the text objects for predator attribute window
     void HideAllAttributes()
     {
         foreach (PredatorUIText text in mAttributeContainer)
@@ -78,7 +83,7 @@ public class PredatorUIManager : AgentUIManager
         UpdateHealthBar(mPredatorController.mAttributes.mEnergyLevel, mPredatorController.mAttributes.mMaxEnergy);
         UpdateAttributeText();
     }
-
+    //Loads and sets the inital string values of the predator 
     protected override void SetAttributeText()
     {
         mAttributeContainer = mAttributeMenu.GetComponentsInChildren<PredatorUIText>();
@@ -90,7 +95,7 @@ public class PredatorUIManager : AgentUIManager
         HideAllAttributes();
         mAttributeContainer[(int)PredatorUITypes.General].gameObject.SetActive(true);
     }
-
+    //Updates the specific text elements that can change over time 
     protected override void UpdateAttributeText()
     {
         if (mAttributeContainer[(int)PredatorUITypes.General].isActiveAndEnabled)
@@ -106,7 +111,7 @@ public class PredatorUIManager : AgentUIManager
             SetGOBText();
         }
     }
-
+    //Sets general text values
     private void SetGeneralText()
     {
         mGeneralText[0].text = "Name: " + gameObject.name;
@@ -114,6 +119,7 @@ public class PredatorUIManager : AgentUIManager
         mGeneralText[2].text = "Food Eaten: " + mPredatorController.mAttributes.mTotalObjectsEatten;
     }
 
+    //Sets genetic text values
     private void SetGeneticText()
     {
         mGeneticText[0].text = "Speed: " + mPredatorController.mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.Speed].mPointTotal;
@@ -126,6 +132,7 @@ public class PredatorUIManager : AgentUIManager
         mGeneticText[7].text = "Close Sensing Radius: " + mPredatorController.mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.CloseSensingRadius].mPointTotal;
     }
 
+    //Sets GOB text values
     private void SetGOBText()
     {
         mGOBText[0].text = "Hunt: " + (int)mPredatorController.mGOB.mGoalArray[(int)GoalTypes.Eat].mValue;

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+//Base class for agents attributes
+//Child classes consist of PredatorAttributes & PreyAttributes
 public class AgentAttributes
 {
     [Header("Energy")]
@@ -19,45 +21,10 @@ public class AgentAttributes
         get => energyLevel;
         set => this.energyLevel = Mathf.Clamp(value, 0, mMaxEnergy);
     }
-
-
     [Space(15)]
     [SerializeField]
     public float mSpeed;
-
     public int mTotalObjectsEatten = 0;
     public int mCurrentGeneration = 1;
-}
-
-
-[Serializable]
-public class PreyAttributes : AgentAttributes
-{
-    public int mObjectsEattenToReproduce;
-    public int mCurrentNumObjectsEaten;
-
-    [SerializeField]
-    public float mLearningRate;
-    [SerializeField]
-    public float mlearningRateMin = 0.05f;
-    [SerializeField]
-    public float mlearningRateMax = 0.3f;
-
-    [SerializeField]
-    public int mTurnRateStartMin;
-    [SerializeField]
-    public int mTurnRateStartMax;
-    public int mTurnRate;
-
-    public float mEnergyGivenWhenEaten = 15.0f;
-}
-[Serializable]
-public class PredatorAttributes : AgentAttributes
-{
-    public bool  mIsSprinting;
-    public float mLookingForMateEnergyMultiplier;
-    public bool  mMateFound;
-    public float mMatingDistance;
-    public float mTimeToReproduce;
 }
 

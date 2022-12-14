@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
+//Initalizes and updates all prey specific UI elements
 public class PreyUIManager : AgentUIManager
 { 
     PreyController preyController;
@@ -29,7 +30,7 @@ public class PreyUIManager : AgentUIManager
     {
         UpdateHealthBar(preyController.mAttributes.mEnergyLevel, preyController.mAttributes.mMaxEnergy);
     }
-
+    //Initalizes the prey UI text 
     protected override void SetAttributeText()
     {
         mTextContainer[0].text = "Name: " + gameObject.name;
@@ -39,8 +40,7 @@ public class PreyUIManager : AgentUIManager
         mTextContainer[4].text = "Turn Rate: " + preyController.mAttributes.mTurnRate;
     }
 
-
-
+    //Updates the prey UI text that can change over time
     protected override void UpdateAttributeText()
     {
         mTextContainer[2].text = "Food Eaten: " + preyController.mAttributes.mTotalObjectsEatten;

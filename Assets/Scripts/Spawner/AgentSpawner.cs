@@ -11,7 +11,7 @@ public enum SpawnerType
     Predator
 }
 
-
+//Handles spawning of the predator and prey agents
 public class AgentSpawner : MonoBehaviour
 {
     Transform groundPosition;
@@ -43,13 +43,13 @@ public class AgentSpawner : MonoBehaviour
 
     private void Start()
     {
-        for (int i = 0; i < mMaxNumberOfAgents; i++)
+        for (int i = mCurrentNumberOfAgents; i < mMaxNumberOfAgents; i++)
         {
             GameObject obj = Instantiate(agentPrefab, gameObject.transform);
             obj.name = mAgentName + " #" + i.ToString();
             mCurrentNumberOfAgents++;
             RandomizeAgentPosition(obj);
-
+            //Adds excess agents to object pool
             if (i >= mNumberAgentsToSpawn)
             {
                 mAgentQueue.Enqueue(obj);
@@ -57,17 +57,20 @@ public class AgentSpawner : MonoBehaviour
                 mCurrentNumberOfAgents--;
             }
         }
-        if (mSpawnerType == SpawnerType.Predator)
-        {
-            InvokeRepeating(nameof(IncreaseAllPredatorGeneticPoints), mExtraPointGivenRate, mExtraPointGivenRate);
-        }
+        //Added to potentially give a boost to predators as prey neural network improves
+        //if (mSpawnerType == SpawnerType.Predator)
+        //{
+        //    InvokeRepeating(nameof(IncreaseAllPredatorGeneticPoints), mExtraPointGivenRate, mExtraPointGivenRate);
+        //}
     }
-
+    //Checks to ensure max number of agents isn't reached
+    //If so will return null
     public GameObject SpawnAgent(GameObject prefab)
     {
         if (mMaxNumberOfAgents > mCurrentNumberOfAgents)
         {
             mCurrentNumberOfAgents++;
+            //If pool queue is empty will create new agent
             if (mAgentQueue.Count <= 0)
                 mAgentQueue.Enqueue(Instantiate(agentPrefab, gameObject.transform));
             GameObject obj = mAgentQueue.Dequeue();
@@ -76,7 +79,7 @@ public class AgentSpawner : MonoBehaviour
         }
         return null;
     }
-
+    //Returns agent to object pool queue
     public void ReturnAgentToPool(GameObject obj)
     {
         if (obj.activeInHierarchy)
@@ -86,7 +89,7 @@ public class AgentSpawner : MonoBehaviour
             mAgentQueue.Enqueue(obj);
         }
     }
-
+    //Spawns an agent in a random position on the map
     public void RandomizeAgentPosition(GameObject obj)
     {
         float randX = Random.Range(-groundPosition.localScale.x * 3f, groundPosition.localScale.x * 3f);
@@ -94,17 +97,19 @@ public class AgentSpawner : MonoBehaviour
         obj.transform.position = new Vector3(randX, 1.0f, randZ);
         obj.transform.Rotate(0, Random.Range(0, 360), 0);
     }
-
+    //Added to potentially give a boost to predators as prey neural network improves
+    //Over-time will add genetic attribute points to predator
     public void IncreaseAllPredatorGeneticPoints()
     {
-        if (mExtraPointCounter <= mExtraPointGivenRate)
+        if (mExtraPointCounter <= mMaxNumberOfExtraPoints)
         {
             Debug.Log("Extra point given");
-            mExtraPointCounter += 2;
+            mExtraPointCounter++;
             for (int i =0; i < gameObject.transform.childCount; i++) 
             {
                 if (TryGetComponent(out PredatorController controller))
                 {
+                    //Gives two points at a time
                     controller.mNumberGeneticPoints+=2;
                     controller.UpdatePoints();
                 }

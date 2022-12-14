@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Class which contains the information regarding genetic attributes
+//Genetic attributes work on a point system
+//When an agent receives a point in an attribute that attribute is increased by a set amount
+//Attributes are initialized with a base value
 [Serializable]
 public class GeneticAttribute
 {

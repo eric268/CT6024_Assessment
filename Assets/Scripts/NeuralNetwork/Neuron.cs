@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Class which houses the activation and bias of each network node
+//Bias is initalized with a small random value 
 public class Neuron
 {
     public double mActivation;

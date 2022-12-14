@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace AIGOAP
 {
+    //Describes the different types of GOB goals
     public enum GoalTypes
     {
         Eat,
@@ -11,7 +12,8 @@ namespace AIGOAP
         Reproduce,
         Num_Goal_Types
     }
-
+    //Class which contains the discontentment value of each goal
+    //Three types of goals: to eat, sleep and reproduce
     public class Goal
     {
         public GoalTypes mGoalTypes;
@@ -24,10 +26,12 @@ namespace AIGOAP
             mValue = v;
             mChange = c;
         }
+        //Increases the discontentment of a goal overtime based on it's increase rate
         public void UpdateValue(float deltaTime)
         {
             mValue += mChange * deltaTime;
         }
+        //Returns the discontentment squared to ensure that as discontentment increases the agent responds more urgently to higher numbers
         public float GetDiscontentment(float val)
         {
             return val * val;

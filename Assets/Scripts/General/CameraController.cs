@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Allows for player input to control camera
+//W - forward
+//S - back
+//A - left
+//D - right
+//Mouse scroll wheel zooms in and out
 public class CameraController : MonoBehaviour
 {
 
@@ -55,7 +61,7 @@ public class CameraController : MonoBehaviour
         }
 
     }
-
+    //Ensures camera stays within the specified bounds
     void EnforceBounds()
     {
         mEnforceBounds = false;

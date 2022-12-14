@@ -8,8 +8,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
-
-
+//Controller for predator agent
 public class PredatorController : AgentController
 {
     [SerializeField]
@@ -45,25 +44,30 @@ public class PredatorController : AgentController
         Move(mCurrentTarget);
         UpdateEnergyLevels();
     }
-
+    //Initializes a predators genetic attributes and resets energy level
+    //This is important for when a new predator is spawned from two parent predators
     void Initalize()
     {
         mAttributes.mEnergyLevel = mAttributes.mStartingEnergy;
         BindGeneticAttributesEvent();
         mGeneticManager.BroadcastAllAttributes();
     }
-
+    //Updates the material of the predator to match their current GOB action
     public void ChangeAppearance(Color color)
     {
         GetComponent<Renderer>().material.SetColor("_Color", color);
     }
-
+    //Moves the agent
+    //Specifically moves the agent towards the current target if the currentt target is set
+    //Otherwise checks if the agent is moving towards a wall, if so it will turn the agent around
     public void Move(GameObject target)
     {
         if (mCurrentTarget != null)
         {
             if (target.CompareTag(mEnergyTag))
             {
+                //This sets the predators target location as slightly in front of the prey. This accounts for predator stopping and stuttering when getting very close to agent
+                //but not actually colliding with the agent
                 mNavMeshAgent.SetDestination(mCurrentTarget.transform.position + mCurrentTarget.transform.forward * 2.0f);
             }
             else
@@ -74,6 +78,7 @@ public class PredatorController : AgentController
         }
         else
         {
+            //Speed is set based on genetic traits
             mNavMeshAgent.speed = mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.Speed].mAttribute;
             if (mSensingManager.IsFacingWall())
             {
@@ -85,15 +90,14 @@ public class PredatorController : AgentController
             }
         }
     }
-
+    //Updates the attributes when a predator eats a prey agent
     protected override void ObjectConsumed(float val)
     {
         mAttributes.mTotalObjectsEatten++;
         mAttributes.mEnergyLevel += val;
-
-        //Change Goal Values
     }
-
+    //Updates the GOB system when a hunted prey agent is successfully eaten.
+    //Returns the prey agent to object pool and deactivates it
     void OnPreyEatten(PreyController prey)
     {
         mGOB.mCurrentAction.StopAction();
@@ -102,7 +106,8 @@ public class PredatorController : AgentController
         mGOB.mActionSuccessful = true;
         mGOB.SelectNewAction();
     }
-
+    //Checks if the predator has no remaining energy
+    //If so kills predator otherwise reduces energy with delta time
     protected override void UpdateEnergyLevels()
     {
         if (mAttributes.mEnergyLevel <= 0)
@@ -111,22 +116,30 @@ public class PredatorController : AgentController
         }
         else
         {
-            // Lose energy in relation to sprinting or not
-            //Lose less energy when looking for mate
             mAttributes.mEnergyLevel -= Time.deltaTime;
         }
     }
-
+    //Called when predator has run out of energy
+    //Returns the predator to it's object pool
     public void KillPredator()
     {
         StopAllCoroutines();
         mAgentSpawner.ReturnAgentToPool(gameObject);
     }
 
+    //Spawns a new agent when two parents have successfully reproduced
+    //The new agent is set to slightly behind the parent position
     public GameObject SpawnAgent(GameObject otherParent)
     {
+        if (otherParent == null) 
+        {
+            return null;
+        }
         GameObject temp = mAgentSpawner.SpawnAgent(gameObject);
-        Debug.Assert(temp);
+        //Need null check because if max number of prey agents have been spawned SpawnAgent will return a null GameObject
+        if (temp == null)
+            return null;
+
         temp.transform.position = transform.position - transform.forward * 2.5f;
         temp.transform.parent = gameObject.transform.parent;
         PredatorController controller = temp.GetComponent<PredatorController>();
@@ -134,18 +147,19 @@ public class PredatorController : AgentController
         {
             controller.OnSpawn(this, otherParent);
         }
-        
         return temp;
     }
 
+    //Sets attributes back to starting values when action is completed or duration has expired
     public void ResetAttributes()
     {
-        mMate = null;
         mNavMeshAgent.isStopped = false;
         mAttributes.mMateFound = false;
-        //mCurrentTarget = null;
     }
 
+    //Initializes the genetic attributes with half of the attribute points from one parent and the other half from the second parent
+    //Slightly mutates the genetic attribute points by adding one point to a random attribute and removing one point from a random attribute
+    //Initializes GOB behavior
     void OnSpawn(PredatorController parent1Controller, GameObject parent2)
     {
         mGeneticManager = new PredatorGeneticManager(GetParentGeneticPoints(parent1Controller, parent2));
@@ -156,7 +170,9 @@ public class PredatorController : AgentController
         mGOB.SelectNewAction();
         mAttributes.mCurrentGeneration = mAttributes.mCurrentGeneration + 1;
     }
-
+    //Checks if the predator has collided with a prey agent
+    //If it has and it is currently hunting then the prey is eaten.
+    //If it is not hunting do not want to eat it
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag(mEnergyTag))
@@ -171,7 +187,9 @@ public class PredatorController : AgentController
             }
         }
     }
-
+    //Binds genetic attributes action to the necessary functions
+    //When an attributes value is changed the OnAttributeChanged action is called
+    //This will update any listening functions with the correct new attribute value
     void BindGeneticAttributesEvent()
     {
         mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.Speed].OnAttributeChanged += SetSpeed;
@@ -183,17 +201,18 @@ public class PredatorController : AgentController
         mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.CloseSensingAngle].OnAttributeChanged += mSensingManager.SetCloseSensingAngle;
         mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.CloseSensingRadius].OnAttributeChanged += mSensingManager.SetCloseSensingRadius;
     }
-
+    //Sets the speed of the predator NavMeshAgent
     void SetSpeed(float speed)
     {
         mNavMeshAgent.speed = speed;
     }
-
+    //Sets the angular speed of the predator NavMeshAgent
     void SetAngularSpeed(float speed)
     {
         mNavMeshAgent.angularSpeed = speed;
     }
-
+    //Returns a list of float with the first half being from one parent and the second half from the other parent
+    //This is how genetic traits (points) are passed onto children agents
     List<float> GetParentGeneticPoints(PredatorController parent1Controller, GameObject parent2)
     {
         PredatorController parent2Controller = parent2.GetComponent<PredatorController>();
@@ -209,6 +228,7 @@ public class PredatorController : AgentController
 
         return parent1GeneticPoints;
     }
+    //Increases and decreases a point from a random genetic attribute
 
     void MutateGeneticAttributes()
     {

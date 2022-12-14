@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using AIGOAP;
+
+//Class which controls predators sleeping GOB action
 public class SleepAction : Action
 {
     private PredatorController mController;
@@ -15,7 +17,8 @@ public class SleepAction : Action
     {
         //Do not need anything here as of right now as there are not variables to reset.
     }
-
+    //Coroutine which begins the timer for the sleeping action
+    //There is no possibility of this action ending early or failing so will always be successful
     public override IEnumerator BeginAction()
     {
         if (!mController.gameObject.activeInHierarchy)

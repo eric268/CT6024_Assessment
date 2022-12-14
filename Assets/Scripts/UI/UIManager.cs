@@ -5,6 +5,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
+//Manages the general simulation UI elements
 public class UIManager : MonoBehaviour
 {
     GameManager mGameManager;
@@ -13,6 +14,7 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI mFitnessText;
     public TextMeshProUGUI mNumPreyText;
     public TextMeshProUGUI mNumPredatorsText;
+    public TextMeshProUGUI mTimeSliderText;
     public Slider mTimeSlider;
 
     [SerializeField]
@@ -23,6 +25,7 @@ public class UIManager : MonoBehaviour
     {
         mGameManager = FindObjectOfType<GameManager>();
         mTimeSlider.onValueChanged.AddListener(delegate { OnSliderTimeChange(mTimeSlider); });
+        mTimeSliderText.text = "Time Scale: " + (int)mTimeSlider.value;
     }
 
     // Update is called once per frame
@@ -35,7 +38,7 @@ public class UIManager : MonoBehaviour
 
     void OnSliderTimeChange(Slider slider)
     {
-        Debug.Log("V");
+        mTimeSliderText.text = "Time Scale: " + (int)slider.value;
         mGameManager.SetGameTimeScale((int)slider.value);
     }
 }
