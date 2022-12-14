@@ -19,8 +19,6 @@ public class FoodSpawnerScript : MonoBehaviour
     int nextItemToSpawn;
     [SerializeField]
     float maxSpawnRate;
-    [SerializeField]
-    AgentSpawner mPreySpawner;
 
     public static int mMaxFoodOnMap = 500;
     public static int mCurrentAmountofFoodOnMap = 0;
@@ -29,11 +27,6 @@ public class FoodSpawnerScript : MonoBehaviour
     Transform groundPosition;
 
     public static Queue<GameObject> foodPool;
-
-    private void Awake()
-    {
-        mPreySpawner = GameObject.FindGameObjectWithTag("PreySpawner").GetComponent<AgentSpawner>();
-    }
     // Start is called before the first frame update
     void Start ()
     {

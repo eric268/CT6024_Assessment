@@ -8,7 +8,7 @@ public class AgentAttributes
 {
     [Header("Energy")]
     [SerializeField]
-    private float mMaxEnergy = 100;
+    public float mMaxEnergy = 100;
     [SerializeField]
     public float mStartingEnergy;
     [SerializeField]

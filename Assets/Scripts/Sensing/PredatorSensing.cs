@@ -22,6 +22,7 @@ public class PredatorSensing : SensingScript
     LayerMask mWallLayerMask;
 
     private float mMateSensingRadius;
+    private float mWallSensingRadius;
 
     // Start is called before the first frame update
     void Awake()
@@ -77,7 +78,12 @@ public class PredatorSensing : SensingScript
 
     public bool IsFacingWall()
     {
-        return Physics.Raycast(transform.position, transform.forward, sensingVisionCones[(int)VisionConeTypes.Far_Cone].mRadius, mWallLayerMask);
+        return Physics.Raycast(transform.position, transform.forward, mWallSensingRadius, mWallLayerMask);
+    }
+
+    public void SetWallSensingRadius(float radius)
+    {
+        mWallSensingRadius = radius;
     }
 
     public void SetCloseSensingAngle(float angle)

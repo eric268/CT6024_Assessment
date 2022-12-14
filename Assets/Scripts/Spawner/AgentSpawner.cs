@@ -27,9 +27,9 @@ public class AgentSpawner : MonoBehaviour
     public int mMaxNumberOfAgents;
     public int mCurrentNumberOfAgents;
 
-    public int mMaxNumberOfExtraPoints = 25;
-    public int mExtraPointCounter = 0;
-    public int mExtraPointGivenRate = 60;
+    private int mMaxNumberOfExtraPoints = 50;
+    private int mExtraPointCounter = 0;
+    public int mExtraPointGivenRate = 45;
 
     [SerializeField]
     private SpawnerType mSpawnerType;
@@ -100,12 +100,13 @@ public class AgentSpawner : MonoBehaviour
         if (mExtraPointCounter <= mExtraPointGivenRate)
         {
             Debug.Log("Extra point given");
-            mExtraPointCounter++;
+            mExtraPointCounter += 2;
             for (int i =0; i < gameObject.transform.childCount; i++) 
             {
                 if (TryGetComponent(out PredatorController controller))
                 {
-                    controller.mNumberGeneticPoints++;
+                    controller.mNumberGeneticPoints+=2;
+                    controller.UpdatePoints();
                 }
             }
         }

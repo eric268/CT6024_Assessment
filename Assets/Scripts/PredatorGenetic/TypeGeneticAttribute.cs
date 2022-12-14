@@ -4,10 +4,10 @@ using UnityEngine;
 
 public enum TypeGeneticAttributes
 {
-    Sprint,
     MateSensingRadius,
     Speed,
     AngularSpeed,
+    WallSensing,
     FarSensingAngle,
     FarSensingRadius,
     CloseSensingAngle,

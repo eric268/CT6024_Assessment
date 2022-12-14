@@ -9,11 +9,12 @@ using Unity.VisualScripting;
 public class PredatorGeneticManager
 {
     public int mNumberOfStartingPoints;
-
+    public int mNumberOfBasePointsInAttribute;
     public List<GeneticAttribute> mGeneticAttributes;
     
     public PredatorGeneticManager(int numPoints)
     {
+        mNumberOfBasePointsInAttribute = 8;
         mNumberOfStartingPoints = numPoints;
         Initalize();
         AddPointsRandomlyToAttributes();
@@ -33,14 +34,14 @@ public class PredatorGeneticManager
     void Initalize()
     {
         mGeneticAttributes = new List<GeneticAttribute>();
-        mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.Sprint, 0.07f, true));
-        mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.MateSensingRadius, 7.0f, true));
-        mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.Speed, 0.5f, true));
-        mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.AngularSpeed, 20.0f, true));
-        mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.FarSensingAngle, 3.5f, true));
-        mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.FarSensingRadius, 4.0f, true));
-        mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.CloseSensingAngle, 6.5f, true));
-        mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.CloseSensingRadius, 0.5f, true));
+        mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.MateSensingRadius, 10.0f, mNumberOfBasePointsInAttribute));
+        mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.Speed, 0.55f, mNumberOfBasePointsInAttribute));
+        mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.AngularSpeed, 25.0f, mNumberOfBasePointsInAttribute));
+        mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.WallSensing, 2.0f, mNumberOfBasePointsInAttribute));
+        mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.FarSensingAngle, 3.5f, mNumberOfBasePointsInAttribute));
+        mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.FarSensingRadius, 4.0f, mNumberOfBasePointsInAttribute));
+        mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.CloseSensingAngle, 6.5f, mNumberOfBasePointsInAttribute));
+        mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.CloseSensingRadius, 0.5f, mNumberOfBasePointsInAttribute));
     }
 
     public void BroadcastAllAttributes()
@@ -53,8 +54,8 @@ public class PredatorGeneticManager
 
     void AddPointsRandomlyToAttributes()
     {
-        //All attributes state with a base point of 1 therefore need to subtract the total number of attributes so the total will be correct
-        for (int i = 0; i < mNumberOfStartingPoints - mGeneticAttributes.Count; i++)
+        //All attributes state with a base point of 3 therefore need to subtract 3 * number of attributes so the point total will be correct
+        for (int i = 0; i < mNumberOfStartingPoints - mGeneticAttributes.Count * mNumberOfBasePointsInAttribute; i++)
         {
             int rand = UnityEngine.Random.Range(0, (int)TypeGeneticAttributes.NUM_GENETIC_ATTRITBUES);
             mGeneticAttributes[rand].mPointTotal++;

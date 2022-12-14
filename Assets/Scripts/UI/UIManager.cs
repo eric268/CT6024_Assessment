@@ -15,13 +15,13 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI mNumPredatorsText;
     public Slider mTimeSlider;
 
+    [SerializeField]
     private AgentSpawner mPreySpawner;
+    [SerializeField]
     private AgentSpawner mPredatorSpawner;
     void Awake()
     {
         mGameManager = FindObjectOfType<GameManager>();
-        mPreySpawner = GameObject.FindGameObjectWithTag("PreySpawner").GetComponent<AgentSpawner>();
-        mPredatorSpawner = GameObject.FindGameObjectWithTag("PredatorSpawner").GetComponent<AgentSpawner>();
         mTimeSlider.onValueChanged.AddListener(delegate { OnSliderTimeChange(mTimeSlider); });
     }
 

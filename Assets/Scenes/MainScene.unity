@@ -158,7 +158,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -571, y: 40}
+  m_AnchoredPosition: {x: 466, y: 136.41428}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &44916302
@@ -427,7 +427,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -557, y: 176.58572}
+  m_AnchoredPosition: {x: 480, y: 273}
   m_SizeDelta: {x: 240.2194, y: 36.8286}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &317991360
@@ -560,9 +560,9 @@ RectTransform:
   m_Father: {fileID: 1216275596}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 265}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -100}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &343496797
@@ -1124,7 +1124,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -543, y: 0}
+  m_AnchoredPosition: {x: 494, y: 96.414276}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &963194225
@@ -1138,6 +1138,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1203,14 +1204,31 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.4835368, y: -0, z: -0, w: 0.8753241}
-  m_LocalPosition: {x: -14.2, y: 139.2, z: -131.5}
+  m_LocalRotation: {x: 0.46174863, y: 0, z: 0, w: 0.8870109}
+  m_LocalPosition: {x: -14.2, y: 146.4, z: -171.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 57.833, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 55, y: 0, z: 0}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1653a80d0cf454c4fabc504c347db183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mZoomSpeed: 20
+  mCameraSpeed: 10
+  mXBounds: {x: -100, y: 100}
+  mYBounds: {x: 15, y: 150}
+  mZBounds: {x: -150, y: 100}
 --- !u!1 &995325762
 GameObject:
   m_ObjectHideFlags: 0
@@ -1682,6 +1700,8 @@ MonoBehaviour:
   mNumPreyText: {fileID: 281085507}
   mNumPredatorsText: {fileID: 1397962615}
   mTimeSlider: {fileID: 894937580}
+  mPreySpawner: {fileID: 1759343740}
+  mPredatorSpawner: {fileID: 1657069353}
 --- !u!114 &1216275593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2050,7 +2070,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -528.4265, y: 112.571594}
+  m_AnchoredPosition: {x: 508.5735, y: 208.98587}
   m_SizeDelta: {x: 299.3665, y: 35.569}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1458155459
@@ -2097,13 +2117,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4114e407d1c3ece45bf52f966c9dcef2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  foodPoolSize: 1500
-  startingFoodAmount: 500
+  foodPoolSize: 1000
+  startingFoodAmount: 300
   foodPrefab: {fileID: 7685706745089078590, guid: 94247775a3259a041b481ab8f974271d, type: 3}
-  spawnRate: 0.1
-  spawnRateDecreaseFrequency: 120
-  maxSpawnRate: 0.5
-  mPreySpawner: {fileID: 0}
+  spawnRate: 0.2
+  spawnRateDecreaseFrequency: 90
+  maxSpawnRate: 1
   groundPosition: {fileID: 1016317245}
 --- !u!1 &1657069351
 GameObject:
@@ -2149,14 +2168,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19c9fe228a3b7947b2fc8e11a050774, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mNumberAgentsToSpawn: 100
+  mNumberAgentsToSpawn: 50
   agentPrefab: {fileID: 3734262667457119066, guid: eb466924bc7d52b40ad1d57269ccecc6, type: 3}
   mAgentName: Predator
   mCurrentGen: 1
   mMaxNumberOfAgents: 300
   mCurrentNumberOfAgents: 0
-  mMaxNumberOfExtraPoints: 0
-  mExtraPointCounter: 0
   mExtraPointGivenRate: 60
   mSpawnerType: 2
 --- !u!1 &1695056355
@@ -2402,8 +2419,6 @@ MonoBehaviour:
   mCurrentGen: 1
   mMaxNumberOfAgents: 300
   mCurrentNumberOfAgents: 0
-  mMaxNumberOfExtraPoints: 0
-  mExtraPointCounter: 0
   mExtraPointGivenRate: 60
   mSpawnerType: 1
 --- !u!4 &1759343741
@@ -2628,6 +2643,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2096147080}
   - component: {fileID: 2096147081}
+  - component: {fileID: 2096147082}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2662,3 +2678,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f26c1ec584d88f8488917a9e7b12596b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2096147082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2096147078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c481789edb0c7644e864897c3f17312d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mSelectedAgent: {fileID: 0}
+  mAgentLayerMask:
+    serializedVersion: 2
+    m_Bits: 512

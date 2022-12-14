@@ -1,48 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PreyUIManager : MonoBehaviour
-{
-    public float screenOffset = 2.0f;
-    private Camera cam;
-    private RawImage image;
+public class PreyUIManager : AgentUIManager
+{ 
     PreyController preyController;
-    public GameObject healthBarPrefab;
-    GameObject healthBar;
-    Canvas canvas;
-    float startingXDeltaSize;
+    TextMeshProUGUI[] mTextContainer;
+
+    private void Awake()
+    {
+        base.Awake();
+    }
 
     private void OnEnable()
     {
-        canvas = FindObjectOfType<UIManager>().GetComponent<Canvas>();
-        cam = Camera.main;
+        base.OnEnable();
         preyController = GetComponentInParent<PreyController>();
-        healthBar = Instantiate(healthBarPrefab, canvas.transform);
-        image = healthBar.transform.GetChild(1).GetComponent<RawImage>();
-        startingXDeltaSize = image.rectTransform.sizeDelta.x;
-    }
-    private void OnDisable()
-    {
-        Destroy(healthBar);
+        mTextContainer = mAttributeMenu.GetComponentsInChildren<TextMeshProUGUI>();
+        Debug.Assert(mNumberOfAttributesToDisplay == mTextContainer.Length);
+        SetAttributeText();
     }
 
-    private void FixedUpdate()
-    {
-        healthBar.transform.position = cam.WorldToScreenPoint(transform.gameObject.transform.position + Vector3.up * screenOffset);
-        float percentageEnergyRemaining = preyController.mAttributes.mEnergyLevel / preyController.mAttributes.mStartingEnergy;
-        image.rectTransform.sizeDelta = new Vector2(startingXDeltaSize * percentageEnergyRemaining, image.rectTransform.sizeDelta.y);
-        image.rectTransform.anchoredPosition = new Vector2((startingXDeltaSize * percentageEnergyRemaining - startingXDeltaSize) / 2.0f, 0.0f);
 
+    private void Update()
+    {
+        UpdateHealthBar(preyController.mAttributes.mEnergyLevel, preyController.mAttributes.mMaxEnergy);
     }
-    //private void OnMouseEnter()
-    //{
-    //    healthBar.SetActive(true);
-    //}
-    //private void OnMouseExit()
-    //{
-    //    healthBar.SetActive(false);
-    //}
+
+    protected override void SetAttributeText()
+    {
+        mTextContainer[0].text = "Name: " + gameObject.name;
+        mTextContainer[1].text = "Current Generation: " + preyController.mAttributes.mCurrentGeneration;
+        mTextContainer[2].text = "Food Eaten: " + preyController.mAttributes.mTotalObjectsEatten;
+        mTextContainer[3].text = "Learning Rate: " + (int)(preyController.mAttributes.mLearningRate * 100) + "%";
+        mTextContainer[4].text = "Turn Rate: " + preyController.mAttributes.mTurnRate;
+    }
+
+
+
+    protected override void UpdateAttributeText()
+    {
+        mTextContainer[2].text = "Food Eaten: " + preyController.mAttributes.mTotalObjectsEatten;
+    }
 }

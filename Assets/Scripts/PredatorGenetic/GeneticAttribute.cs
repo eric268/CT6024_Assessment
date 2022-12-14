@@ -10,15 +10,15 @@ public class GeneticAttribute
     public float mPointValue;
     public float mPointTotal;
     public float mAttribute;
-    public bool mIsAdditive;
+    public int mNumBasePoints;
     public Action<float> OnAttributeChanged;
 
-    public GeneticAttribute(TypeGeneticAttributes type, float val, bool b)
+    public GeneticAttribute(TypeGeneticAttributes type, float val, int b)
     {
         mType = type;
         mPointValue = val;
-        mIsAdditive= b;
-        mPointTotal = 1;
+        mNumBasePoints= b;
+        mPointTotal = mNumBasePoints;
         mAttribute = 0;
     }
 }

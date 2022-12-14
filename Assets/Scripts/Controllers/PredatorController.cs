@@ -62,8 +62,6 @@ public class PredatorController : AgentController
     {
         if (mCurrentTarget != null)
         {
-            mNavMeshAgent.speed = mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.Speed].mAttribute * mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.Sprint].mAttribute;
-            
             if (target.CompareTag(mEnergyTag))
             {
                 mNavMeshAgent.SetDestination(mCurrentTarget.transform.position + mCurrentTarget.transform.forward * 2.0f);
@@ -115,7 +113,7 @@ public class PredatorController : AgentController
         {
             // Lose energy in relation to sprinting or not
             //Lose less energy when looking for mate
-            mAttributes.mEnergyLevel -= Time.deltaTime *  mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.Sprint].mAttribute;
+            mAttributes.mEnergyLevel -= Time.deltaTime;
         }
     }
 
@@ -134,7 +132,6 @@ public class PredatorController : AgentController
         PredatorController controller = temp.GetComponent<PredatorController>();
         if (controller) 
         {
-            controller.gameObject.name = "Newly Spawned Predator";
             controller.OnSpawn(this, otherParent);
         }
         
@@ -152,7 +149,7 @@ public class PredatorController : AgentController
     void OnSpawn(PredatorController parent1Controller, GameObject parent2)
     {
         mGeneticManager = new PredatorGeneticManager(GetParentGeneticPoints(parent1Controller, parent2));
-        LimitGeneticAttributes();
+        UpdatePoints();
         Initalize();
         MutateGeneticAttributes();
         mGOB.Initalize();
@@ -177,12 +174,19 @@ public class PredatorController : AgentController
 
     void BindGeneticAttributesEvent()
     {
+        mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.Speed].OnAttributeChanged += SetSpeed;
         mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.AngularSpeed].OnAttributeChanged += SetAngularSpeed;
         mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.MateSensingRadius].OnAttributeChanged += mSensingManager.SetMateSensingRadius;
+        mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.WallSensing].OnAttributeChanged += mSensingManager.SetWallSensingRadius;
         mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.FarSensingAngle].OnAttributeChanged += mSensingManager.SetFarSensingAngle;
         mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.FarSensingRadius].OnAttributeChanged += mSensingManager.SetFarSensingRadius;
         mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.CloseSensingAngle].OnAttributeChanged += mSensingManager.SetCloseSensingAngle;
         mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.CloseSensingRadius].OnAttributeChanged += mSensingManager.SetCloseSensingRadius;
+    }
+
+    void SetSpeed(float speed)
+    {
+        mNavMeshAgent.speed = speed;
     }
 
     void SetAngularSpeed(float speed)
@@ -232,7 +236,7 @@ public class PredatorController : AgentController
     //When getting the attribute genes from both parents the total may add up to above or below what the max number of points should
     //This function will randomly select attributes to either add a point or take a point away from to ensure it is equal to mNumberGeneticPoints
     //Only one of these while loops will run depending on whether we need to add or subtract if it is equal to mNumberGeneticPoints neither will run
-    void LimitGeneticAttributes()
+    public void UpdatePoints()
     {
         while(mGeneticManager.mNumberOfStartingPoints < mNumberGeneticPoints)
         {

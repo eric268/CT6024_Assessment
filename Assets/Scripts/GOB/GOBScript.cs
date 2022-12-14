@@ -9,7 +9,7 @@ namespace AIGOAP
         [SerializeField]
         Action[] mActionArray;
         [SerializeField]
-        Goal[] mGoalArray;
+        public Goal[] mGoalArray;
         PredatorController mPredatorController;
         public Action mCurrentAction;
         public bool mActionSuccessful = false;
@@ -33,14 +33,14 @@ namespace AIGOAP
         public void Initalize()
         {
             mActionArray = new Action[(int)ActionType.NUM_ACTION_TYPES];
-            mActionArray[0] = new HuntAction(mPredatorController, this, -5.0f, 2.0f, 4.5f, 4.0f);
-            mActionArray[1] = new SleepAction(mPredatorController, this,  5.0f, -3.0f, 1.0f, 2.0f);
+            mActionArray[0] = new HuntAction(mPredatorController, this, -10.0f, 2.0f, 4.5f, 4.0f);
+            mActionArray[1] = new SleepAction(mPredatorController, this,  5.0f, -5.0f, 1.0f, 2.0f);
             mActionArray[2] = new ReproduceAction(mPredatorController,this, 3.5f, 2.5f, -15.0f, 7.0f);
 
             mGoalArray = new Goal[(int)GoalTypes.Num_Goal_Types];
-            mGoalArray[0] = new Goal(GoalTypes.Eat, 0.0f, 1.0f);
-            mGoalArray[1] = new Goal(GoalTypes.Sleep, 0.0f, 0.5f);
-            mGoalArray[2] = new Goal(GoalTypes.Reproduce, 0.0f, 0.25f);
+            mGoalArray[0] = new Goal(GoalTypes.Eat, UnityEngine.Random.Range(0.0f,5.0f), 1.0f);
+            mGoalArray[1] = new Goal(GoalTypes.Sleep, UnityEngine.Random.Range(0.0f, 5.0f), 0.5f);
+            mGoalArray[2] = new Goal(GoalTypes.Reproduce, UnityEngine.Random.Range(0.0f, 5.0f), 0.25f);
         }
 
         void UpdateDiscontentmentValues()

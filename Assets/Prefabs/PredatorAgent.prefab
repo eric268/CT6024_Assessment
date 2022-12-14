@@ -203,6 +203,7 @@ GameObject:
   - component: {fileID: 3064740730617123691}
   - component: {fileID: 5604341981506692050}
   - component: {fileID: 7205041893405811892}
+  - component: {fileID: 339500529528764664}
   m_Layer: 7
   m_Name: PredatorAgent
   m_TagString: Predator
@@ -224,6 +225,7 @@ Transform:
   m_Children:
   - {fileID: 3734262666208508468}
   - {fileID: 3734262665857694419}
+  - {fileID: 792176973196244773}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 208.458, z: 0}
@@ -344,7 +346,7 @@ MonoBehaviour:
   mRigidBody: {fileID: 0}
   mAgentSpawner: {fileID: 0}
   mAgentType: 1
-  mNumberGeneticPoints: 150
+  mNumberGeneticPoints: 135
   mAttributes:
     mMaxEnergy: 100
     mStartingEnergy: 30
@@ -364,6 +366,7 @@ MonoBehaviour:
   mMate: {fileID: 0}
   mGeneticManager:
     mNumberOfStartingPoints: 0
+    mNumberOfBasePointsInAttribute: 0
     mGeneticAttributes: []
 --- !u!114 &7205041893405811892
 MonoBehaviour:
@@ -378,6 +381,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mActionSuccessful: 0
+--- !u!114 &339500529528764664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3734262667457119066}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7cd174a17476d6449613f298632c025, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mPositionOffset: 2.5
+  mHealthBarPrefab: {fileID: 1718980306238101755, guid: 982bdda7d46059444ae4a629b31c2a80, type: 3}
+  mAttributeMenuPrefab: {fileID: 4728846419594138383, guid: 95d1415fdca4d9f4aaf1ae534f353271, type: 3}
+  mNumberOfAttributesToDisplay: 1
+  mNumberGeneralTextItems: 3
+  mNumberGenticTextItems: 8
+  mNumberGOBTextItems: 3
 --- !u!1 &5013393033359467289
 GameObject:
   m_ObjectHideFlags: 0
@@ -426,3 +448,48 @@ MonoBehaviour:
   mVisionConeAngle: 120
   mVisionDirectionOffset: 0
   mRadius: 10
+--- !u!1 &8929938820538912644
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 792176973196244773}
+  - component: {fileID: 1377434310224207969}
+  m_Layer: 9
+  m_Name: ClickTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &792176973196244773
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8929938820538912644}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3734262667457119060}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &1377434310224207969
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8929938820538912644}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2
+  m_Center: {x: 0, y: 0, z: 0}
