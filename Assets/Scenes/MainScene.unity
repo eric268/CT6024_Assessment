@@ -1205,7 +1205,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.46174863, y: 0, z: 0, w: 0.8870109}
-  m_LocalPosition: {x: -14.2, y: 146.4, z: -171.5}
+  m_LocalPosition: {x: -14.2, y: 149.38, z: -159.95}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1617,8 +1617,8 @@ Canvas:
   m_GameObject: {fileID: 1216275591}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 963194227}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -1981,12 +1981,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4114e407d1c3ece45bf52f966c9dcef2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  foodPoolSize: 1000
+  foodPoolSize: 500
   startingFoodAmount: 200
   foodPrefab: {fileID: 7685706745089078590, guid: 94247775a3259a041b481ab8f974271d, type: 3}
   spawnRate: 0.15
-  spawnRateDecreaseFrequency: 60
-  maxSpawnRate: 1
+  spawnRateDecreaseFrequency: 120
+  maxSpawnRate: 0.5
   groundPosition: {fileID: 1016317245}
 --- !u!1 &1657069351
 GameObject:
@@ -2032,7 +2032,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19c9fe228a3b7947b2fc8e11a050774, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mNumberAgentsToSpawn: 75
+  mNumberAgentsToSpawn: 50
   agentPrefab: {fileID: 3734262667457119066, guid: eb466924bc7d52b40ad1d57269ccecc6, type: 3}
   mAgentName: Predator
   mCurrentGen: 1
@@ -2277,7 +2277,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19c9fe228a3b7947b2fc8e11a050774, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mNumberAgentsToSpawn: 150
+  mNumberAgentsToSpawn: 300
   agentPrefab: {fileID: 3734262667457119066, guid: f9a077ab961a097468c2eeab9c241693, type: 3}
   mAgentName: Prey
   mCurrentGen: 1

@@ -12,19 +12,10 @@ public class PreyController : AgentController
     [SerializeField]
     public int[] mNetworkLayerSizes;
     public NeuralNetwork mNeuralNetwork;
-   
     [SerializeField]
     public PreyAttributes mAttributes;
     FoodSpawnerScript mFoodSpawner;
-
-    [SerializeField]
-    public int mInputLayerSize;
-
     PreySensing mSensingManager;
-
-    private int mResult;
-
-
     private void Awake()
     {
         mEnergyTag = "Food";
@@ -32,7 +23,8 @@ public class PreyController : AgentController
         mSensingManager = GetComponentInChildren<PreySensing>();
         mFoodSpawner = FindObjectOfType<FoodSpawnerScript>();
         mAgentSpawner = GameObject.FindGameObjectWithTag("PreySpawner").GetComponent<AgentSpawner>();
-        mNetworkLayerSizes = new int[4] { mInputLayerSize, 55, 55, 3 };
+        mNetworkLayerSizes = new int[3] { 28, 40, 3 };
+        //mNetworkLayerSizes = new int[4] { 40, 55,55, 3 };
         mNeuralNetwork = new NeuralNetwork(mNetworkLayerSizes);
     }
 
@@ -61,10 +53,10 @@ public class PreyController : AgentController
         mAttributes.mEnergyLevel = mAttributes.mStartingEnergy;
         mAttributes.mCurrentGeneration = parent.mAttributes.mCurrentGeneration + 1;
         mSensingManager = GetComponentInChildren<PreySensing>();
-        mNeuralNetwork.CopyAndMutateNetwork(mNeuralNetwork.mNetworkLayers, mAttributes.mLearningRate);
-
-        mAttributes.mTurnRate = parent.mAttributes.mTurnRate + UnityEngine.Random.Range(-1, 2);
+        mAttributes.mTurnRate = parent.mAttributes.mTurnRate + UnityEngine.Random.Range(-2, 2);
+        mAttributes.mTurnRate = Mathf.Clamp(mAttributes.mTurnRate, mAttributes.mTurnRateStartMin, mAttributes.mTurnRateStartMax);
         mAttributes.mLearningRate = parent.mAttributes.mLearningRate + UnityEngine.Random.Range(-0.03f, 0.03f);
+        mNeuralNetwork.CopyAndMutateNetwork(parent.mNeuralNetwork.mNetworkLayers, mAttributes.mLearningRate);
     }
 
     //Called when a prey agent has eaten enough food items to reproduce

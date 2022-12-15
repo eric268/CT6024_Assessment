@@ -65,7 +65,7 @@ public class FoodSpawnerScript : MonoBehaviour
         if (spawnRate > maxSpawnRate)
             return;
         spawnRate += 0.05f;
-        Debug.Log("Spawn Rate Decreased to: " + spawnRate);
+        Debug.Log("Food spawn rate decreased");
         CancelInvoke(nameof(SpawnFood));
         InvokeRepeating(nameof(SpawnFood), 0.0f, spawnRate);
     }

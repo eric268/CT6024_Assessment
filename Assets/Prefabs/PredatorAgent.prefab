@@ -325,7 +325,7 @@ NavMeshAgent:
   m_AngularSpeed: 350
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
+  m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 1
@@ -346,10 +346,10 @@ MonoBehaviour:
   mRigidBody: {fileID: 0}
   mAgentSpawner: {fileID: 0}
   mAgentType: 1
-  mNumberGeneticPoints: 100
+  mNumberGeneticPoints: 110
   mAttributes:
-    mMaxEnergy: 125
-    mStartingEnergy: 40
+    mMaxEnergy: 80
+    mStartingEnergy: 30
     energyLevel: 30
     mSpeed: 8.5
     mTotalObjectsEatten: 0
@@ -359,6 +359,7 @@ MonoBehaviour:
     mMateFound: 0
     mMatingDistance: 2
     mTimeToReproduce: 2
+    mBonusGeneticPoints: 0
   mGOB: {fileID: 0}
   mNavMeshAgent: {fileID: 0}
   mCurrentTarget: {fileID: 0}
@@ -398,7 +399,7 @@ MonoBehaviour:
   mAttributeMenuPrefab: {fileID: 4728846419594138383, guid: 95d1415fdca4d9f4aaf1ae534f353271, type: 3}
   mNumberOfAttributesToDisplay: 1
   mNumberGeneralTextItems: 3
-  mNumberGenticTextItems: 8
+  mNumberGenticTextItems: 9
   mNumberGOBTextItems: 3
 --- !u!1 &5013393033359467289
 GameObject:

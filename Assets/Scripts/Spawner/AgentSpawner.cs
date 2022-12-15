@@ -41,7 +41,7 @@ public class AgentSpawner : MonoBehaviour
         mAgentQueue = new Queue<GameObject>();
     }
 
-    private void Start()
+    private void OnEnable()
     {
         for (int i = mCurrentNumberOfAgents; i < mMaxNumberOfAgents; i++)
         {
@@ -57,11 +57,16 @@ public class AgentSpawner : MonoBehaviour
                 mCurrentNumberOfAgents--;
             }
         }
+    }
+
+    private void Start()
+    {
+
         //Added to potentially give a boost to predators as prey neural network improves
-        //if (mSpawnerType == SpawnerType.Predator)
-        //{
-        //    InvokeRepeating(nameof(IncreaseAllPredatorGeneticPoints), mExtraPointGivenRate, mExtraPointGivenRate);
-        //}
+        if (mSpawnerType == SpawnerType.Predator)
+        {
+            InvokeRepeating(nameof(IncreaseAllPredatorGeneticPoints), mExtraPointGivenRate, mExtraPointGivenRate);
+        }
     }
     //Checks to ensure max number of agents isn't reached
     //If so will return null
@@ -103,14 +108,15 @@ public class AgentSpawner : MonoBehaviour
     {
         if (mExtraPointCounter <= mMaxNumberOfExtraPoints)
         {
-            Debug.Log("Extra point given");
+            Debug.Log("Extra genetic attribute points given to predators");
             mExtraPointCounter++;
             for (int i =0; i < gameObject.transform.childCount; i++) 
             {
-                if (TryGetComponent(out PredatorController controller))
+                if (gameObject.transform.GetChild(i).TryGetComponent(out PredatorController controller))
                 {
                     //Gives two points at a time
-                    controller.mNumberGeneticPoints+=2;
+                    controller.mTotalNumberGeneticPoints += 2;
+                    controller.mAttributes.mBonusGeneticPoints += 2;
                     controller.UpdatePoints();
                 }
             }

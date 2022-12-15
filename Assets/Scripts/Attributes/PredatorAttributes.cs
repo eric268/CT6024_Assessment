@@ -12,4 +12,6 @@ public class PredatorAttributes : AgentAttributes
     public bool mMateFound;
     public float mMatingDistance;
     public float mTimeToReproduce;
+    public int mBonusGeneticPoints;
+    public bool mIsLookingForMate;
 }

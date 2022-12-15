@@ -28,6 +28,7 @@ public class ReproduceAction : Action
     //FindClosestMate will only return a GameObject that is also performing a mate action
     public override IEnumerator BeginAction()
     {
+        mController.mAttributes.mIsLookingForMate = true;
         mActionColor = Color.white;
         while (mActionTimer < mGOB.mCurrentAction.mActionDuration)
         {

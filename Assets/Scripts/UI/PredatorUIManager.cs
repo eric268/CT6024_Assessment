@@ -130,6 +130,7 @@ public class PredatorUIManager : AgentUIManager
         mGeneticText[5].text = "Far Sensing Radius: " + mPredatorController.mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.FarSensingRadius].mPointTotal;
         mGeneticText[6].text = "Close Sensing FOV: " + mPredatorController.mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.CloseSensingAngle].mPointTotal;
         mGeneticText[7].text = "Close Sensing Radius: " + mPredatorController.mGeneticManager.mGeneticAttributes[(int)TypeGeneticAttributes.CloseSensingRadius].mPointTotal;
+        mGeneticText[8].text = "Bonus Genetic Points: " + mPredatorController.mAttributes.mBonusGeneticPoints;
     }
 
     //Sets GOB text values

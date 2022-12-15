@@ -40,10 +40,10 @@ public class PreySensing : SensingScript
 
     private void Awake()
     {
-        mSensingLayerMasks = new LayerMask[3];
+        mSensingLayerMasks = new LayerMask[2];
         mSensingLayerMasks[0] = mFoodLayerMask;
         mSensingLayerMasks[1] = mPredatorLayerMask;
-        mSensingLayerMasks[2] = mWallLayerMask;
+        //mSensingLayerMasks[2] = mWallLayerMask;
 
         inputData = new List<double>();
         sensingVisionCones = GetComponentsInChildren<VisionCone>();

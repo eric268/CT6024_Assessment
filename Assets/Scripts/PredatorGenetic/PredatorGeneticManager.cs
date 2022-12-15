@@ -9,7 +9,7 @@ using Unity.VisualScripting;
 [Serializable]
 public class PredatorGeneticManager
 {
-    public int mNumberOfStartingPoints;
+    public int mStartingNumberPoints;
     public int mNumberOfBasePointsInAttribute;
     public List<GeneticAttribute> mGeneticAttributes;
     
@@ -18,8 +18,8 @@ public class PredatorGeneticManager
     //I say semi-randomly as some base points are evenly spread 
     public PredatorGeneticManager(int numPoints)
     {
-        mNumberOfBasePointsInAttribute = 5;
-        mNumberOfStartingPoints = numPoints;
+        mNumberOfBasePointsInAttribute = 2;
+        mStartingNumberPoints = numPoints;
         Initalize();
         AddPointsRandomlyToAttributes();
     }
@@ -28,22 +28,22 @@ public class PredatorGeneticManager
     public PredatorGeneticManager(List<float> mPointTotal)
     {
         Initalize();
-        mNumberOfStartingPoints = mGeneticAttributes.Count;
+        mStartingNumberPoints = mGeneticAttributes.Count;
         for(int i = 0; i < mGeneticAttributes.Count; i++)
         {
             mGeneticAttributes[i].mPointTotal = mPointTotal[i];
-            mNumberOfStartingPoints += (int)mPointTotal[i];
+            mStartingNumberPoints += (int)mPointTotal[i];
         }
     }
     //Adds the attributes to the manager
     //The second parameter in the constructor is the value that one point of that attribute provides the agent
-    //For example one point in the MateSensing attribue will increase the radius that it can sense mates by 10 units
+    //For example one point in the MateSensing attribute will increase the radius that it can sense mates by 10 units
     void Initalize()
     {
         mGeneticAttributes = new List<GeneticAttribute>();
         mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.MateSensingRadius, 10.0f, mNumberOfBasePointsInAttribute));
-        mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.Speed, 0.55f, mNumberOfBasePointsInAttribute));
-        mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.AngularSpeed, 25.0f, mNumberOfBasePointsInAttribute));
+        mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.Speed, 0.65f, mNumberOfBasePointsInAttribute));
+        mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.AngularSpeed, 30.0f, mNumberOfBasePointsInAttribute));
         mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.WallSensing, 2.0f, mNumberOfBasePointsInAttribute));
         mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.FarSensingAngle, 3.5f, mNumberOfBasePointsInAttribute));
         mGeneticAttributes.Add(new GeneticAttribute(TypeGeneticAttributes.FarSensingRadius, 4.0f, mNumberOfBasePointsInAttribute));
@@ -64,7 +64,7 @@ public class PredatorGeneticManager
     {
         //All attributes state with a certain amount of base points.
         //Therefore need to multiply the number of base points allocated * number of total attributes so the point total will be correct
-        for (int i = 0; i < mNumberOfStartingPoints - mGeneticAttributes.Count * mNumberOfBasePointsInAttribute; i++)
+        for (int i = 0; i < mStartingNumberPoints - mGeneticAttributes.Count * mNumberOfBasePointsInAttribute; i++)
         {
             int rand = UnityEngine.Random.Range(0, (int)TypeGeneticAttributes.NUM_GENETIC_ATTRITBUES);
             mGeneticAttributes[rand].mPointTotal++;
@@ -82,6 +82,11 @@ public class PredatorGeneticManager
     //Adds a point into attribute and calls the OnValueChanged() action
     public bool ImproveAttribute(int att)
     {
+        if (att < 0 || att >= mGeneticAttributes.Count)
+        {
+            Debug.Log("Brokem");
+        }
+
         Debug.Assert(att >=0 && att < mGeneticAttributes.Count);
 
         //Can add check for a max value and return false if that occurs and not add a point

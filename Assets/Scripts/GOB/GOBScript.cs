@@ -30,18 +30,18 @@ namespace AIGOAP
         {
             UpdateDiscontentmentValues();
         }
-        //Initalizes the goals and actions of the GOB
+        //Initializes the goals and actions of the GOB
         public void Initalize()
         {
             mActionArray = new Action[(int)ActionType.NUM_ACTION_TYPES];
-            mActionArray[0] = new HuntAction(mPredatorController, this, -10.0f, 3.0f, 2.0f, 4.0f);
-            mActionArray[1] = new SleepAction(mPredatorController, this,  5.0f, -15.0f, 3.0f, 2.5f);
-            mActionArray[2] = new ReproduceAction(mPredatorController,this, 3.5f, 2.5f, -15.0f, 7.0f);
+            mActionArray[0] = new HuntAction(mPredatorController, this, -5.0f, 3.5f, 3.0f, 4.0f);
+            mActionArray[1] = new SleepAction(mPredatorController, this,  2.5f, -4.0f, 1.5f, 2.5f);
+            mActionArray[2] = new ReproduceAction(mPredatorController,this, 3.5f, 2.5f, -6.0f, 8.0f);
 
             mGoalArray = new Goal[(int)GoalTypes.Num_Goal_Types];
-            mGoalArray[0] = new Goal(GoalTypes.Eat, UnityEngine.Random.Range(0.0f,4.0f), 0.25f);
-            mGoalArray[1] = new Goal(GoalTypes.Sleep, UnityEngine.Random.Range(0.0f, 3.0f), 0.15f);
-            mGoalArray[2] = new Goal(GoalTypes.Reproduce, UnityEngine.Random.Range(0.0f, 2.0f), 0.06f);
+            mGoalArray[0] = new Goal(GoalTypes.Eat, UnityEngine.Random.Range(0.0f,4.0f), 0.5f);
+            mGoalArray[1] = new Goal(GoalTypes.Sleep, UnityEngine.Random.Range(0.0f, 3.0f), 0.25f);
+            mGoalArray[2] = new Goal(GoalTypes.Reproduce, UnityEngine.Random.Range(0.0f, 2.0f), 0.15f);
         }
         //Updates all of the goal discontentment values over time
         void UpdateDiscontentmentValues()
@@ -75,6 +75,7 @@ namespace AIGOAP
             {
                 mCurrentAction.ResetAction();
             }
+            
             mActionSuccessful = false;
             mPredatorController.ResetAttributes();
             mCurrentAction = ChooseAction(mActionArray, mGoalArray);

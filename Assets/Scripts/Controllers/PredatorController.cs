@@ -1,10 +1,5 @@
 using AIGOAP;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,7 +7,7 @@ using UnityEngine.AI;
 public class PredatorController : AgentController
 {
     [SerializeField]
-    public int mNumberGeneticPoints = 100;
+    public int mTotalNumberGeneticPoints = 100;
     [SerializeField]
     public PredatorAttributes mAttributes;
     public GOBScript mGOB;
@@ -31,11 +26,11 @@ public class PredatorController : AgentController
         mNavMeshAgent= GetComponent<NavMeshAgent>();
         mSensingManager = GetComponentInChildren<PredatorSensing>();
         mNavMeshAgent.speed = mAttributes.mSpeed;
+        mGeneticManager = new PredatorGeneticManager(mTotalNumberGeneticPoints);
     }
 
     private void Start()
     {
-        mGeneticManager = new PredatorGeneticManager(mNumberGeneticPoints);
         Initalize();
     }
 
@@ -86,7 +81,14 @@ public class PredatorController : AgentController
             }
             else
             {
-                mNavMeshAgent.SetDestination(transform.position + transform.forward * 5.0f);
+                if (mAttributes.mIsLookingForMate)
+                {
+                    mNavMeshAgent.SetDestination(Vector3.zero);// transform.position + transform.forward * 5.0f);
+                }
+                else
+                {
+                    mNavMeshAgent.SetDestination(transform.position + transform.forward * 5.0f);
+                }
             }
         }
     }
@@ -155,6 +157,7 @@ public class PredatorController : AgentController
     {
         mNavMeshAgent.isStopped = false;
         mAttributes.mMateFound = false;
+        mAttributes.mIsLookingForMate = false;
     }
 
     //Initializes the genetic attributes with half of the attribute points from one parent and the other half from the second parent
@@ -258,21 +261,21 @@ public class PredatorController : AgentController
     //Only one of these while loops will run depending on whether we need to add or subtract if it is equal to mNumberGeneticPoints neither will run
     public void UpdatePoints()
     {
-        while(mGeneticManager.mNumberOfStartingPoints < mNumberGeneticPoints)
+        while(mGeneticManager.mStartingNumberPoints < mTotalNumberGeneticPoints)
         {
             int randomAttribute = Random.Range(0, (int)TypeGeneticAttributes.NUM_GENETIC_ATTRITBUES);
             if (mGeneticManager.ImproveAttribute(randomAttribute))
             {
-                mGeneticManager.mNumberOfStartingPoints++;
+                mGeneticManager.mStartingNumberPoints++;
             }
         }
 
-        while (mGeneticManager.mNumberOfStartingPoints > mNumberGeneticPoints)
+        while (mGeneticManager.mStartingNumberPoints > mTotalNumberGeneticPoints)
         {
             int randomAttribute = Random.Range(0, (int)TypeGeneticAttributes.NUM_GENETIC_ATTRITBUES);
             if (mGeneticManager.DeteriorateAttribute(randomAttribute))
             {
-                mGeneticManager.mNumberOfStartingPoints--;
+                mGeneticManager.mStartingNumberPoints--;
             }
         }
     }
