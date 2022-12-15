@@ -23,8 +23,7 @@ public class PreyController : AgentController
         mSensingManager = GetComponentInChildren<PreySensing>();
         mFoodSpawner = FindObjectOfType<FoodSpawnerScript>();
         mAgentSpawner = GameObject.FindGameObjectWithTag("PreySpawner").GetComponent<AgentSpawner>();
-        mNetworkLayerSizes = new int[3] { 28, 40, 3 };
-        //mNetworkLayerSizes = new int[4] { 40, 55,55, 3 };
+        mNetworkLayerSizes = new int[4] { 40, 55,55, 3 };
         mNeuralNetwork = new NeuralNetwork(mNetworkLayerSizes);
     }
 
